@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+    :root {
+
+        --gray-0: #f9f9f9;
+        --gray-05: #f6f6f6;
+        --gray-1: #eee;
+        --gray-2: #e6e6e6;
+        --gray-3: #ddd;
+        --gray-4: #bbb;
+        --gray-5: #999;
+        --gray-6: #666;
+        --gray-65: #555;
+        --gray-7: #2c2c2c;
+        --gray-8: #252525;
+        --gray-9: #1f1f1f;
+        --gray-10: #181818;
+
+        --green: #5eddac;
+        --orange: #ff7e22;
+        --yellow: #fca62a;
+        --light-yellow: #f6cd5d;
+        --pink: #f57ad0;
+        --lavendar: #9b78fa;
+        --violet: #ff67f7;
+        --blue: #59abf7;
+        --purple: #673ece;
+        --indigo: #5a43f1;
+        --indigo-dark: #4509cf;
+        --indigo-light: #969bf6;
+        --indigo-muted: #f1f2fd;
+
+
+        /* Colors */
+        --color-background-base: var(--gray-0);
+        --color-text-base: var(--gray-10);
+        --color-button-bg-base: var(--gray-2);
+        --color-button-border-base: var(--gray-5);
+
+        /* Sizes */
+        --content-width: 900px;
+    }
+
+    .dark {
+        /* Colors */
+        --color-background-base: var(--gray-10);
+        --color-text-base: var(--gray-0);
+        --color-button-bg-base: var(--gray-7);
+        --color-button-border-base: var(--gray-3);
+
+    }
+}
+/* Texts */
+h1, h2, h3, h4, h5, p, span {
+  color: var(--color-text-base);
+}
+
+
+/* Containers */
+.container {
+    max-width: var(--content-width);
+    padding: 0 1rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* section header */
+.section .section-header {
+    padding-bottom: 20px;
+    padding-top: 80px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    place-content: space-between;
+
+}
+
+.section .section-header .title {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.section .section-header .viewall {
+    border: 1px solid;
+    border-radius: 95px 155px 148px 103px / 48px 95px 130px 203px;
+    padding: 8px;
+    border-color: var(--color-button-border-base);
+    background-color: var(--color-button-bg-base);
+}

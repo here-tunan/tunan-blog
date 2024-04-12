@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 
+
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,10 +9,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      backgroundColor: {
+        skin: {
+          base: 'var(--color-background-base)',
+        },
+        button: {
+          base: 'var(--color-button-bg-base)',
+        }
+      },
+      borderColor: {
+        button: {
+          base: 'var(--color-button-border-base)'
+        }
       },
     },
   },

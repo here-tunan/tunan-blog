@@ -1,23 +1,40 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+'use client'
 import "./globals.css";
-import React from "react";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "tunan-blog",
-  description: "It's tunan's blog here.",
-};
+import React, {useState} from "react";
+import Navigation from "@/app/components/Navigation";
+import Footer from "@/app/components/Footer";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const [theme, setTheme] = useState('light')
+
+  function themeToggleHandler() {
+    const newTheme = theme === 'dark' ? 'light' : 'dark'
+    window.localStorage.setItem('theme', newTheme)
+    setTheme(newTheme)
+  }
+
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={theme}>
+      <body>
+        <div id="layout" className="layout flex-col flex min-h-screen bg-skin-base">
+
+          <Navigation themeToggleHandler={themeToggleHandler}/>
+
+          <div className="flex-1">
+            {children}
+          </div>
+
+          <div>
+            <Footer />
+          </div>
+
+        </div>
+      </body>
     </html>
-  );
+  )
 }
