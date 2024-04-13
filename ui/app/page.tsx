@@ -3,6 +3,7 @@ import SkillsSection from "@/app/components/home/SkillsSection";
 import ProjectsSection from "@/app/components/home/ProjectsSection";
 import BlogsSection from "@/app/components/home/BlogsSection";
 
+
 export default function Home() {
 
 
@@ -14,7 +15,7 @@ export default function Home() {
             <h1 className="text-4xl font-mono font-bold">Hi, Welcome! I&apos;m Tunan! </h1>
           </header>
           <div className="rounded-full border-2 overflow-hidden bg-button-base">
-            <img src={`https://media.giphy.com/media/WIQ0N0OUvei1OW1h9Z/giphy.gif`} width="100" className="p-3"/>
+            <img src={`https://media.giphy.com/media/WIQ0N0OUvei1OW1h9Z/giphy.gif`} width="100" className="p-3" alt="cute"/>
           </div>
         </div>
 
