@@ -12,7 +12,7 @@ export default function BlogList() {
   return (
     <ul className="divide-y divide-double divide-emerald-500">
       {blogs.map((item, i) => (
-        <BlogItem link={item.link} name={item.name} key={i}></BlogItem>
+        <BlogItem link={'/blog/' + item.link} name={item.name} key={i}></BlogItem>
       ))}
     </ul>
   );
