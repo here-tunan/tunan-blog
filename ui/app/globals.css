@@ -41,6 +41,12 @@
         --color-button-bg-base: var(--gray-2);
         --color-button-border-base: var(--gray-5);
 
+
+        --markdwon-code-backgroud: var(--gray-2);
+        --markdwon-text-base: var(--gray-10);
+        --markdown-divide: var(--gray-4);
+
+
         /* Sizes */
         --content-width: 900px;
     }
@@ -48,14 +54,19 @@
     .dark {
         /* Colors */
         --color-background-base: var(--gray-10);
-        --color-text-base: var(--gray-0);
+        --color-text-base: var(--gray-4);
         --color-button-bg-base: var(--gray-7);
         --color-button-border-base: var(--gray-3);
 
+        --markdwon-code-backgroud: var(--gray-6);
+        --markdwon-text-base: var(--gray-0);
+        --markdown-divide: var(--gray-4);
+
     }
 }
+
 /* Texts */
-h1, h2, h3, h4, h5, p, span {
+h1, h2, h3, h4, h5, p, li, ul, span {
   color: var(--color-text-base);
 }
 
