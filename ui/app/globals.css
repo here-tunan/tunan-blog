@@ -74,9 +74,9 @@ h1, h2, h3, h4, h5, p, li, ul, span {
 /* Containers */
 .container {
     max-width: var(--content-width);
-    padding: 0 1rem;
     margin-left: auto;
     margin-right: auto;
+    padding: 8rem 1rem 0;
 }
 
 /* section header */
