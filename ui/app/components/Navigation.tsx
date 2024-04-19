@@ -6,13 +6,13 @@ const items = [
   {
     "name": "Home",
     "href": "/",
-    "img": "assets/icons/home.png",
+    "img": "/assets/icons/home.png",
     "target": "_self",
   },
   {
     "name": "Blog",
     "href": "/blog",
-    "img": "assets/icons/blog.png",
+    "img": "/assets/icons/blog.png",
     "target": "_self",
   },
   {

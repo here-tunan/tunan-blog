@@ -14,7 +14,6 @@ type ContentProps = {
 }
 
 const Content = async (props: ContentProps) => {
-  console.log(props)
   const fileContents = fs.readFileSync('public/content/demo.md', 'utf8');
 
   return (
