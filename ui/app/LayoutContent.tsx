@@ -41,7 +41,7 @@ export default function LayoutContent({
         width={1512}
         height={447}
         className='absolute -bottom-4 left-1/2 -z-10 -translate-x-1/2'
-        src='/images/gradient-background-bottom.png'
+        src='/assets/gradient-background-bottom.png'
         alt=''
         priority
       />
