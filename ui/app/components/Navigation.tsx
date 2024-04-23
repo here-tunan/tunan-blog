@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import NavButton from "@/app/components/NavButton";
+import {useTheme} from "next-themes";
+import {themes} from "@/app/themes";
 
 // 导航内容
 const items = [
@@ -39,12 +41,18 @@ const items = [
 const themeLightIcon = "/assets/icons/sun.png";
 const themeDarkIcon = "/assets/icons/moon.png";
 
-interface NavigationProps {
-  theme: string,
-  themeToggleHandler: () => void
-}
+export default function Navigation() {
 
-export default function Navigation({theme, themeToggleHandler}: NavigationProps) {
+  const [themeState, setThemeState] = useState(0)
+
+  const { setTheme } = useTheme()
+
+  const themeToggleHandler = () => {
+    const newTheme = themes[(themeState + 1) % themes.length].theme
+    setThemeState((themeState + 1) % themes.length)
+    console.log(newTheme)
+    setTheme(newTheme)
+  }
 
   return (
     <div
@@ -54,9 +62,9 @@ export default function Navigation({theme, themeToggleHandler}: NavigationProps)
           <NavButton item={item} key={i}/>
         ))}
       </nav>
-      <button className="p-3 rounded-full border"
+      <button className="theme-toggle-button p-3 rounded-full border"
               onClick={themeToggleHandler}>
-        <img src={theme === 'light' ? themeLightIcon : themeDarkIcon} alt="Theme" height="20px" width="25px"></img>
+        <img alt="Theme" height="20px" width="25px"></img>
       </button>
     </div>
 

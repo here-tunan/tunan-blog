@@ -49,6 +49,10 @@
 
         /* Sizes */
         --content-width: 900px;
+
+        .theme-toggle-button img{
+            content: url("../public/assets/icons/sun.png");
+        }
     }
 
     .dark {
@@ -62,6 +66,25 @@
         --markdwon-text-base: var(--gray-0);
         --markdown-divide: var(--gray-4);
 
+        .theme-toggle-button img{
+            content: url("../public/assets/icons/moon.png");
+        }
+    }
+
+    .cyberpunk {
+        /* Colors */
+        --color-background-base: var(--green);
+        --color-text-base: var(--orange);
+        --color-button-bg-base: var(--blue);
+        --color-button-border-base: var(--purple);
+
+        --markdwon-code-backgroud: var(--violet);
+        --markdwon-text-base: var(--gray-0);
+        --markdown-divide: var(--gray-4);
+
+        .theme-toggle-button img{
+            content: url("../public/assets/icons/cyberpunk.png");
+        }
     }
 }
 
