@@ -1,5 +1,5 @@
 'use client'
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {ThemeContext} from "@/app/CustomThemeProvider";
 import Footer from "@/app/components/Footer";
 import Navigation from "@/app/components/Navigation";
@@ -11,6 +11,14 @@ export default function LayoutContent({
   children: React.ReactNode;
 }>) {
   const {theme, toggleTheme} = useContext(ThemeContext);
+
+  useEffect(() => {
+    const savedTheme = window.localStorage.getItem('theme')
+
+    if (savedTheme !== theme) {
+      toggleTheme()
+    }
+  }, [theme, toggleTheme])
 
   return (
     <html lang="en" className={theme}>

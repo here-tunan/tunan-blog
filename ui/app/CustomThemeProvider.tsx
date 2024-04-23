@@ -14,9 +14,9 @@ export const ThemeContext = createContext<ThemeContextType>({
 export default function CustomThemeProvider({children}: Readonly<{
   children: React.ReactNode;
 }>) {
-  let initialTheme= window.localStorage.getItem('theme') === null ? 'light' : String(window.localStorage.getItem('theme'))
+  // let initialTheme= window.localStorage.getItem('theme') === null ? 'light' : String(window.localStorage.getItem('theme'))
 
-  const [theme, setTheme] = useState(initialTheme);
+  const [theme, setTheme] = useState('dark');
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
