@@ -14,7 +14,7 @@ type ContentProps = {
 }
 
 const Content = async (props: ContentProps) => {
-  const fileContents = fs.readFileSync('public/content/demo.md', 'utf8');
+  // const fileContents = fs.readFileSync('public/content/demo.md', 'utf8');
 
   return (
     <div className="blog-content">
@@ -22,7 +22,7 @@ const Content = async (props: ContentProps) => {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight]}
       >
-        {fileContents}
+        {props.content}
       </Markdown>
     </div>
   )
