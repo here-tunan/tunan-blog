@@ -8,6 +8,8 @@ import (
 
 type Article struct {
 	Id         int    `json:"id"`
+	Title      string `json:"title"`
+	Slug       string `json:"slug"`
 	Content    string `json:"content"`
 	ViewNumber int    `json:"viewNumber"`
 	LikeNumber int    `json:"likeNumber"`
@@ -25,6 +27,18 @@ type ArticleQueryParam struct {
 	PageSize  int    `json:"pageSize"`
 	PageIndex int    `json:"pageIndex"`
 	Type      int    `json:"type"`
+}
+
+func GetArticleBySlug(slug string) (Article, error) {
+	session := infrastructure.Mysql.Where("is_deleted = 0")
+	session.And("slug = ?", slug)
+	var article Article
+
+	_, err := session.Get(&article)
+	if err != nil {
+		return Article{}, err
+	}
+	return article, err
 }
 
 // QueryArticle 查询符合查询参数的文章
