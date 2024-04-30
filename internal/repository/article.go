@@ -72,7 +72,7 @@ func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
 	}
 
 	// 排序
-	session.Desc("gmt_create")
+	session.Asc("gmt_create")
 
 	var articles []Article
 	err := session.Find(&articles)
