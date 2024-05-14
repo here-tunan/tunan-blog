@@ -46,13 +46,13 @@ func readEncProperties() {
 	// 根据环境变量解析配置文件
 	appEnv := os.Getenv("GO_TUNAN_BLOG_ENV")
 	if appEnv == "dev" || appEnv == "" {
-		fmt.Println("Start go-my-life app in development environment!")
+		fmt.Println("Start go-tunan-blog app in development environment!")
 		envFilePath = "./env/dev.yaml"
 	} else if appEnv == "prod" {
-		fmt.Println("Start go-my-life app in production environment!")
+		fmt.Println("Start go-tunan-blog app in production environment!")
 		envFilePath = "./env/prod.yaml"
 	} else {
-		fmt.Println("Start go-my-life app in unknown environment! Maybe cause errors!")
+		fmt.Println("Start go-tunan-blog app in unknown environment! Maybe cause errors!")
 	}
 
 	// 读取YAML文件内容
