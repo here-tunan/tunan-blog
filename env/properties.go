@@ -44,7 +44,7 @@ func readEncProperties() {
 	envFilePath := "./env/dev.yaml"
 
 	// 根据环境变量解析配置文件
-	appEnv := os.Getenv("GO_MY_LIFE_ENV")
+	appEnv := os.Getenv("GO_TUNAN_BLOG_ENV")
 	if appEnv == "dev" || appEnv == "" {
 		fmt.Println("Start go-my-life app in development environment!")
 		envFilePath = "./env/dev.yaml"
