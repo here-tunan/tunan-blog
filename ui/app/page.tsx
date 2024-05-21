@@ -21,7 +21,7 @@ export default function Home() {
 
         <BlogsSection/>
 
-        <ProjectsSection/>
+        {/*<ProjectsSection/>*/}
 
       </div>
     </main>
