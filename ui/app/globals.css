@@ -20,13 +20,13 @@
         --gray-9: #1f1f1f;
         --gray-10: #181818;
 
-        --green: #5eddac;
-        --orange: #ff7e22;
+        --green: #7becbf;
+        --orange: #f32f2f;
         --yellow: #fca62a;
         --light-yellow: #f6cd5d;
         --pink: #f57ad0;
         --lavendar: #9b78fa;
-        --violet: #ff67f7;
+        --violet: #8bbbec;
         --blue: #59abf7;
         --purple: #673ece;
         --indigo: #5a43f1;
@@ -48,7 +48,7 @@
 
 
         /* Sizes */
-        --content-width: 900px;
+        --content-width: 1054px;
 
         --theme-icon-img: url('../public/assets/icons/sun.png');
     }

@@ -1,12 +1,11 @@
 import '../../markdown.css'
 
-import fs from 'node:fs'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSanitize from 'rehype-sanitize'
-
+import rehypeSlug from 'rehype-slug'
 
 type ContentProps = {
   content: string
@@ -15,16 +14,16 @@ type ContentProps = {
 
 const Content = async (props: ContentProps) => {
   // const fileContents = fs.readFileSync('public/content/demo.md', 'utf8');
+  const markdown = props.content
 
   return (
-    <div className="blog-content">
-      <Markdown className="markdown-body"
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight]}
-      >
-        {props.content}
-      </Markdown>
-    </div>
+    <Markdown className="markdown-body"
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight, rehypeSlug]}
+    >
+      {markdown}
+    </Markdown>
+
   )
 }
 

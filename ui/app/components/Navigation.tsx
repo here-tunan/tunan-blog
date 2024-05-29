@@ -1,3 +1,5 @@
+'use client'
+
 import React, {useState} from "react";
 import NavButton from "@/app/components/NavButton";
 import {useTheme} from "next-themes";
@@ -38,10 +40,23 @@ const items = [
 
 ]
 
-const themeLightIcon = "/assets/icons/sun.png";
-const themeDarkIcon = "/assets/icons/moon.png";
-
 export default function Navigation() {
+
+  const [isScrolled, setIsScrolled] = React.useState(false)
+
+  React.useEffect(() => {
+    const changeBackground = () => {
+      if (window.scrollY > 100) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    document.addEventListener('scroll', changeBackground)
+
+    return () => document.removeEventListener('scroll', changeBackground)
+  }, [])
 
   const [themeState, setThemeState] = useState(0)
 
@@ -56,7 +71,8 @@ export default function Navigation() {
 
   return (
     <div
-      className="fixed flex inset-x-0 top-4 mx-auto h-[55px] max-w-4xl items-center justify-between rounded-2xl bg-background/30 shadow-sm saturate-100 backdrop-blur-[10px]">
+      className={`fixed z-50 flex inset-x-0 top-4 mx-auto h-[55px] max-w-screen-lg items-center justify-between rounded-2xl bg-background/30 shadow-sm saturate-100 backdrop-blur-[10px] transition-colors 
+      ${isScrolled && 'bg-background/80'}`}>
       <nav className="flex items-center gap-3">
         {items.map((item, i) => (
           <NavButton item={item} key={i}/>

@@ -1,0 +1,22 @@
+.table-of-contents {
+    .level1 {
+        font-weight: normal;
+        font-size: 15pt;
+        font-family: "Microsoft YaHei", serif;
+        padding-bottom: 4px;
+    }
+    .level2 {
+        font-weight: lighter;
+        font-size: 13pt;
+        font-family: "Microsoft YaHei", serif;
+        padding-bottom: 2px;
+        padding-left: 10px;
+    }
+    .level3 {
+        font-weight: lighter;
+        font-size: 10pt;
+        font-family: "Microsoft YaHei", serif;
+        padding-bottom: 2px;
+        padding-left: 15px;
+    }
+}

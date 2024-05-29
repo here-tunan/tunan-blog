@@ -1,6 +1,7 @@
 import Header from "@/app/blog/[slug]/header";
 import Content from "@/app/blog/[slug]/content";
 import service from "@/app/api/request";
+import TableOfContents from "@/app/components/markdown/toc";
 
 export default async function Page({params}: { params: { slug: string } }) {
 
@@ -16,7 +17,7 @@ export default async function Page({params}: { params: { slug: string } }) {
     }
   })
     .then(function (response) {
-      console.log(response.data);
+      // console.log(response.data);
       let data = response.data;
       if (data.success) {
         article = data.data
@@ -30,9 +31,23 @@ export default async function Page({params}: { params: { slug: string } }) {
 
   return (
     <div className="container">
-      <Header title={article.title} date={article.gmtCreate}/>
+      <div className="">
+        <div>
+          <Header title={article.title} date={article.gmtCreate}/>
+        </div>
 
-      <Content content={article.content}/>
+        <div className="blog-content flex flex-row pt-9">
+          <div className="w-3/4">
+            <Content content={article.content}/>
+          </div>
+
+          <div className="w-1/4">
+            <div className="sticky top-80 pl-3">
+              <TableOfContents content={article.content}/>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
