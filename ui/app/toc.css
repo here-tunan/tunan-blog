@@ -1,4 +1,10 @@
 .table-of-contents {
+    .level0 {
+        font-weight: normal;
+        font-size: 17pt;
+        font-family: "Microsoft YaHei", serif;
+        padding-bottom: 5px;
+    }
     .level1 {
         font-weight: normal;
         font-size: 15pt;

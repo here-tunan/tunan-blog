@@ -2,10 +2,9 @@ import '../../markdown.css'
 
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import rehypeRaw from 'rehype-raw'
 import rehypeHighlight from 'rehype-highlight'
-import rehypeSanitize from 'rehype-sanitize'
 import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 type ContentProps = {
   content: string
@@ -16,10 +15,17 @@ const Content = async (props: ContentProps) => {
   // const fileContents = fs.readFileSync('public/content/demo.md', 'utf8');
   const markdown = props.content
 
+  const autolinkHeadingsOptions = {
+    behavior: 'append',
+    properties: {
+      className: ['heading_anchor_svg'],
+    },
+  };
+
   return (
     <Markdown className="markdown-body"
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight, rehypeSlug]}
+              rehypePlugins={[rehypeHighlight, rehypeSlug, [rehypeAutolinkHeadings, autolinkHeadingsOptions]]}
     >
       {markdown}
     </Markdown>
