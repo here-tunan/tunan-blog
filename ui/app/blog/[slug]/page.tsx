@@ -42,7 +42,7 @@ export default async function Page({params}: { params: { slug: string } }) {
           </div>
 
           <div className="w-1/4">
-            <div className="sticky top-80 pl-3">
+            <div className="sticky top-20 pl-3">
               <TableOfContents content={article.content}/>
             </div>
           </div>

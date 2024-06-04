@@ -138,6 +138,9 @@
 .hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-variable {
     color: #005cc5;
 }
+.markdown-body a {
+    color: #74abf5; /* 设置链接颜色 */
+}
 
 /* 当光标悬停在 h 标签上时显示 SVG 图标 */
 h1:hover .heading_anchor_svg,

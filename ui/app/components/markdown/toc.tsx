@@ -20,7 +20,7 @@ const TableOfContents = ({content}: ArticleProps) => {
   const markdownWithoutCodeBlocks =  markdownWithoutLinks.replace(regexReplaceCode, "")
 
   // filter the headers
-  const regXHeader = /#{1,6}.+/g
+  const regXHeader = /#{1,6}\s.+/g
   const titles = markdownWithoutCodeBlocks.match(regXHeader)
 
   const toc:TocContent[] = [];
