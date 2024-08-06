@@ -62,7 +62,7 @@ const TableOfContents = ({content}: ArticleProps) => {
   return (
     <div>
       <p className="pb-10 font-mono font-bold text-lg">Content</p>
-      <div>
+      <div  className="overflow-y-auto h-screen pb-44">
         <TOC/>
       </div>
     </div>
