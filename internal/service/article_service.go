@@ -1,11 +1,73 @@
 package service
 
-import "tunan-blog/internal/repository"
+import (
+	"time"
+	"tunan-blog/internal/repository"
+)
 
-func QueryArticle(param repository.ArticleQueryParam) ([]repository.Article, int64, error) {
-	return repository.QueryArticle(param)
+type ArticleResponse struct {
+	Id         int64     `json:"id"`
+	Title      string    `json:"title"`
+	Slug       string    `json:"slug"`
+	Content    string    `json:"content"`
+	ViewNumber int       `json:"viewNumber"`
+	LikeNumber int       `json:"likeNumber"`
+	TagNames   []string  `json:"tagNames"`
+	GmtCreate  time.Time `json:"gmtCreate"`
 }
 
-func QueryArticleBySlug(slug string) (repository.Article, error) {
-	return repository.GetArticleBySlug(slug)
+func QueryArticle(param repository.ArticleQueryParam) ([]ArticleResponse, int64, error) {
+	articles, total, err := repository.QueryArticle(param)
+	if err != nil {
+		return nil, 0, err
+	}
+	var resList = make([]ArticleResponse, 0)
+	for _, article := range articles {
+		var res ArticleResponse
+		res.Id = article.Id
+		res.Title = article.Title
+		res.Slug = article.Slug
+		res.Content = article.Content
+		res.ViewNumber = article.ViewNumber
+		res.LikeNumber = article.LikeNumber
+		res.GmtCreate = article.GmtCreate
+		res.TagNames = []string{}
+
+		tags, err := repository.GetArticleTagRelationshipByArticleId(article.Id)
+		if err != nil {
+
+		}
+		for _, tag := range tags {
+			res.TagNames = append(res.TagNames, tag.Name)
+		}
+		resList = append(resList, res)
+	}
+	return resList, total, nil
+}
+
+func QueryArticleBySlug(slug string) (ArticleResponse, error) {
+	article, err := repository.GetArticleBySlug(slug)
+	if err != nil || article.Id == 0 {
+		return ArticleResponse{}, err
+	}
+
+	var res ArticleResponse
+	res.Id = article.Id
+	res.Title = article.Title
+	res.Slug = article.Slug
+	res.Content = article.Content
+	res.ViewNumber = article.ViewNumber
+	res.LikeNumber = article.LikeNumber
+	res.GmtCreate = article.GmtCreate
+	res.TagNames = []string{}
+
+	tags, err := repository.GetArticleTagRelationshipByArticleId(article.Id)
+	if err != nil {
+		return res, err
+	}
+	// 从tags中收集tagNames
+	for _, tag := range tags {
+		res.TagNames = append(res.TagNames, tag.Name)
+	}
+	return res, nil
 }

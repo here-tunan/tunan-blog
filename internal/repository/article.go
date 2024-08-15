@@ -7,7 +7,7 @@ import (
 )
 
 type Article struct {
-	Id         int    `json:"id"`
+	Id         int64  `json:"id"`
 	Title      string `json:"title"`
 	Slug       string `json:"slug"`
 	Content    string `json:"content"`

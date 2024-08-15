@@ -8,7 +8,8 @@ export default async function Page({params}: { params: { slug: string } }) {
   let article = {
     title: '',
     content: '',
-    gmtCreate: ''
+    gmtCreate: '',
+    tagNames: []
   }
 
   await service.get('/article', {
@@ -33,10 +34,10 @@ export default async function Page({params}: { params: { slug: string } }) {
     <div className="container">
       <div className="">
         <div>
-          <Header title={article.title} date={article.gmtCreate}/>
+          <Header title={article.title} date={article.gmtCreate} tags={article.tagNames} />
         </div>
 
-        <div className="blog-content flex flex-row pt-9">
+        <div className="blog-content flex flex-row">
           <div className="w-3/4">
             <Content content={article.content}/>
           </div>

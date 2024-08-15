@@ -11,7 +11,7 @@ import (
 var Mysql *xorm.Engine
 
 func init() {
-	dataSourName := fmt.Sprintf("%s:%s@tcp(%s:%d)/blog?charset=utf8mb4",
+	dataSourName := fmt.Sprintf("%s:%s@tcp(%s:%d)/life?charset=utf8mb4",
 		env.Prop.Mysql.Username, env.Prop.Mysql.Password, env.Prop.Mysql.Host, env.Prop.Mysql.Port)
 
 	newEngine, _ := xorm.NewEngine("mysql", dataSourName)
