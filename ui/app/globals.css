@@ -10,10 +10,10 @@
         --gray-05: #f6f6f6;
         --gray-1: #eee;
         --gray-2: #e6e6e6;
-        --gray-3: #ddd;
+        --gray-3: #eeebeb;
         --gray-4: #bbb;
         --gray-5: #999;
-        --gray-6: #666;
+        --gray-6: #000000;
         --gray-65: #555;
         --gray-7: #2c2c2c;
         --gray-8: #252525;
@@ -41,12 +41,21 @@
         --color-button-bg-base: var(--gray-2);
         --color-button-border-base: var(--gray-5);
         --color-blog-tag-bg-base: var(--gray-3);
+        --color-toc-text-base: #596869;
 
-
-
-        --markdwon-code-backgroud: var(--gray-2);
+        /* Markdown 渲染的一些颜色 */
+        --markdwon-code-backgroud: #f1f1f1;
         --markdwon-text-base: var(--gray-10);
         --markdown-divide: var(--gray-4);
+        --markdown-codeblock-color1: #e73119;
+        --markdown-codeblock-color2: #8bc34a;
+        --markdown-codeblock-color3: #4cb9e8;
+        --markdown-codeblock-color4: #9e9d24;
+        --markdown-codeblock-color5: #d41800;
+        --markdown-codeblock-color6: #7e57c2;
+        --markdown-codeblock-color7: #bfbfbf;
+
+
 
 
         /* Sizes */
@@ -64,10 +73,21 @@
         --color-button-bg-base: var(--gray-7);
         --color-button-border-base: var(--gray-3);
         --color-blog-tag-bg-base: var(--gray-6);
+        --color-toc-text-base: #b1babb;
 
-        --markdwon-code-backgroud: var(--gray-6);
+        /* Markdown 渲染的一些颜色 */
+        --markdwon-code-backgroud: #282c34;
         --markdwon-text-base: var(--gray-0);
         --markdown-divide: var(--gray-4);
+        --markdown-codeblock-color1: #9257c2;
+        --markdown-codeblock-color2: #8bc34a;
+        --markdown-codeblock-color3: #4cb9e8;
+        --markdown-codeblock-color4: #9e9d24;
+        --markdown-codeblock-color5: #d41800;
+        --markdown-codeblock-color6: #4cb9e8;
+        --markdown-codeblock-color7: #bfbfbf;
+
+
 
         --theme-icon-img: url('../public/assets/icons/moon.png');
 
@@ -81,11 +101,19 @@
         --color-button-bg-base: var(--blue);
         --color-button-border-base: var(--purple);
         --color-blog-tag-bg-base: var(--violet);
+        --color-toc-text-base: #e3ab5a;
 
 
-        --markdwon-code-backgroud: var(--violet);
+        --markdwon-code-backgroud: #16795d;
         --markdwon-text-base: var(--gray-0);
         --markdown-divide: var(--gray-4);
+        --markdown-codeblock-color1: #5f2a8d;
+        --markdown-codeblock-color2: #8bc34a;
+        --markdown-codeblock-color3: #4cb9e8;
+        --markdown-codeblock-color4: #9e9d24;
+        --markdown-codeblock-color5: #8a3e2f;
+        --markdown-codeblock-color6: #de4141;
+        --markdown-codeblock-color7: #e80a0a;
 
         --theme-icon-img: url('../public/assets/icons/cyberpunk.png');
 

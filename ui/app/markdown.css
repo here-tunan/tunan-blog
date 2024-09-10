@@ -9,7 +9,7 @@
     line-height: 1.25;
 }
 .markdown-body h1 {
-    font-size: 2em;
+    font-size: 1.8em;
     margin-bottom: 16px;
     padding-bottom: .3em;
     border-bottom: 1px solid var(--markdown-divide);
@@ -17,18 +17,18 @@
 
 .markdown-body h2 {
     padding-bottom: .3em;
-    font-size: 1.8em;
+    font-size: 1.6em;
     border-bottom: 1px solid var(--markdown-divide);
 }
 
 .markdown-body h3 {
     padding-bottom: .2em;
-    font-size: 1.5em;
+    font-size: 1.4em;
     border-bottom: 1px solid var(--markdown-divide);
 }
 .markdown-body h4 {
     padding-bottom: .1em;
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 
 .markdown-body h5 {
@@ -124,19 +124,28 @@
 }
 
 .hljs-doctag, .hljs-keyword, .hljs-meta .hljs-keyword, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-variable.language_ {
-    color: #d73a49;
+    color: var(--markdown-codeblock-color1);
 }
-.hljs-title, .hljs-title.class_, .hljs-title.class_.inherited__, .hljs-title.function_ {
-    color: #6f42c1;
+
+.hljs-title.class_ {
+    color: var(--markdown-codeblock-color2);
+}
+
+.hljs-title,  .hljs-title.class_.inherited__, .hljs-title.function_ {
+    color: var(--markdown-codeblock-color3);
 }
 .hljs-meta .hljs-string, .hljs-regexp, .hljs-string {
-    color: #032f62;
+    color: var(--markdown-codeblock-color2);
 }
 .hljs-name, .hljs-quote, .hljs-selector-pseudo, .hljs-selector-tag {
     color: #22863a;
 }
-.hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-variable {
-    color: #005cc5;
+.hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-params, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-variable {
+    color: var(--markdown-codeblock-color6);
+}
+
+.hljs-comment {
+    color: var(--markdown-codeblock-color7);
 }
 .markdown-body a {
     color: #74abf5; /* 设置链接颜色 */

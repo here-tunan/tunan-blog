@@ -1,28 +1,33 @@
 .table-of-contents {
     .level0 {
         font-weight: normal;
-        font-size: 17pt;
+        font-size: 14pt;
         font-family: "Microsoft YaHei", serif;
-        padding-bottom: 5px;
+        padding-bottom: 8px;
+        color: var(--color-toc-text-base);
+        padding-left: 0;
     }
     .level1 {
         font-weight: normal;
-        font-size: 15pt;
-        font-family: "Microsoft YaHei", serif;
-        padding-bottom: 4px;
+        font-size: 12pt;
+        padding-bottom: 6px;
+        color: var(--color-toc-text-base);
+        padding-left: 6px;
     }
     .level2 {
         font-weight: lighter;
-        font-size: 13pt;
+        font-size: 11pt;
         font-family: "Microsoft YaHei", serif;
-        padding-bottom: 2px;
+        padding-bottom: 4px;
         padding-left: 10px;
+        color: var(--color-toc-text-base);
     }
     .level3 {
         font-weight: lighter;
-        font-size: 10pt;
+        font-size: 9pt;
         font-family: "Microsoft YaHei", serif;
         padding-bottom: 2px;
         padding-left: 15px;
+        color: var(--color-toc-text-base);
     }
 }

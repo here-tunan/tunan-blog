@@ -61,7 +61,7 @@ const TableOfContents = ({content}: ArticleProps) => {
 
   return (
     <div>
-      <p className="pb-10 font-mono font-bold text-lg">Content</p>
+      <p className="pb-10 font-mono font-bold text-2xl">📔Content</p>
       <div  className="overflow-y-auto h-screen" style={{ maxHeight: 'calc(100vh - 200px)' }}>
         <TOC/>
       </div>
