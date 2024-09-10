@@ -1,5 +1,6 @@
 import React from "react";
 import Skills from "@/app/components/Skills";
+import SkillsSection from "@/app/components/home/SkillsSection";
 
 export default function About() {
   return (
@@ -26,7 +27,8 @@ export default function About() {
           <br/>
           I am learning English🆎, I will try to write some blog articles in English.
         </p>
-        <Skills/>
+
+        <SkillsSection/>
       </div>
     </main>
   );

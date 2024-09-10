@@ -21,7 +21,7 @@ const Header = (props: HeaderProps) => {
       <div className="flex gap-2 mt-3 flex-wrap">
         {tags.map((tag) => (
           <button key={tag}
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded inline-flex">
+                  className="blog-tag hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded inline-flex">
             {tag}
           </button>
         ))}

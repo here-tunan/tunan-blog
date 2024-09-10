@@ -18,7 +18,7 @@ export function BlogItem({link, name, gmtCreate, tagNames}: BlogItemProps) {
           <div className="flex gap-1 px-1">
             {tagNames.map((tag) => (
               <span key={tag}
-                    className="bg-gray-100 font-light text-xs py-1 px-2 rounded inline-flex items-center font-mono">
+                    className="blog-tag font-light text-xs py-1 px-2 rounded inline-flex items-center font-mono">
                 {tag}
               </span>
             ))}

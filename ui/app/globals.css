@@ -40,6 +40,8 @@
         --color-text-base: var(--gray-10);
         --color-button-bg-base: var(--gray-2);
         --color-button-border-base: var(--gray-5);
+        --color-blog-tag-bg-base: var(--gray-3);
+
 
 
         --markdwon-code-backgroud: var(--gray-2);
@@ -61,6 +63,7 @@
         --color-text-base: var(--gray-4);
         --color-button-bg-base: var(--gray-7);
         --color-button-border-base: var(--gray-3);
+        --color-blog-tag-bg-base: var(--gray-6);
 
         --markdwon-code-backgroud: var(--gray-6);
         --markdwon-text-base: var(--gray-0);
@@ -77,6 +80,8 @@
         --color-text-base: var(--orange);
         --color-button-bg-base: var(--blue);
         --color-button-border-base: var(--purple);
+        --color-blog-tag-bg-base: var(--violet);
+
 
         --markdwon-code-backgroud: var(--violet);
         --markdwon-text-base: var(--gray-0);
@@ -109,7 +114,7 @@ h1, h2, h3, h4, h5, p, li, ul, span {
 /* section header */
 .section .section-header {
     padding-bottom: 20px;
-    padding-top: 80px;
+    padding-top: 10px;
     display: flex;
     gap: 20px;
     align-items: center;
@@ -128,4 +133,8 @@ h1, h2, h3, h4, h5, p, li, ul, span {
     padding: 8px;
     border-color: var(--color-button-border-base);
     background-color: var(--color-button-bg-base);
+}
+
+.blog-tag {
+    background: var(--color-blog-tag-bg-base);
 }
