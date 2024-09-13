@@ -46,7 +46,8 @@
         /* Markdown 渲染的一些颜色 */
         --markdwon-code-backgroud: #f1f1f1;
         --markdwon-text-base: var(--gray-10);
-        --markdown-divide: var(--gray-4);
+        --markdown-divide: #eb2344;
+        --markdown-divide-sub: var(--gray-5);
         --markdown-codeblock-color1: #e73119;
         --markdown-codeblock-color2: #8bc34a;
         --markdown-codeblock-color3: #4cb9e8;
@@ -78,7 +79,8 @@
         /* Markdown 渲染的一些颜色 */
         --markdwon-code-backgroud: #282c34;
         --markdwon-text-base: var(--gray-0);
-        --markdown-divide: var(--gray-4);
+        --markdown-divide: #eb2344;
+        --markdown-divide-sub: var(--gray-4);
         --markdown-codeblock-color1: #9257c2;
         --markdown-codeblock-color2: #8bc34a;
         --markdown-codeblock-color3: #4cb9e8;

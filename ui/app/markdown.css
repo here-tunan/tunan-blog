@@ -8,32 +8,70 @@
     font-weight: 600;
     line-height: 1.25;
 }
+
 .markdown-body h1 {
-    font-size: 1.8em;
+    font-size: 1.4em;
     margin-bottom: 16px;
     padding-bottom: .3em;
-    border-bottom: 1px solid var(--markdown-divide);
+}
+
+.markdown-body h1:after {
+    display: block;
+    content: "";
+    width: 50px;
+    margin-top: 10px;
+    border-bottom: 3px solid var(--markdown-divide);
 }
 
 .markdown-body h2 {
     padding-bottom: .3em;
-    font-size: 1.6em;
-    border-bottom: 1px solid var(--markdown-divide);
+    font-size: 1.3em;
+}
+
+.markdown-body h2:after {
+    display: block;
+    content: "";
+    width: 50px;
+    margin-top: 10px;
+    border-bottom: 3px solid var(--markdown-divide);
 }
 
 .markdown-body h3 {
     padding-bottom: .2em;
-    font-size: 1.4em;
-    border-bottom: 1px solid var(--markdown-divide);
+    font-size: 1.2em;
 }
+
+.markdown-body h3:after {
+    display: block;
+    content: "";
+    width: 50px;
+    margin-top: 10px;
+    border-bottom: 2px solid var(--markdown-divide-sub);
+}
+
 .markdown-body h4 {
     padding-bottom: .1em;
-    font-size: 1.2em;
+    font-size: 1em;
+}
+
+.markdown-body h4:after {
+    display: block;
+    content: "";
+    width: 40px;
+    margin-top: 10px;
+    border-bottom: 2px solid var(--markdown-divide-sub);
 }
 
 .markdown-body h5 {
     padding-bottom: .1em;
-    font-size: 1.1em;
+    font-size: 0.9em;
+}
+
+.markdown-body h5:after {
+    display: block;
+    content: "";
+    width: 40px;
+    margin-top: 10px;
 }
 
 .markdown-body p, .markdown-body blockquote, .markdown-body ul, .markdown-body ol, .markdown-body dl, .markdown-body table, .markdown-body pre, .markdown-body details {
@@ -89,7 +127,7 @@
 
     table caption {
         color: #000;
-        font: italic 85%/1 arial,sans-serif;
+        font: italic 85%/1 arial, sans-serif;
         padding: 1em 0;
         text-align: center;
     }
@@ -131,15 +169,18 @@
     color: var(--markdown-codeblock-color2);
 }
 
-.hljs-title,  .hljs-title.class_.inherited__, .hljs-title.function_ {
+.hljs-title, .hljs-title.class_.inherited__, .hljs-title.function_ {
     color: var(--markdown-codeblock-color3);
 }
+
 .hljs-meta .hljs-string, .hljs-regexp, .hljs-string {
     color: var(--markdown-codeblock-color2);
 }
+
 .hljs-name, .hljs-quote, .hljs-selector-pseudo, .hljs-selector-tag {
     color: #22863a;
 }
+
 .hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-params, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-variable {
     color: var(--markdown-codeblock-color6);
 }
@@ -147,6 +188,7 @@
 .hljs-comment {
     color: var(--markdown-codeblock-color7);
 }
+
 .markdown-body a {
     color: #74abf5; /* 设置链接颜色 */
 }
