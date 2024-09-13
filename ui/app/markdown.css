@@ -84,12 +84,18 @@
 .markdown-body ul {
     list-style-position: inside;
     list-style-type: disc;
+    margin-left: 10px;
+}
+
+.markdown-body ul li {
+    padding-bottom: 2px;
 }
 
 /* 设置子列表的样式 */
 .markdown-body ul ul {
     list-style-type: circle; /* 设置子列表项的符号为空心圆 */
     margin-left: 20px; /* 设置左侧间距，使其缩进显示为子列表 */
+    padding-top: 10px;
 }
 
 /** markdown style - ol **/
@@ -98,22 +104,32 @@
     list-style-type: decimal;
 }
 
+.markdown-body ol li {
+    padding-bottom: 15px;
+}
+
 /** markdown style - code**/
 .markdown-body code, .markdown-body tt {
-    padding: .2em .4em;
-    margin: 0;
-    font-size: 85%;
+    margin: .4em;
+    font-size: 95%;
     white-space: break-spaces;
     background-color: var(--markdwon-code-backgroud);
     border-radius: 6px;
+    color: var(--markdwon-code-text);
 }
 
 /** markdown style - code block**/
 .markdown-body blockquote {
-    margin: 0;
-    padding: 0 1em;
-    color: var(--gray-6);
-    border-left: .25em solid var(--gray-4);
+    border-left: .3em solid var(--markdown-blockquote-letf);
+    font-size: 0.9em;
+    background-color: var(--markdown-blockquote-background);
+}
+
+.markdown-body blockquote p, blockquote ol, blockquote ul,blockquote li {
+    color: var(--markdown-blockquote-text);
+    padding-left: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 /** markdown style - table**/
@@ -158,7 +174,9 @@
     display: block;
     overflow-x: auto;
     padding: 1em;
+    font-size: 85%;
     background-color: var(--markdwon-code-backgroud);
+    color: var(--markdown-blockquote-text);
 }
 
 .hljs-doctag, .hljs-keyword, .hljs-meta .hljs-keyword, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-variable.language_ {
@@ -191,6 +209,9 @@
 
 .markdown-body a {
     color: #74abf5; /* 设置链接颜色 */
+}
+.markdown-body a:hover {
+    text-decoration: underline;
 }
 
 /* 当光标悬停在 h 标签上时显示 SVG 图标 */

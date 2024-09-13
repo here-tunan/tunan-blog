@@ -44,7 +44,8 @@
         --color-toc-text-base: #596869;
 
         /* Markdown 渲染的一些颜色 */
-        --markdwon-code-backgroud: #f1f1f1;
+        --markdwon-code-backgroud: var(--gray-1);
+        --markdwon-code-text: #ea4c9b;
         --markdwon-text-base: var(--gray-10);
         --markdown-divide: #eb2344;
         --markdown-divide-sub: var(--gray-5);
@@ -55,6 +56,9 @@
         --markdown-codeblock-color5: #d41800;
         --markdown-codeblock-color6: #7e57c2;
         --markdown-codeblock-color7: #bfbfbf;
+        --markdown-blockquote-letf: #86d5a8;
+        --markdown-blockquote-text: var(--gray-5);
+        --markdown-blockquote-background: var(--gray-3);
 
 
 
@@ -77,7 +81,8 @@
         --color-toc-text-base: #b1babb;
 
         /* Markdown 渲染的一些颜色 */
-        --markdwon-code-backgroud: #282c34;
+        --markdwon-code-backgroud: #191c21;
+        --markdwon-code-text: #ee839c;
         --markdwon-text-base: var(--gray-0);
         --markdown-divide: #eb2344;
         --markdown-divide-sub: var(--gray-4);
@@ -88,6 +93,9 @@
         --markdown-codeblock-color5: #d41800;
         --markdown-codeblock-color6: #4cb9e8;
         --markdown-codeblock-color7: #bfbfbf;
+        --markdown-blockquote-letf: #de5555;
+        --markdown-blockquote-text: var(--gray-5);
+        --markdown-blockquote-background: var(--gray-7);
 
 
 
@@ -116,6 +124,7 @@
         --markdown-codeblock-color5: #8a3e2f;
         --markdown-codeblock-color6: #de4141;
         --markdown-codeblock-color7: #e80a0a;
+        --markdown-blockquote-letf: #e80a0a;
 
         --theme-icon-img: url('../public/assets/icons/cyberpunk.png');
 
