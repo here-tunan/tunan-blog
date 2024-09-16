@@ -2,6 +2,7 @@ import Header from "@/app/blog/[slug]/header";
 import Content from "@/app/blog/[slug]/content";
 import service from "@/app/api/request";
 import TableOfContents from "@/app/components/markdown/toc";
+import Comment from "@/app/blog/[slug]/comment";
 
 export default async function Page({params}: { params: { slug: string } }) {
 
@@ -34,12 +35,13 @@ export default async function Page({params}: { params: { slug: string } }) {
     <div className="container">
       <div className="">
         <div>
-          <Header title={article.title} date={article.gmtCreate} tags={article.tagNames} />
+          <Header title={article.title} date={article.gmtCreate} tags={article.tagNames}/>
         </div>
 
         <div className="blog-content flex flex-row">
           <div className="w-3/4">
             <Content content={article.content}/>
+            <Comment commentsId="123"/>
           </div>
 
           <div className="w-1/4 pl-4">
