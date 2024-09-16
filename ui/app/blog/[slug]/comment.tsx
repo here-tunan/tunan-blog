@@ -1,6 +1,6 @@
 'use client'
 
-import {Fragment, useEffect} from 'react'
+import {Fragment, useEffect, useState} from 'react'
 
 declare global {
   interface Window {
@@ -81,6 +81,14 @@ type CommentsProps = {
 // The location prop is {props.location.pathname} from the parent component.
 // I.e. invoke the component like this in the parent: <Comments location={props.location.pathname} />
 export function Comments({ location }: CommentsProps) {
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    // 获取当前页面的 URL
+    const currentUrl = window.location.origin + window.location.pathname;
+    setUrl(currentUrl);
+  }, []);
+
   // Insert the two useEffect hooks. Maybe you can combine them into one? Feel free if you want to.
   useEffect(manageScript, [location]);
   useEffect(recreateRemark42Instance, [location]);
@@ -88,7 +96,7 @@ export function Comments({ location }: CommentsProps) {
   return (
     <Fragment>
       <h2>Comments</h2>
-      <span className="counter"><span className="remark42__counter" data-url="{{ window.location.origin + window.location.pathname }}"></span></span>
+      <span className="counter"><span className="remark42__counter" data-url={url}></span></span>
       {/* This div is the target for actual comments insertion */}
       <div id="remark42"/>
     </Fragment>
