@@ -25,17 +25,16 @@ const insertScript = (id: string, parentElement: HTMLElement) => {
     host: 'https://remark42.tunan.fun',
     components: ['embed', 'counter'],
     site_id: 'tunan-remark',
-    url: "{url}",
+    url: "${url}",
     max_shown_comments: 10,
     theme: 'light',
     page_title: 'Moving to Remark42',
     locale: 'en',
     show_email_subscription: false, 
   };
-  !function(e,n){for(var o=0;o<e.length;o++){var r=n.createElement("script"),c=".js",d=n.head||n.body;"noModule"in r?(r.type="module",c=".mjs"):r.async=!0,r.defer=!0,r.src=remark_config.host+"/web/"+e[o]+c,d.appendChild(r)}}(remark_config.components||["embed"],document);\`;
-  `
-  parentElement.appendChild(script)
-}
+  !function(e,n){for(var o=0;o<e.length;o++){var r=n.createElement("script"),c=".js",d=n.head||n.body;"noModule"in r?(r.type="module",c=".mjs"):r.async=!0,r.defer=!0,r.src=remark_config.host+"/web/"+e[o]+c,d.appendChild(r)}}(remark_config.components||["embed"],document);`;
+  parentElement.appendChild(script);
+};
 
 /* This function removes the previously added script from the DOM.
 Might be necessary when page transitions happen, to make sure a new instance
@@ -76,7 +75,7 @@ const recreateRemark42Instance = () => {
 };
 
 type CommentsProps = {
-  location: string;
+  location: string | number;
 };
 
 // The location prop is {props.location.pathname} from the parent component.

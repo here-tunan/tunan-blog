@@ -41,7 +41,7 @@ export default async function Page({params}: { params: { slug: string } }) {
         <div className="blog-content flex flex-row">
           <div className="w-3/4">
             <Content content={article.content}/>
-            <Comments location={params.slug}/>
+            <Comments location={"123"}/>
           </div>
 
           <div className="w-1/4 pl-4">
