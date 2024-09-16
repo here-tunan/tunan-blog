@@ -2,7 +2,7 @@ import Header from "@/app/blog/[slug]/header";
 import Content from "@/app/blog/[slug]/content";
 import service from "@/app/api/request";
 import TableOfContents from "@/app/components/markdown/toc";
-import Comment from "@/app/blog/[slug]/comment";
+import {Comments} from "@/app/blog/[slug]/comment";
 
 export default async function Page({params}: { params: { slug: string } }) {
 
@@ -41,7 +41,7 @@ export default async function Page({params}: { params: { slug: string } }) {
         <div className="blog-content flex flex-row">
           <div className="w-3/4">
             <Content content={article.content}/>
-            <Comment commentsId="123"/>
+            <Comments location={params.slug}/>
           </div>
 
           <div className="w-1/4 pl-4">
