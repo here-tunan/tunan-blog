@@ -13,7 +13,7 @@ const insertScript = (id: string, parentElement: HTMLElement) => {
     var remark_config = {
     host: 'https://remark42.tunan.fun',
     components: ['embed', 'counter'],
-    site_id: 'tunan-remark-fun',
+    site_id: 'tunan-remark',
     max_shown_comments: 10,
     theme: 'light',
     page_title: 'Moving to Remark42',
