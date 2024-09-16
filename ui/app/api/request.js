@@ -8,9 +8,9 @@ console.log("apiUrl: " + apiUrl)
 const service = axios.create({
     baseURL: apiUrl,
     timeout: 50000, // request timeout
-    headers: {
-        'Content-Type': 'application/json', // header config
-    },
+    // headers: {
+    //     'Content-Type': 'application/json', // header config
+    // },
 })
 
 export default service
