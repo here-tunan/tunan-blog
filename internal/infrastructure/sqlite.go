@@ -13,9 +13,12 @@ var Sqlite *xorm.Engine
 func init() {
 
 	println("sqlite3 connect db file", env.Prop.Sqlite3.File)
-	newEngine, _ := xorm.NewEngine("sqlite3", env.Prop.Sqlite3.File)
+	newEngine, err := xorm.NewEngine("sqlite3", env.Prop.Sqlite3.File)
 
-	// println(err)
+	if err != nil {
+		println("sqlite3 connect failed", err)
+		return
+	}
 
 	// 设置驼峰转换
 	newEngine.SetMapper(names.GonicMapper{})
@@ -23,7 +26,7 @@ func init() {
 	// 时区
 	newEngine.TZLocation, _ = time.LoadLocation("Asia/Shanghai")
 
-	err := newEngine.Ping()
+	err = newEngine.Ping()
 	if err != nil {
 		println("sqlite3 connect failed", err)
 		return
