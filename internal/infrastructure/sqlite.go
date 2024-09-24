@@ -24,6 +24,7 @@ func init() {
 
 	err := newEngine.Ping()
 	if err != nil {
+		println("sqlite3 connect failed", err)
 		return
 	}
 
