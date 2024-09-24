@@ -12,6 +12,7 @@ var Sqlite *xorm.Engine
 
 func init() {
 
+	println("sqlite3 connect db file", env.Prop.Sqlite3.File)
 	newEngine, _ := xorm.NewEngine("sqlite3", env.Prop.Sqlite3.File)
 
 	// println(err)
