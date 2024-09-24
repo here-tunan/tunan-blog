@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/gofiber/fiber/v2 v2.52.4
+	github.com/mattn/go-sqlite3 v1.14.16
 	gopkg.in/yaml.v3 v3.0.1
 	xorm.io/xorm v1.3.9
 )

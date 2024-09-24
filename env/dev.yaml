@@ -1,3 +1,5 @@
+sqlite3:
+  file: /Users/yaodao/devTools/sqlite/sqlite.db
 mysql:
   host: 127.0.0.1
   port: 3306

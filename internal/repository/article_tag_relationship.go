@@ -21,6 +21,6 @@ func (a *ArticleTagRelationship) TableName() string {
 func GetArticleTagRelationshipByArticleId(articleId int64) ([]ArticleTagRelationship, error) {
 
 	var articleTagRelationships []ArticleTagRelationship
-	err := infrastructure.Mysql.Where("article_id = ?", articleId).Join("INNER", "article_tag", "article_tag.id = article_tag_relationship.tag_id").Find(&articleTagRelationships)
+	err := infrastructure.Sqlite.Where("article_id = ?", articleId).Join("INNER", "article_tag", "article_tag.id = article_tag_relationship.tag_id").Find(&articleTagRelationships)
 	return articleTagRelationships, err
 }

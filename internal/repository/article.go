@@ -30,7 +30,7 @@ type ArticleQueryParam struct {
 }
 
 func GetArticleBySlug(slug string) (Article, error) {
-	session := infrastructure.Mysql.Where("is_deleted = 0")
+	session := infrastructure.Sqlite.Where("is_deleted = 0")
 	session.And("slug = ?", slug)
 	var article Article
 
@@ -43,7 +43,7 @@ func GetArticleBySlug(slug string) (Article, error) {
 
 // QueryArticle 查询符合查询参数的文章
 func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
-	session := infrastructure.Mysql.Where("is_deleted = 0")
+	session := infrastructure.Sqlite.Where("is_deleted = 0")
 	if param.Type != 0 {
 		session = session.And("type = ?", param.Type)
 	}

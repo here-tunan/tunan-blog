@@ -8,6 +8,10 @@ import (
 )
 
 type Properties struct {
+	Sqlite3 struct {
+		File string `json:"file"`
+	} `json:"sqlite3"`
+
 	Mysql struct {
 		Host     string `json:"host"`
 		Port     int    `json:"port"`
