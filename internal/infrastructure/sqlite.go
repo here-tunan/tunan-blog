@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	_ "github.com/mattn/go-sqlite3"
+	"log"
 	"time"
 	"tunan-blog/env"
 	"xorm.io/xorm"
@@ -16,7 +17,7 @@ func init() {
 	newEngine, err := xorm.NewEngine("sqlite3", env.Prop.Sqlite3.File)
 
 	if err != nil {
-		println("sqlite3 connect failed", err)
+		log.Println(err)
 		return
 	}
 
@@ -28,7 +29,7 @@ func init() {
 
 	err = newEngine.Ping()
 	if err != nil {
-		println("sqlite3 connect failed", err)
+		log.Println(err)
 		return
 	}
 
