@@ -2,7 +2,10 @@
 Personal blog system.
 
 ## 1. how to start go backend
-- build the linux execute file locally： `CGO_ENABLED=0  GOOS=linux  GOARCH=amd64 go build -o tunan-blog cmd/tunan-blog/main.go`
+- build the linux execute file locally： `CGO_ENABLED=1  GOOS=linux  GOARCH=amd64 go build -o tunan-blog cmd/tunan-blog/main.go`
+- `CGO_ENABLED=1 GOOS=linux  GOARCH=amd64  CC=x86_64-linux-musl-gcc  CXX=x86_64-linux-musl-g++ go build -o tunan-blog cmd/tunan-blog/main.go`
+[CGO_ENABLED=1 get error: How to solve it](https://www.baifachuan.com/posts/4862a3b1.html)
+
 - upload the file to your server, like here：`/home/xxx/my-app/tunan-blog`
 - add prod.yaml file as the prod config file(following the env file folder)：`/home/yaodao/my-app/tunan-blog/env/prod.yaml`
 - config the env variable：`export GO_TUNAN_BLOG_ENV=prod`
