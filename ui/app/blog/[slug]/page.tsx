@@ -13,23 +13,22 @@ export default async function Page({params}: { params: { slug: string } }) {
     tagNames: []
   }
 
+
   await service.get('/article', {
     params: {
       slug: params.slug,
     }
-  })
-    .then(function (response) {
-      // console.log(response.data);
-      let data = response.data;
-      if (data.success) {
-        article = data.data
-      }
-      console.log(article.title)
-      console.log(article.gmtCreate)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  }).then(function (response) {
+    // console.log(response.data);
+    let data = response.data;
+    if (data.success) {
+      article = data.data
+    }
+    console.log(article.title)
+    console.log(article.gmtCreate)
+  }).catch(function (error) {
+    console.log(error);
+  });
 
   return (
     <div className="container">
@@ -41,7 +40,7 @@ export default async function Page({params}: { params: { slug: string } }) {
         <div className="blog-content flex flex-row">
           <div className="w-3/4">
             <Content content={article.content}/>
-            {/*<Comments location={"123"}/>*/}
+            <Comments />
           </div>
 
           <div className="w-1/4 pl-4">

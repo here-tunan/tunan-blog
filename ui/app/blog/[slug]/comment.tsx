@@ -80,7 +80,7 @@ type CommentsProps = {
 
 // The location prop is {props.location.pathname} from the parent component.
 // I.e. invoke the component like this in the parent: <Comments location={props.location.pathname} />
-export function Comments({ location }: CommentsProps) {
+export function Comments() {
   const [url, setUrl] = useState('');
 
   useEffect(() => {
@@ -90,13 +90,15 @@ export function Comments({ location }: CommentsProps) {
   }, []);
 
   // Insert the two useEffect hooks. Maybe you can combine them into one? Feel free if you want to.
-  useEffect(manageScript, [location]);
-  useEffect(recreateRemark42Instance, [location]);
+  useEffect(manageScript, []);
+  useEffect(recreateRemark42Instance, []);
 
   return (
     <Fragment>
-      <h2>Comments</h2>
-      <span className="counter"><span className="remark42__counter" data-url={url}></span></span>
+      <div className="mt-10 mb-5 border-t-2 pt-3">
+        <span className="text-2xl pr-1 font-extralight">Comments</span>
+        <span className="counter align-super font-bold"><span className="remark42__counter" data-url={url}></span></span>
+      </div>
       {/* This div is the target for actual comments insertion */}
       <div id="remark42"/>
     </Fragment>
