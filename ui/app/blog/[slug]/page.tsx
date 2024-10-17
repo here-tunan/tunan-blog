@@ -1,8 +1,8 @@
-import Header from "@/app/blog/[slug]/header";
-import Content from "@/app/blog/[slug]/content";
+import Header from "@/app/components/blog/header";
+import Content from "@/app/components/blog/content";
 import service from "@/app/api/request";
 import TableOfContents from "@/app/components/markdown/toc";
-import {Comments} from "@/app/blog/[slug]/comment";
+import {Comments} from "@/app/components/blog/comment";
 
 export default async function Page({params}: { params: { slug: string } }) {
 

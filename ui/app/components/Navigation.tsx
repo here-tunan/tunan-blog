@@ -20,6 +20,12 @@ const items = [
     "target": "_self",
   },
   {
+    "name": "Weekly",
+    "href": "/weekly",
+    "img": "/assets/icons/7-days.png",
+    "target": "_self",
+  },
+  {
     "name": "About",
     "href": "/about",
     "img": "/assets/icons/cool.png",

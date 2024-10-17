@@ -1,6 +1,4 @@
 import React from "react";
-import SkillsSection from "@/app/components/home/SkillsSection";
-import ProjectsSection from "@/app/components/home/ProjectsSection";
 import BlogsSection from "@/app/components/home/BlogsSection";
 
 
