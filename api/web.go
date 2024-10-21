@@ -27,7 +27,7 @@ func Start() {
 		}
 
 		// 否则需要进行token验证
-		apiKey := c.Query("apiKey")
+		apiKey := c.Query("apikey")
 		if apiKey != env.Prop.Apikey {
 			return c.Status(401).SendString("Invalid apiKey")
 		}
