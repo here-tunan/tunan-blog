@@ -5,11 +5,10 @@ mysql:
   port: 3306
   username: root
   password: root
-redis:
-  host: 127.0.0.1
-  port: 6379
-  db: 0
-  password:
-elasticSearch:
-  host: http://127.0.0.1
-  port: 9200
+apikey: rss_api_secret_key
+website:
+  url: your_website_url
+  title: your_website_title
+  description: your_website_description
+  follow_feed_id: follow_feed_id_for_claim
+  follow_user_id: follow_user_id_for_claim

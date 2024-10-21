@@ -5,9 +5,10 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 	"strings"
+	"tunan-blog/env"
 )
 
-var authWhiteList = []string{"login", "validToken", "refreshToken", "category_analysis", "category_immigrate"}
+var authList = []string{"rss"}
 
 func Start() {
 
@@ -21,7 +22,15 @@ func Start() {
 	validateMiddleware := func(c *fiber.Ctx) error {
 		api := c.Path()
 		println("validateMiddleware: ", api)
+		if !isNeedAuth(api) {
+			return c.Next()
+		}
 
+		// 否则需要进行token验证
+		apiKey := c.Query("apiKey")
+		if apiKey != env.Prop.Apikey {
+			return c.Status(401).SendString("Invalid apiKey")
+		}
 		return c.Next()
 	}
 
@@ -35,12 +44,13 @@ func Start() {
 	root := app.Group("/api")
 
 	root.Mount("/article", ArticleMount())
+	root.Mount("/rss", RssMount())
 
 	log.Fatal(app.Listen(":3002"))
 }
 
-func isNotNeedAuth(api string) bool {
-	for _, s := range authWhiteList {
+func isNeedAuth(api string) bool {
+	for _, s := range authList {
 		if strings.HasSuffix(api, s) {
 			return true
 		}

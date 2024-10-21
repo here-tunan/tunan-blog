@@ -19,21 +19,15 @@ type Properties struct {
 		Password string `json:"password"`
 	} `json:"mysql"`
 
-	Redis struct {
-		HOST     string `json:"host"`
-		Port     string `json:"port"`
-		Db       int    `json:"db"`
-		Password string `json:"password"`
-	} `json:"redis"`
+	Website struct {
+		Url          string `json:"url"`
+		Title        string `json:"title"`
+		Description  string `json:"description"`
+		FollowFeedId string `json:"followFeedId" yaml:"follow_feed_id"`
+		FollowUserId string `json:"followUserId" yaml:"follow_user_id"`
+	} `json:"website"`
 
-	// 像这种 AaaBbb的 需要使用 yaml 标签对应配置文件中的内容才能被成功解析
-	ElasticSearch struct {
-		Host        string `json:"host"`
-		Port        int    `json:"port"`
-		Username    string `json:"username"`
-		Password    string `json:"password"`
-		Fingerprint string `json:"fingerprint"`
-	} `json:"elasticSearch" yaml:"elasticSearch"`
+	Apikey string `json:"apikey"`
 }
 
 var Prop *Properties
