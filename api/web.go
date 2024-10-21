@@ -29,6 +29,8 @@ func Start() {
 		// 否则需要进行token验证
 		apiKey := c.Query("apikey")
 		if apiKey != env.Prop.Apikey {
+			// 打印apikey 和 配置文件中的apikey
+			log.Printf("apikey: %s, config apikey: %s", apiKey, env.Prop.Apikey)
 			return c.Status(401).SendString("Invalid apiKey")
 		}
 		return c.Next()
