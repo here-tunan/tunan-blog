@@ -1,12 +1,13 @@
 import React from "react";
 import Skills from "@/app/components/Skills";
-import SkillsSection from "@/app/components/home/SkillsSection";
+import {Comments} from "@/app/components/blog/comment";
 
 export default function About() {
   return (
     <main>
       <div className="container">
-        <p className="pb-20">
+        <h3 className="font-mono font-bold text-3xl pb-10">👦🏻 Introduction</h3>
+        <p className="pb-10">
           嗨👋，我是图南Tunan，一个想成为全栈工程师的开发者🇨🇳。以后想参与更多的开源项目为社区做贡献。
           <br/>
           <br/>
@@ -16,7 +17,7 @@ export default function About() {
           <br/>
           <br/>
 
-          I am Tunan who want to be a full stack developer. You can also call me Aaron.
+          I am Tunan who wants to be a full stack developer. You can also call me Aaron.
           <br/>
           <br/>
           I would like to participate in more open source projects and contribute to the community.☘️
@@ -28,7 +29,11 @@ export default function About() {
           I am learning English🆎, I will try to write some blog articles in English.
         </p>
 
-        <SkillsSection/>
+        <h3 className="font-mono font-bold text-3xl pt-5 pb-10">🛠️ Languages and Tools</h3>
+        <Skills/>
+
+        <h3 className="font-mono font-bold text-3xl pt-20">🐳 Why not leave a comment?</h3>
+        <Comments/>
       </div>
     </main>
   );
