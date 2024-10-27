@@ -22,11 +22,12 @@ type Article struct {
 }
 
 type ArticleQueryParam struct {
-	StartTime string `json:"startTime"`
-	EndTime   string `json:"endTime"`
-	PageSize  int    `json:"pageSize"`
-	PageIndex int    `json:"pageIndex"`
-	Type      int    `json:"type"`
+	StartTime     string `json:"startTime"`
+	EndTime       string `json:"endTime"`
+	PageSize      int    `json:"pageSize"`
+	PageIndex     int    `json:"pageIndex"`
+	Type          int    `json:"type"`
+	IgnoreContent bool   `json:"ignoreContent"`
 }
 
 func GetArticleBySlug(slug string) (Article, error) {
@@ -75,7 +76,11 @@ func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
 	session.Desc("gmt_create")
 
 	var articles []Article
-	err := session.Find(&articles)
+	columns := []string{"id", "title", "slug", "view_number", "like_number", "gmt_create"}
+	if !param.IgnoreContent {
+		columns = append(columns, "content")
+	}
+	err := session.Cols(columns...).Find(&articles)
 	if err != nil {
 		log.Println(err)
 		return articles, total, err

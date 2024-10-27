@@ -12,6 +12,7 @@
     "@types/react-syntax-highlighter": "^15.5.11",
     "antd": "^5.16.1",
     "axios": "^1.7.7",
+    "framer-motion": "^11.11.10",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "markdown-navbar": "^1.4.0",

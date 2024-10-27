@@ -23,6 +23,7 @@ func ArticleMount() *fiber.App {
 		param := &repository.ArticleQueryParam{}
 
 		err := ctx.BodyParser(param)
+		param.IgnoreContent = true
 		if err != nil {
 			return ctx.JSON(&fiber.Map{
 				"success": false,
