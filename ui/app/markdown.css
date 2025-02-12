@@ -214,6 +214,34 @@
     text-decoration: underline;
 }
 
+.markdown-body .image-text {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.markdown-body .image-text img {
+    margin-right: 15px;
+}
+
+.markdown-body .image-text p {
+    flex: 1;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .markdown-body .image-text {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .markdown-body .image-text img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
 /* 当光标悬停在 h 标签上时显示 SVG 图标 */
 h1:hover .heading_anchor_svg,
 h2:hover .heading_anchor_svg,

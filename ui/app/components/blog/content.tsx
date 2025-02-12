@@ -5,6 +5,8 @@ import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeRaw from 'rehype-raw'
+
 
 type ContentProps = {
   content: string
@@ -25,7 +27,7 @@ const Content = async (props: ContentProps) => {
   return (
     <Markdown className="markdown-body"
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight, rehypeSlug, [rehypeAutolinkHeadings, autolinkHeadingsOptions]]}
+              rehypePlugins={[rehypeHighlight, rehypeSlug, [rehypeAutolinkHeadings, autolinkHeadingsOptions], rehypeRaw]}
     >
       {markdown}
     </Markdown>
