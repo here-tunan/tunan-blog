@@ -1,6 +1,7 @@
 'use client'
 
 import {Fragment, useEffect, useState} from 'react'
+
 declare global {
   interface Window {
     REMARK42: any;
@@ -10,7 +11,7 @@ declare global {
 
 // This function will insert the usual <script> tag of
 // Remark42 into the specified DOM location (parentElement)
-const insertScript = (id: string, theme: string, parentElement: HTMLElement) => {
+const insertScript = (id: string, parentElement: HTMLElement) => {
   const script = window.document.createElement('script')
   script.type = 'text/javascript'
   script.async = true
@@ -19,6 +20,8 @@ const insertScript = (id: string, theme: string, parentElement: HTMLElement) => 
   if (url.endsWith('/')) {
     url = url.slice(0, -1);
   }
+  // next-themes 提供的组件会把当前主题保存在 localStorage 中
+  let theme = window.localStorage.getItem('theme') || 'light'
   script.innerHTML = `
     var remark_config = {
     host: 'https://remark42.tunan.fun',
@@ -39,7 +42,7 @@ const insertScript = (id: string, theme: string, parentElement: HTMLElement) => 
 Might be necessary when page transitions happen, to make sure a new instance
 is created, pointing to the current URL. Although this might actually
 not be necessary, please do your own testing. */
-const removeScript = (id: string , parentElement: HTMLElement) => {
+const removeScript = (id: string, parentElement: HTMLElement) => {
   const script = window.document.getElementById(id)
   if (script) {
     parentElement.removeChild(script)
@@ -48,14 +51,14 @@ const removeScript = (id: string , parentElement: HTMLElement) => {
 
 // This function will be provided to useEffect and will insert the script
 // when the component is mounted and remove it when it unmounts
-const manageScript = (theme: string) => {
-  console.log('theme = ', theme)
+const manageScript = () => {
   if (!window) {
-    return () => {};
+    return () => {
+    };
   }
-  const { document } = window;
+  const {document} = window;
   if (document.getElementById('remark42')) {
-    insertScript('comments-script', theme, document.body);
+    insertScript('comments-script', document.body);
   }
   return () => removeScript('comments-script', document.body);
 };
@@ -85,17 +88,17 @@ export function Comments() {
     setUrl(currentUrl);
   }, []);
 
-  // next-themes 提供的组件会把当前主题保存在 localStorage 中
-  const currentTheme = window.localStorage.getItem('theme') || 'light';
+
   // Insert the two useEffect hooks. Maybe you can combine them into one? Feel free if you want to.
-  useEffect(() => manageScript(currentTheme));
+  useEffect(manageScript);
   useEffect(recreateRemark42Instance, []);
 
   return (
     <Fragment>
       <div className="mt-10 mb-5 border-t-2 pt-3">
         <span className="text-2xl pr-1 font-extralight">Comments</span>
-        <span className="counter align-super font-bold"><span className="remark42__counter" data-url={url}></span></span>
+        <span className="counter align-super font-bold"><span className="remark42__counter"
+                                                              data-url={url}></span></span>
       </div>
       {/* This div is the target for actual comments insertion */}
       <div id="remark42"/>
