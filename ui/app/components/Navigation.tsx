@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import NavButton from "@/app/components/NavButton";
 import {useTheme} from "next-themes";
 import {themes} from "@/app/themes";
@@ -74,6 +74,17 @@ export default function Navigation() {
     console.log(newTheme)
     setTheme(newTheme)
   }
+
+  // 更新 Remark42 的主题并重新初始化
+  const updateTheme = (themeState: number) => {
+    if (window && window.REMARK42) {
+      let theme = themes[(themeState) % themes.length].theme; // 更新主题配置
+      window.REMARK42.changeTheme(theme)
+    }
+  };
+  useEffect(() => {
+    updateTheme(themeState); // 组件加载时设置主题
+  }, [themeState]);
 
   return (
     <div

@@ -1,7 +1,6 @@
 'use client'
 
 import {Fragment, useEffect, useState} from 'react'
-
 declare global {
   interface Window {
     REMARK42: any;
@@ -11,7 +10,7 @@ declare global {
 
 // This function will insert the usual <script> tag of
 // Remark42 into the specified DOM location (parentElement)
-const insertScript = (id: string, parentElement: HTMLElement) => {
+const insertScript = (id: string, theme: string, parentElement: HTMLElement) => {
   const script = window.document.createElement('script')
   script.type = 'text/javascript'
   script.async = true
@@ -27,7 +26,7 @@ const insertScript = (id: string, parentElement: HTMLElement) => {
     site_id: 'tunan-remark',
     url: "${url}",
     max_shown_comments: 10,
-    theme: 'light',
+    theme: "${theme}",
     page_title: 'Moving to Remark42',
     locale: 'en',
     show_email_subscription: false, 
@@ -49,13 +48,14 @@ const removeScript = (id: string , parentElement: HTMLElement) => {
 
 // This function will be provided to useEffect and will insert the script
 // when the component is mounted and remove it when it unmounts
-const manageScript = () => {
+const manageScript = (theme: string) => {
+  console.log('theme = ', theme)
   if (!window) {
     return () => {};
   }
   const { document } = window;
   if (document.getElementById('remark42')) {
-    insertScript('comments-script', document.body);
+    insertScript('comments-script', theme, document.body);
   }
   return () => removeScript('comments-script', document.body);
 };
@@ -74,10 +74,6 @@ const recreateRemark42Instance = () => {
   }
 };
 
-type CommentsProps = {
-  location: string | number;
-};
-
 // The location prop is {props.location.pathname} from the parent component.
 // I.e. invoke the component like this in the parent: <Comments location={props.location.pathname} />
 export function Comments() {
@@ -89,8 +85,10 @@ export function Comments() {
     setUrl(currentUrl);
   }, []);
 
+  // next-themes 提供的组件会把当前主题保存在 localStorage 中
+  const currentTheme = window.localStorage.getItem('theme') || 'light';
   // Insert the two useEffect hooks. Maybe you can combine them into one? Feel free if you want to.
-  useEffect(manageScript, []);
+  useEffect(() => manageScript(currentTheme));
   useEffect(recreateRemark42Instance, []);
 
   return (

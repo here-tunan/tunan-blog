@@ -73,7 +73,7 @@
 
     .dark {
         /* Colors */
-        --color-background-base: var(--gray-10);
+        --color-background-base: var(--gray-8);
         --color-text-base: var(--gray-4);
         --color-button-bg-base: var(--gray-7);
         --color-button-border-base: var(--gray-3);
