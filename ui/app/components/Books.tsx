@@ -2,6 +2,14 @@
 
 import React, {useState} from 'react';
 
+interface Book {
+    blog_link: string | null; // 允许 null
+    douban_link?: string | null; // 允许 null
+    name: string;
+    category: string;
+    rating: number;
+}
+
 const books = [
     // 技术与编程
     {
@@ -133,7 +141,7 @@ const books = [
     },
 ];
 
-const Star = ({filled}) => {
+const Star = ({filled}: { filled: boolean }) => {
     return (
         <svg width="16" height="16" viewBox="0 0 24 24" fill={filled ? 'gold' : 'gray'} stroke="gold" strokeWidth="1">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.77 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/>
@@ -141,7 +149,7 @@ const Star = ({filled}) => {
     );
 };
 
-const Book = ({book}) => {
+const Book = ({book}: { book: Book }) => {
     const [showModal, setShowModal] = useState(false);
 
     const isDev = process.env.NODE_ENV === 'development';
@@ -231,14 +239,14 @@ const Book = ({book}) => {
 };
 
 export default function Books() {
-    const groupedBooks = books.reduce((acc, book) => {
+    const groupedBooks = books.reduce((acc: Record<string, Book[]>, book) => {
         const category = book.category;
         if (!acc[category]) {
             acc[category] = [];
         }
         acc[category].push(book);
         return acc;
-    }, {});
+    }, {} as Record<string, Book[]>);
 
     const categoryOrder = [
         '技术与编程',

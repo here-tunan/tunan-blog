@@ -16,7 +16,7 @@ export default function About() {
 
                             <h4 className="font-mono font-bold text-xl pt-5 pb-5">Who I Am</h4>
                             <p>
-                                Hello there! I'm Tunan, but you can also call me Aaron. I'm a Java Backend Development Engineer from
+                                Hello there! I&apos;m Tunan, but you can also call me Aaron. I&apos;m a Java Backend Development Engineer from
                                 China 🇨🇳 and a passionate developer on a journey to become a full-stack engineer.
                             </p>
 
@@ -44,7 +44,7 @@ export default function About() {
 
                             <h4 className="font-mono font-bold text-xl pt-5 pb-5">On this Blog</h4>
                             <p>
-                                I'm continuously improving my English 📚 and will be sharing my thoughts and technical
+                                I&apos;m continuously improving my English 📚 and will be sharing my thoughts and technical
                                 explorations on this blog. Thanks for stopping by! 😊
                             </p>
                         </div>
