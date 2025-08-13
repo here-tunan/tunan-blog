@@ -1,12 +1,11 @@
 import axios from "axios";
+import { API_URL } from "@/lib/config";
 
-const apiUrl = process.env.NODE_ENV === 'production' ? "https://yourprod.com" : "http://127.0.0.1:3002/api";
-
-console.log("apiUrl: " + apiUrl)
+console.log("apiUrl: " + API_URL)
 
 // create an axios instance
 const service = axios.create({
-    baseURL: apiUrl,
+    baseURL: API_URL,
     timeout: 50000, // request timeout
     // headers: {
     //     'Content-Type': 'application/json', // header config

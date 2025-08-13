@@ -1,57 +1,53 @@
-'use client'
-import React, {useEffect, useState} from "react";
+import React from "react";
 import BlogList from "@/app/components/blog/BlogList";
-import service from "@/app/api/request";
-import { motion, AnimatePresence } from 'framer-motion';
+import { API_URL } from "@/lib/config";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.5 } },
-  exit: { opacity: 0, transition: { duration: 0.5 } }
-};
-
-export default function BlogsSection() {
-
-  const [blogs, setBlogs] = useState([]);
-
-  // Make a request for data to an API
-  useEffect(() => {
-    service.post('/article/list', {
-      type: 1,
-      pageSize: 10,
-      pageIndex: 1,
-    })
-    .then(function (response) {
-      console.log(response.data);
-      let data = response.data;
-      if (data.success) {
-        setBlogs(data.data);
-      }
-      console.log(data.data)
-    })
-    .catch(function (error) {
-      console.log(error);
+async function getBlogs() {
+  try {
+    // We use fetch directly here to control the caching behavior
+    const response = await fetch(`${API_URL}/article/list`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 1,
+        pageSize: 10,
+        pageIndex: 1,
+      }),
+      // This is the key part: it tells Next.js not to cache the result.
+      cache: 'no-store',
     });
-  }, []);
+
+    if (!response.ok) {
+      // Log the error for debugging on the server
+      console.error(`API request failed with status: ${response.status}`);
+      return [];
+    }
+
+    const data = await response.json();
+    if (data && data.success) {
+      return data.data;
+    }
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+  }
+  return [];
+}
+
+export default async function BlogsSection() {
+  const blogs = await getBlogs();
 
   return (
-    <motion.section
-      className="section"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
+    <section className="section">
       <header className="section-header">
-        <h3 className="title">Lasted Blogs</h3>
+        <h3 className="title">Latest Blogs</h3>
         <a href="/blog" className="viewall">
           <span>View all</span>
         </a>
       </header>
 
-      <AnimatePresence initial={false} custom={{delay: 0.2}}>
-        {blogs.length > 0 && <BlogList key="blog-list" blogs={blogs} />}
-      </AnimatePresence>
-    </motion.section>
+      {blogs.length > 0 && <BlogList blogs={blogs} />}
+    </section>
   )
 }
