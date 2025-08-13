@@ -47,8 +47,15 @@ func Start() {
 
 	root.Mount("/article", ArticleMount())
 	root.Mount("/rss", RssMount())
+	root.Mount("/book", BookMount())
 
 	log.Fatal(app.Listen(":3002"))
+}
+
+func BookMount() *fiber.App {
+	book := fiber.New()
+	book.Get("/list", GetAllBooks)
+	return book
 }
 
 func isNeedAuth(api string) bool {

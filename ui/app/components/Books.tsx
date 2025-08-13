@@ -1,145 +1,20 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import api from "@/app/api/request.js";
 
 interface Book {
-    blog_link: string | null; // 允许 null
-    douban_link?: string | null; // 允许 null
+    id: number;
     name: string;
+    author: string;
     category: string;
-    rating: number;
+    douban_link: string | null;
+    my_review: string | null;
+    score: number;
+    gmt_create: string;
+    gmt_modified: string;
+    is_deleted: boolean;
 }
-
-const books = [
-    // 技术与编程
-    {
-        name: '代码大全',
-        category: '技术与编程',
-        rating: 5,
-        douban_link: 'https://book.douban.com/subject/1477390/',
-        blog_link: null
-    },
-    {
-        name: '重构',
-        category: '技术与编程',
-        rating: 5,
-        douban_link: 'https://book.douban.com/subject/30468597/',
-        blog_link: null
-    },
-    {
-        name: '软技能：代码之外的生存指南',
-        category: '技术与编程',
-        rating: 3,
-        douban_link: 'https://book.douban.com/subject/26835090/',
-        blog_link: null
-    },
-
-    // 思维与认知
-    {
-        name: '思考，快与慢',
-        category: '思维与认知',
-        rating: 4,
-        douban_link: 'https://book.douban.com/subject/10785583/',
-        blog_link: 'https://www.tunan.fun/blog/book-review-thinking-fast-and-slow'
-    },
-    {
-        name: '情商',
-        category: '思维与认知',
-        rating: 4,
-        douban_link: 'https://book.douban.com/subject/30181152/',
-        blog_link: null
-    },
-    {
-        name: '习惯的力量',
-        category: '思维与认知',
-        rating: 4,
-        douban_link: 'https://book.douban.com/subject/27045616/',
-        blog_link: null
-    },
-
-    // 社科与历史
-    {
-        name: '人类简史',
-        category: '社科与历史',
-        rating: 5,
-        douban_link: 'https://book.douban.com/subject/25985021/',
-        blog_link: null
-    },
-    {
-        name: '智人之上',
-        category: '社科与历史',
-        rating: 5,
-        douban_link: 'https://book.douban.com/subject/36924549/',
-        blog_link: null
-    },
-    {
-        name: '社会性动物',
-        category: '社科与历史',
-        rating: 4,
-        douban_link: 'https://book.douban.com/subject/26754816/',
-        blog_link: null
-    },
-    {
-        name: '大衰退时代',
-        category: '社科与历史',
-        rating: 4,
-        douban_link: 'https://book.douban.com/subject/33451663/',
-        blog_link: null
-    },
-
-    // 个人成长
-    {
-        name: '亲密关系',
-        category: '个人成长',
-        rating: 5,
-        douban_link: 'https://book.douban.com/subject/26378692/',
-        blog_link: null
-    },
-    {
-        name: '高效能人士的七个习惯',
-        category: '个人成长',
-        rating: 5,
-        douban_link: 'https://book.douban.com/subject/35241421/',
-        blog_link: null
-    },
-    {
-        name: '穷爸爸富爸爸',
-        category: '个人成长',
-        rating: 3,
-        douban_link: 'https://book.douban.com/subject/3291111/',
-        blog_link: null
-    },
-    {
-        name: '活法',
-        category: '个人成长',
-        rating: 1,
-        douban_link: 'https://book.douban.com/subject/1798929/',
-        blog_link: null
-    },
-    {
-        name: '下班后开启新的一天',
-        category: '个人成长',
-        rating: 2,
-        douban_link: 'https://book.douban.com/subject/36021556/',
-        blog_link: 'https://www.tunan.fun/blog/book-review-new-day-after-work'
-    },
-
-    // 文学与小说
-    {
-        name: '基督山伯爵',
-        category: '文学与小说',
-        rating: 3,
-        douban_link: 'https://book.douban.com/subject/1046205/',
-        blog_link: null
-    },
-    {
-        name: '杀死一只知更鸟（英文版）',
-        category: '文学与小说',
-        rating: 3,
-        douban_link: 'https://book.douban.com/subject/26879778/',
-        blog_link: null
-    },
-];
 
 const Star = ({filled}: { filled: boolean }) => {
     return (
@@ -153,9 +28,9 @@ const Book = ({book}: { book: Book }) => {
     const [showModal, setShowModal] = useState(false);
 
     const isDev = process.env.NODE_ENV === 'development';
-    const blogLink = book.blog_link && isDev
-        ? book.blog_link.replace('https://www.tunan.fun', 'http://localhost:3000')
-        : book.blog_link;
+    const blogLink = book.my_review && isDev
+        ? book.my_review.replace('https://www.tunan.fun', 'http://localhost:3000')
+        : book.my_review;
 
     const handleClick = () => {
         const hasBothLinks = book.douban_link && blogLink;
@@ -188,9 +63,10 @@ const Book = ({book}: { book: Book }) => {
                     </div>
                 )}
                 <h3 className="font-bold text-base truncate pr-5">{book.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{book.author}</p>
                 <div className="flex items-center mt-1.5">
                     {[...Array(5)].map((_, i) => (
-                        <Star key={i} filled={i < book.rating}/>
+                        <Star key={i} filled={i < book.score}/>
                     ))}
                 </div>
             </div>
@@ -239,6 +115,19 @@ const Book = ({book}: { book: Book }) => {
 };
 
 export default function Books() {
+    const [books, setBooks] = useState<Book[]>([]);
+
+    useEffect(() => {
+        api.get('/book/list').then(response => {
+            console.log("Books data from API:", response.data);
+            if (response.data) {
+                setBooks(response.data);
+            }
+        }).catch(error => {
+            console.error("Error fetching books:", error);
+        });
+    }, []);
+
     const groupedBooks = books.reduce((acc: Record<string, Book[]>, book) => {
         const category = book.category;
         if (!acc[category]) {
@@ -248,23 +137,15 @@ export default function Books() {
         return acc;
     }, {} as Record<string, Book[]>);
 
-    const categoryOrder = [
-        '技术与编程',
-        '思维与认知',
-        '社科与历史',
-        '个人成长',
-        '文学与小说',
-    ];
-
     return (
         <div className="prose dark:prose-invert max-w-none">
             <div className="max-h-96 overflow-y-auto pr-4">
                 <div className="space-y-8">
-                    {categoryOrder.map(category => (
+                    {Object.keys(groupedBooks).map(category => (
                         groupedBooks[category] && (
                             <div key={category}>
                                 <h4 className="font-mono font-bold text-xl pt-4 pb-1 mb-3 border-b border-gray-200 dark:border-gray-700">{category}</h4>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                                     {groupedBooks[category].map((book, index) => (
                                         <Book key={index} book={book}/>
                                     ))}
