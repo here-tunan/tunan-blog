@@ -1,34 +1,37 @@
 import Header from "@/app/components/blog/header";
 import Content from "@/app/components/blog/content";
-import service from "@/app/api/request";
 import TableOfContents from "@/app/components/markdown/toc";
 import {Comments} from "@/app/components/blog/comment";
+import { API_URL } from "@/lib/config";
+import { notFound } from 'next/navigation';
+
+async function getArticle(slug: string) {
+  try {
+    const response = await fetch(`${API_URL}/article?slug=${slug}`, {
+      next: { revalidate: 3600 }, // Revalidate every hour
+    });
+
+    if (!response.ok) {
+      return null; // Or handle errors more specifically
+    }
+
+    const data = await response.json();
+    if (data && data.success) {
+      return data.data;
+    }
+    return null;
+  } catch (error) {
+    console.error("Failed to fetch article:", error);
+    return null;
+  }
+}
 
 export default async function Page({params}: { params: { slug: string } }) {
+  const article = await getArticle(params.slug);
 
-  let article = {
-    title: '',
-    content: '',
-    gmtCreate: '',
-    tagNames: []
+  if (!article) {
+    notFound(); // Triggers the 404 page
   }
-
-
-  await service.get('/article', {
-    params: {
-      slug: params.slug,
-    }
-  }).then(function (response) {
-    // console.log(response.data);
-    let data = response.data;
-    if (data.success) {
-      article = data.data
-    }
-    console.log(article.title)
-    console.log(article.gmtCreate)
-  }).catch(function (error) {
-    console.log(error);
-  });
 
   return (
     <div className="container">

@@ -3,8 +3,25 @@ import Skills from "@/app/components/Skills";
 import {Comments} from "@/app/components/blog/comment";
 import DevicesAndApps from "@/app/components/DevicesAndApps";
 import Books from "@/app/components/Books";
+import { API_URL } from "@/lib/config";
 
-export default function About() {
+async function getBooks() {
+  try {
+    const response = await fetch(`${API_URL}/book/list`, {
+      method: 'GET',
+      cache: 'no-store', // Or a revalidation strategy
+    });
+    if (!response.ok) throw new Error('Failed to fetch books');
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    return [];
+  }
+}
+
+export default async function About() {
+  const books = await getBooks();
+
     return (
         <main>
             <div className="container">
@@ -62,7 +79,7 @@ export default function About() {
 
                     <div>
                         <h3 className="font-mono font-bold text-3xl pb-6">📚 My Books</h3>
-                        <Books/>
+                        <Books books={books}/>
                     </div>
 
                     <div>

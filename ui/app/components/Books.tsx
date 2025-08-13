@@ -1,7 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
-import api from "@/app/api/request.js";
+import React, { useState } from 'react';
 
 interface Book {
     id: number;
@@ -24,13 +23,10 @@ const Star = ({filled}: { filled: boolean }) => {
     );
 };
 
-const Book = ({book}: { book: Book }) => {
+const BookCard = ({book}: { book: Book }) => {
     const [showModal, setShowModal] = useState(false);
 
-    const isDev = process.env.NODE_ENV === 'development';
-    const blogLink = book.my_review && isDev
-        ? book.my_review.replace('https://www.tunan.fun', 'http://localhost:3000')
-        : book.my_review;
+    const blogLink = book.my_review;
 
     const handleClick = () => {
         const hasBothLinks = book.douban_link && blogLink;
@@ -114,20 +110,7 @@ const Book = ({book}: { book: Book }) => {
     );
 };
 
-export default function Books() {
-    const [books, setBooks] = useState<Book[]>([]);
-
-    useEffect(() => {
-        api.get('/book/list').then(response => {
-            console.log("Books data from API:", response.data);
-            if (response.data) {
-                setBooks(response.data);
-            }
-        }).catch(error => {
-            console.error("Error fetching books:", error);
-        });
-    }, []);
-
+export default function Books({ books }: { books: Book[] }) {
     const groupedBooks = books.reduce((acc: Record<string, Book[]>, book) => {
         const category = book.category;
         if (!acc[category]) {
@@ -147,7 +130,7 @@ export default function Books() {
                                 <h4 className="font-mono font-bold text-xl pt-4 pb-1 mb-3 border-b border-gray-200 dark:border-gray-700">{category}</h4>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                                     {groupedBooks[category].map((book, index) => (
-                                        <Book key={index} book={book}/>
+                                        <BookCard key={index} book={book}/>
                                     ))}
                                 </div>
                             </div>
