@@ -46,7 +46,7 @@ const items = [
 
 ]
 
-export default function Navigation() {
+export default function Navigation({ setCommandPaletteOpen }: { setCommandPaletteOpen: (open: boolean) => void }) {
 
   const [isScrolled, setIsScrolled] = React.useState(false)
 
@@ -95,10 +95,21 @@ export default function Navigation() {
           <NavButton item={item} key={i}/>
         ))}
       </nav>
-      <button className="theme-toggle-button p-3 rounded-full border"
-              onClick={themeToggleHandler}>
-        <img alt="Theme" height="20px" width="25px"></img>
-      </button>
+      <div className="flex items-center gap-3">
+        <button 
+          onClick={() => setCommandPaletteOpen(true)}
+          className="flex items-center gap-2 rounded-full border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <span>Search...</span>
+          <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        </button>
+        <button className="theme-toggle-button p-3 rounded-full border"
+                onClick={themeToggleHandler}>
+          <img alt="Theme" height="20px" width="25px"></img>
+        </button>
+      </div>
     </div>
 
   );

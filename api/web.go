@@ -49,6 +49,8 @@ func Start() {
 	root.Mount("/rss", RssMount())
 	root.Mount("/book", BookMount())
 
+	root.Get("/search", GetAllSearchItems)
+
 	log.Fatal(app.Listen(":3002"))
 }
 

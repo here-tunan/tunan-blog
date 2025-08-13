@@ -1,12 +1,12 @@
 'use client'
 import "./globals.css";
-import React from "react";
+import React, { useState } from "react";
 
-import { Metadata } from 'next';
 import Navigation from "@/app/components/Navigation";
 import Footer from "@/app/components/Footer";
 import Image from "next/image";
 import {ThemeProvider} from "@/app/components/theme-provider";
+import CommandPalette from "@/app/components/CommandPalette";
 
 
 export default function RootLayout({
@@ -14,6 +14,7 @@ export default function RootLayout({
                                    }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
   return (
     <html lang="en">
@@ -29,9 +30,10 @@ export default function RootLayout({
       // enableSystem
       disableTransitionOnChange
     >
+      <CommandPalette open={commandPaletteOpen} setOpen={setCommandPaletteOpen} />
       <div id="layout" className="layout flex-col flex min-h-screen">
 
-        <Navigation/>
+        <Navigation setCommandPaletteOpen={setCommandPaletteOpen} />
 
         <div className="flex-1">
           {children}

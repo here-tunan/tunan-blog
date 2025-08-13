@@ -22,3 +22,8 @@ go.work
 
 
 *.idea/*
+
+# Environment variables
+# Do not commit sensitive keys and credentials
+.env.local
+.env.*.local
