@@ -1,5 +1,6 @@
 import React from "react";
 import BlogsSection from "@/app/components/home/BlogsSection";
+import GitHubActivity from "@/app/components/home/GitHubActivity";
 
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
         </div>
 
         <BlogsSection/>
+        <GitHubActivity />
         {/*<ProjectsSection/>*/}
 
       </div>
