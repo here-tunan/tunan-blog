@@ -3,6 +3,7 @@ import Skills from "@/app/components/Skills";
 import {Comments} from "@/app/components/blog/comment";
 import DevicesAndApps from "@/app/components/DevicesAndApps";
 import Books from "@/app/components/Books";
+import GitHubActivity from "@/app/components/home/GitHubActivity";
 import { API_URL } from "@/lib/config";
 
 async function getBooks() {
@@ -65,6 +66,11 @@ export default async function About() {
                                 explorations on this blog. Thanks for stopping by! 😊
                             </p>
                         </div>
+                    </div>
+
+                    <div>
+                        <h3 className="font-mono font-bold text-3xl pb-10">👨‍💻 GitHub Activity</h3>
+                        <GitHubActivity />
                     </div>
 
                     <div>

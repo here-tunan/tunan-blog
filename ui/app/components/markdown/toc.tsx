@@ -41,7 +41,7 @@ const TableOfContents = ({content}: ArticleProps) => {
 
     toc.push({
       level: level,
-      id: globalID,
+      id: i, // Use the unique index 'i' as the key
       title: title,
       anchor: anchor,
     })

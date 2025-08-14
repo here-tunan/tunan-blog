@@ -1,30 +1,44 @@
+import { ViewCounter } from "@/app/components/ViewCounter";
+
 type HeaderProps = {
   date: string
   title: string
   tags: string[]
+  path: string
 }
 
 const Header = (props: HeaderProps) => {
 
-  // There will be a error without 'as Intl.DateTimeFormatOptions' or 'as const'
-  const options = { year: "numeric", month: "long", day: "numeric" } as Intl.DateTimeFormatOptions
-  const date = new Date(props.date).toLocaleDateString(undefined, options)
-  const tags = props.tags
+  const options = { year: "numeric", month: "long", day: "numeric" } as Intl.DateTimeFormatOptions;
+  const date = new Date(props.date).toLocaleDateString(undefined, options);
+  const tags = props.tags;
 
   return (
     <div className="blog-header">
-      <h1 className="font-bold font-mono text-4xl">{props.title}</h1>
-      <div className="mt-2">
-        <p className="font-serif text-sm">{date}</p>
-      </div>
+      <h1 className="font-bold font-mono text-4xl mb-4">{props.title}</h1>
 
-      <div className="flex gap-2 mt-3 flex-wrap">
-        {tags.map((tag) => (
-          <button key={tag}
-                  className="blog-tag hover:bg-gray-300 font-medium text-sm py-1 px-3 rounded inline-flex">
-            {tag}
-          </button>
-        ))}
+      {/* Meta-information line */}
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500">
+        {/* Date */}
+        <p className="font-serif">{date}</p>
+
+        {/* Views */}
+        <div className="flex items-center gap-1 font-serif">
+          <span>👀</span>
+          <ViewCounter path={props.path} className="font-medium" />
+        </div>
+
+        {/* Tags */}
+        {tags && tags.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            {tags.map((tag) => (
+              <div key={tag}
+                   className="px-3 py-1 text-xs font-medium text-indigo-800 bg-indigo-100 rounded-full">
+                #{tag}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

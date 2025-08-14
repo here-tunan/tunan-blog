@@ -177,3 +177,18 @@ h1, h2, h3, h4, h5, p, li, ul, span {
 .blog-tag {
     background: var(--color-blog-tag-bg-base);
 }
+
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient-text {
+  background: linear-gradient(to right, var(--indigo), var(--pink), var(--purple), var(--indigo));
+  background-size: 300% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradient-animation 8s ease infinite;
+}

@@ -105,17 +105,7 @@ export default async function GitHubActivity() {
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
-    <section className="section mt-12">
-      <header className="section-header">
-        <a 
-          href={`https://github.com/${process.env.GITHUB_USERNAME}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="title hover:underline"
-        >
-          GitHub: {totalContributions} contributions in the last year
-        </a>
-      </header>
+    <section className="section">
       <div className="relative overflow-hidden rounded-md border border-gray-200 dark:border-gray-700 p-4">
         <svg 
           width="100%" 

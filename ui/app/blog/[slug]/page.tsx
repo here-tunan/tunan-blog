@@ -37,7 +37,7 @@ export default async function Page({params}: { params: { slug: string } }) {
     <div className="container">
       <div className="">
         <div>
-          <Header title={article.title} date={article.gmtCreate} tags={article.tagNames}/>
+          <Header title={article.title} date={article.gmtCreate} tags={article.tagNames} path={`/blog/${params.slug}`}/>
         </div>
 
         <div className="blog-content flex flex-row">

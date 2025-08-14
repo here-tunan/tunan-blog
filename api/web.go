@@ -48,6 +48,7 @@ func Start() {
 	root.Mount("/article", ArticleMount())
 	root.Mount("/rss", RssMount())
 	root.Mount("/book", BookMount())
+	root.Mount("/view", ViewMount())
 
 	root.Get("/search", GetAllSearchItems)
 

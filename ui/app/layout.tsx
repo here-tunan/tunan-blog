@@ -7,6 +7,7 @@ import Footer from "@/app/components/Footer";
 import Image from "next/image";
 import {ThemeProvider} from "@/app/components/theme-provider";
 import CommandPalette from "@/app/components/CommandPalette";
+import { ViewTracker } from "@/app/components/ViewTracker";
 
 
 export default function RootLayout({
@@ -17,7 +18,7 @@ export default function RootLayout({
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
     <head>
       <title>tunan&apos;s blog</title>
       <link rel="shortcut icon" href="/favicon/favicon.ico?v=2"/>
@@ -31,6 +32,7 @@ export default function RootLayout({
       disableTransitionOnChange
     >
       <CommandPalette open={commandPaletteOpen} setOpen={setCommandPaletteOpen} />
+      <ViewTracker />
       <div id="layout" className="layout flex-col flex min-h-screen">
 
         <Navigation setCommandPaletteOpen={setCommandPaletteOpen} />
