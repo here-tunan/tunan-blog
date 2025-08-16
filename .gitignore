@@ -27,3 +27,6 @@ go.work
 # Do not commit sensitive keys and credentials
 .env.local
 .env.*.local
+/ui-admin/node_modules/
+/ui-admin/package-lock.json
+/ui-admin/.next/

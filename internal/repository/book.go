@@ -3,6 +3,8 @@ package repository
 import (
 	"time"
 	"tunan-blog/internal/infrastructure"
+
+	"xorm.io/xorm"
 )
 
 type Book struct {
@@ -26,4 +28,31 @@ func FindAllBooks() ([]*Book, error) {
 	var books []*Book
 	err := infrastructure.Sqlite.Where("is_deleted = ?", 0).OrderBy("gmt_modified desc").Find(&books)
 	return books, err
+}
+
+func GetBookByID(id uint) (*Book, error) {
+	var book Book
+	has, err := infrastructure.Sqlite.Where("is_deleted = ?", 0).ID(id).Get(&book)
+	if err != nil {
+		return nil, err
+	}
+	if !has {
+		return nil, nil // Or return a specific not-found error
+	}
+	return &book, nil
+}
+
+func CreateBook(session *xorm.Session, book *Book) error {
+	_, err := session.Insert(book)
+	return err
+}
+
+func UpdateBook(session *xorm.Session, book *Book) error {
+	_, err := session.ID(book.ID).Update(book)
+	return err
+}
+
+func DeleteBook(id uint) error {
+	_, err := infrastructure.Sqlite.ID(id).Cols("is_deleted").Update(&Book{IsDeleted: true})
+	return err
 }

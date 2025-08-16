@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles to override Ant Design table in dark mode */
+@layer base {
+  .dark .ant-table-wrapper .ant-table-thead > tr > th,
+  .dark .ant-table-wrapper .ant-table-tbody > tr > td,
+  .dark .ant-table-wrapper .ant-table-column-title,
+  .dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-placeholder:hover > td,
+  .dark .ant-table-wrapper .ant-table-empty .ant-empty-description {
+    color: theme('colors.gray.200');
+    background: transparent !important;
+  }
+
+  .dark .ant-table-wrapper .ant-table-thead > tr > th {
+    border-bottom: 1px solid theme('colors.gray.600');
+  }
+
+  .dark .ant-table-wrapper .ant-table-tbody > tr > td {
+    border-bottom: 1px solid theme('colors.gray.700');
+  }
+
+  .dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td {
+    background: theme('colors.gray.800') !important;
+  }
+}

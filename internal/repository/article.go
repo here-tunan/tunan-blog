@@ -4,6 +4,8 @@ import (
 	"log"
 	"time"
 	"tunan-blog/internal/infrastructure"
+
+	"xorm.io/xorm"
 )
 
 type Article struct {
@@ -13,6 +15,7 @@ type Article struct {
 	Content    string `json:"content"`
 	ViewNumber int    `json:"viewNumber"`
 	LikeNumber int    `json:"likeNumber"`
+	Type       int    `json:"type"`
 	// 是否删除
 	IsDeleted bool `json:"isDeleted"`
 	// 系统创建时间
@@ -39,6 +42,12 @@ func GetArticleBySlug(slug string) (Article, error) {
 	if err != nil {
 		return Article{}, err
 	}
+	return article, err
+}
+
+func GetArticleByID(id int64) (Article, error) {
+	var article Article
+	_, err := infrastructure.Sqlite.Where("is_deleted = 0").ID(id).Get(&article)
 	return article, err
 }
 
@@ -86,4 +95,19 @@ func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
 		return articles, total, err
 	}
 	return articles, total, nil
+}
+
+func CreateArticle(session *xorm.Session, article *Article) error {
+	_, err := session.Insert(article)
+	return err
+}
+
+func DeleteArticleById(id int64) error {
+	_, err := infrastructure.Sqlite.ID(id).Cols("is_deleted").Update(&Article{IsDeleted: true})
+	return err
+}
+
+func UpdateArticle(session *xorm.Session, article *Article) error {
+	_, err := session.ID(article.Id).Update(article)
+	return err
 }

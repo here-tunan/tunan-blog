@@ -52,6 +52,41 @@ func Start() {
 
 	root.Get("/search", GetAllSearchItems)
 
+	// --- Authentication routes ---
+	auth := app.Group("/api/auth")
+	auth.Post("/login", Login)
+
+	// --- Admin routes ---
+	admin := app.Group("/api/admin")
+	admin.Use(JWTMiddleware()) // Protect all routes in this group
+
+	// Example of a protected admin route
+	admin.Get("/test", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"message": "Welcome Admin!"})
+	})
+
+	// Analytics routes
+	admin.Get("/analytics/views", GetAnalyticsViews)
+
+	// Article management routes
+	admin.Get("/articles", GetAllArticlesForAdmin)
+	admin.Post("/articles", CreateArticleAdmin)
+	admin.Delete("/articles/:id", DeleteArticleAdmin)
+	admin.Put("/articles/:id", UpdateArticleAdmin)
+	admin.Get("/articles/:id", GetArticleAdmin)
+	admin.Get("/tags", GetAllTagsAdmin)
+
+	// Book management routes
+	admin.Get("/books", GetAllBooksAdmin)
+	admin.Post("/books", CreateBookAdmin)
+	admin.Get("/books/:id", GetBookAdmin)
+	admin.Put("/books/:id", UpdateBookAdmin)
+	admin.Delete("/books/:id", DeleteBookAdmin)
+
+	// Analytics routes
+	admin.Get("/analytics/views", GetAnalyticsViews)
+	admin.Get("/analytics/path-views", GetPathViewAnalytics)
+
 	log.Fatal(app.Listen(":3002"))
 }
 

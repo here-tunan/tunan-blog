@@ -12,3 +12,7 @@ website:
   description: your_website_description
   follow_feed_id: follow_feed_id_for_claim
   follow_user_id: follow_user_id_for_claim
+
+auth:
+  admin_password: "$2a$10$Rwkf8ripNXuClGo8FjfXnuU0WqhRxHMGsmTg9WavCRw0d0V7YRe7G"
+  jwt_secret: "a_very_secret_and_long_key_that_should_be_changed"

@@ -31,3 +31,35 @@ func CountTotalViews() (int64, error) {
 	count, err := infrastructure.Sqlite.Count(new(View))
 	return count, err
 }
+
+// PathViewCount is a struct to hold the result of the GROUP BY query
+type PathViewCount struct {
+	Path  string `xorm:"path" json:"path"`
+	Views int64  `xorm:"views" json:"views"`
+}
+
+// DailyViewCount holds the count of views for a specific date.
+type DailyViewCount struct {
+	Date  string `xorm:"date" json:"date"`
+	Views int64  `xorm:"views" json:"views"`
+}
+
+func GetViewsGroupedByPath() ([]*PathViewCount, error) {
+	var results []*PathViewCount
+	sql := "SELECT path, COUNT(*) as views FROM page_views GROUP BY path ORDER BY views DESC"
+	err := infrastructure.Sqlite.SQL(sql).Find(&results)
+	return results, err
+}
+
+// GetDailyViewCounts retrieves the total view count for each of the last N days.
+func GetDailyViewCounts(days int) ([]*DailyViewCount, error) {
+	var results []*DailyViewCount
+	// Calculate the date `days` ago
+	startDate := time.Now().AddDate(0, 0, -days)
+
+	// The SQL query for SQLite. The DATE() function extracts the date part.
+	sql := "SELECT DATE(created_at) as date, COUNT(*) as views FROM page_views WHERE created_at >= ? GROUP BY date ORDER BY date ASC"
+
+	err := infrastructure.Sqlite.SQL(sql, startDate).Find(&results)
+	return results, err
+}

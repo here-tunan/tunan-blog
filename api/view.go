@@ -1,6 +1,8 @@
 package api
 
 import (
+	"strconv"
+	"tunan-blog/internal/repository"
 	"tunan-blog/internal/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -73,4 +75,42 @@ func ViewMount() *fiber.App {
 	})
 
 	return app
+}
+
+func GetAnalyticsViews(c *fiber.Ctx) error {
+	// Default to 30 days, allow overriding with a query param
+	days, err := strconv.Atoi(c.Query("days", "30"))
+	if err != nil {
+		days = 30
+	}
+
+	results, err := service.GetDailyViews(days)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to get analytics data",
+		})
+	}
+
+	// If there are no results, return an empty array instead of null
+	if results == nil {
+		return c.JSON([]*repository.DailyViewCount{})
+	}
+
+	return c.JSON(results)
+}
+
+// GetPathViewAnalytics handles fetching view counts grouped by path.
+func GetPathViewAnalytics(c *fiber.Ctx) error {
+	results, err := service.GetPathViewCounts()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to get path analytics data",
+		})
+	}
+
+	if results == nil {
+		return c.JSON([]*repository.PathViewCount{})
+	}
+
+	return c.JSON(results)
 }

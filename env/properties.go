@@ -2,9 +2,12 @@ package env
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+	"strings"
+
+	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/yaml.v3"
 )
 
 type Properties struct {
@@ -28,6 +31,11 @@ type Properties struct {
 	} `json:"website"`
 
 	Apikey string `json:"apikey"`
+
+	Auth struct {
+		AdminPassword string `json:"admin_password" yaml:"admin_password"`
+		JwtSecret     string `json:"jwt_secret" yaml:"jwt_secret"`
+	} `json:"auth"`
 }
 
 var Prop *Properties
@@ -35,6 +43,7 @@ var Prop *Properties
 // 初始化配置文件
 func init() {
 	readEncProperties()
+	hashedPasswordIfNeeded()
 }
 
 func readEncProperties() {
@@ -66,8 +75,26 @@ func readEncProperties() {
 	if err != nil {
 		log.Fatalf("Failed to unmarshal YAML: %v", err)
 	}
-	// 打印解析后的数据
-	// fmt.Printf("%+v\n", prop)
 
 	Prop = prop
+}
+
+// hashedPasswordIfNeeded checks if the admin password is plaintext.
+// If it is, it hashes it, prints the hash for the user to update their config,
+// and uses the hash for the current session.
+func hashedPasswordIfNeeded() {
+	if Prop != nil && Prop.Auth.AdminPassword != "" && !strings.HasPrefix(Prop.Auth.AdminPassword, "$2a$") {
+		log.Println("Plaintext admin password detected. Generating bcrypt hash...")
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(Prop.Auth.AdminPassword), bcrypt.DefaultCost)
+		if err != nil {
+			log.Fatalf("Failed to hash admin password: %v", err)
+		}
+
+		log.Println("------------------------------------------------------------------------")
+		log.Printf("IMPORTANT: Please update your dev.yaml with the new hashed password:\nauth:\n  admin_password: \"%s\"", string(hashedPassword))
+		log.Println("------------------------------------------------------------------------")
+
+		// Use the hashed password for the current application lifecycle
+		Prop.Auth.AdminPassword = string(hashedPassword)
+	}
 }

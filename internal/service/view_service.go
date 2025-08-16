@@ -18,3 +18,11 @@ func GetViewsByPath(path string) (int64, error) {
 func GetTotalViews() (int64, error) {
 	return repository.CountTotalViews()
 }
+
+func GetPathViewCounts() ([]*repository.PathViewCount, error) {
+	return repository.GetViewsGroupedByPath()
+}
+
+func GetDailyViews(days int) ([]*repository.DailyViewCount, error) {
+	return repository.GetDailyViewCounts(days)
+}
