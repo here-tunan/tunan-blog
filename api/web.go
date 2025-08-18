@@ -1,11 +1,12 @@
 package api
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 	"strings"
 	"tunan-blog/env"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 var authList = []string{"rss"}
@@ -16,7 +17,12 @@ func Start() {
 		//EnablePrintRoutes: true,
 	})
 
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "https://www.tunan.fun,https://tunan.fun,http://localhost:3000,http://localhost:3001",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
+		AllowCredentials: true,
+	}))
 
 	// 定义一个中间件来进行token验证
 	validateMiddleware := func(c *fiber.Ctx) error {
