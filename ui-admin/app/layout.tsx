@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { CustomThemeProvider, useTheme } from './ThemeProvider';
+import AuthGuard from './components/AuthGuard';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import { Layout, Menu, Typography, Button, theme as antdTheme } from 'antd';
 import { 
@@ -81,38 +82,20 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 }
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
   const pathname = usePathname();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (isClient) {
-      const token = localStorage.getItem('jwt_token');
-      if (!token && pathname !== '/login') {
-        router.replace('/login');
-      }
-    }
-  }, [isClient, router, pathname]);
-
-  if (!isClient) {
-    return null;
-  }
-
-  const token = localStorage.getItem('jwt_token');
-  if (!token && pathname !== '/login') {
-    return null;
-  }
 
   return (
     <html lang="en">
+      <head>
+        <title>tunan&apos;s blog admin</title>
+        <link rel="shortcut icon" href="/favicon/favicon.ico?v=2"/>
+      </head>
       <body>
         <AntdRegistry>
           <CustomThemeProvider>
-            {pathname === '/login' ? children : <AppLayout>{children}</AppLayout>}
+            <AuthGuard>
+              {pathname === '/login' ? children : <AppLayout>{children}</AppLayout>}
+            </AuthGuard>
           </CustomThemeProvider>
         </AntdRegistry>
       </body>
@@ -121,3 +104,4 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default RootLayout;
+
