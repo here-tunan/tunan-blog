@@ -1,6 +1,7 @@
 import React from "react";
 import { API_URL } from "@/lib/config";
 import ProjectGrid from "@/app/components/project/ProjectGrid";
+import StarHistory from "@/app/components/project/StarHistory";
 
 interface GitHubInfo {
   name: string;
@@ -47,6 +48,20 @@ async function getProjects(): Promise<Project[]> {
 export default async function Projects() {
   const projects = await getProjects();
 
+  // Extract GitHub repositories from projects
+  const githubRepos = projects
+    .filter(project => project.githubUrl)
+    .map(project => {
+      const url = project.githubUrl;
+      const match = url.match(/github\.com\/([^\/]+\/[^\/]+)/);
+      return match ? match[1] : null;
+    })
+    .filter((repo): repo is string => repo !== null);
+
+  const starHistoryLinkUrl = githubRepos.length > 0
+    ? `https://www.star-history.com/#${githubRepos.join('&')}&Date`
+    : null;
+
   return (
     <main>
       <div className="container">
@@ -64,6 +79,11 @@ export default async function Projects() {
         </div>
         
         <ProjectGrid projects={projects} />
+        
+        {/* Star History Section */}
+        {githubRepos.length > 0 && starHistoryLinkUrl && (
+          <StarHistory repos={githubRepos} linkUrl={starHistoryLinkUrl} />
+        )}
       </div>
     </main>
   );

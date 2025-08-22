@@ -18,4 +18,4 @@ auth:
   jwt_secret: "a_very_secret_and_long_key_that_should_be_changed"
 
 github:
-  token: "your github token for github projects info showing"
+  token: ""
