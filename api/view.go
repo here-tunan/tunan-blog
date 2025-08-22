@@ -2,6 +2,7 @@ package api
 
 import (
 	"strconv"
+	"strings"
 	"tunan-blog/internal/repository"
 	"tunan-blog/internal/service"
 
@@ -24,7 +25,20 @@ func ViewMount() *fiber.App {
 			})
 		}
 
-		ipAddress := c.IP()
+		// 优先从X-Real-IP或X-Forwarded-For获取真实IP
+		ipAddress := c.Get("X-Real-IP")
+		if ipAddress == "" {
+			ipAddress = c.Get("X-Forwarded-For")
+			if ipAddress != "" {
+				// X-Forwarded-For可能包含多个IP，取第一个
+				if idx := strings.Index(ipAddress, ","); idx != -1 {
+					ipAddress = strings.TrimSpace(ipAddress[:idx])
+				}
+			}
+		}
+		if ipAddress == "" {
+			ipAddress = c.IP()
+		}
 		userAgent := string(c.Request().Header.UserAgent())
 
 		if err := service.TrackView(req.Path, ipAddress, userAgent); err != nil {
