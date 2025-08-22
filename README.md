@@ -17,19 +17,21 @@ A full-stack blog application built with Go and Next.js, featuring a modern, fea
 - **Blog & Articles**: Clean and readable interface for blog posts, with full Markdown rendering support.
 - **Command Palette Search**: A fast, keyboard-driven search interface (like VS Code or GitHub) to quickly find articles and navigate the site.
 - **Interactive Comment System**: Integrated with [Remark42](https://remark42.com/) for a privacy-focused, self-hosted commenting experience.
-- **View Count Tracking**: Tracks and displays view counts for each article.
-- **RSS Feed Generation**: Automatically generates an RSS feed for blog updates, compatible with any RSS reader.
-- **Folo Reader Integration**: Includes specific tracking points for the [Folo](https://folo.im/) RSS reader.
+- **View Count Tracking**: Tracks and displays view counts for each article with real client IP detection.
+- **RSS Feed Generation**: Automatically generates RSS feeds with article summaries (optimized for performance).
+- **Social Integration**: Header icons for easy access to GitHub, Discord, Folo, and RSS feeds.
+- **Folo Reader Integration**: Includes specific tracking points and direct links for the [Folo](https://folo.im/) RSS reader.
 - **Book Recommendations**: A dedicated section to display a curated list of books.
 - **Project Showcase**: Display personal or professional projects.
-- **SEO Friendly**: Includes Google Search Console verification and other SEO considerations.
+- **SEO Friendly**: Includes Google Search Console verification and RSS auto-discovery meta tags.
 - **Responsive Design**: Fully responsive layout for an optimal experience on any device.
 - **Dark/Light Theme**: A theme switcher for user preference.
 
 ### Admin Panel (`/ui-admin`)
 
 - **Secure Authentication**: JWT-based login system to protect admin routes.
-- **Dashboard**: A central dashboard to view key metrics, including a page view leaderboard.
+- **Analytics Dashboard**: View key metrics including page view leaderboard and traffic analytics.
+- **RSS Management**: One-click RSS feed generation and management tools.
 - **Full CRUD for Articles**: Create, Read, Update, and Delete articles with a rich text editor.
 - **Full CRUD for Books**: Easily manage the book recommendation list.
 - **Modern UI**: Built with Ant Design for a professional and intuitive user experience.
@@ -152,6 +154,39 @@ website:
   follow_feed_id: "YOUR_FOLO_FEED_ID"
   follow_user_id: "YOUR_FOLO_USER_ID"
 ```
+
+### RSS Feed Configuration
+
+The RSS feed is automatically generated with optimized article summaries for better performance:
+
+- **Location**: Generated at `/rss.xml` in the project root
+- **Content**: Article summaries (approximately 200 characters) instead of full content
+- **Auto-Discovery**: Meta tags are automatically included in the HTML head for RSS reader detection
+- **Management**: Use the admin panel dashboard to generate/update the RSS feed with one click
+
+### Social Links Configuration
+
+Update the social media links in the navigation component (`ui/app/components/Navigation.tsx`):
+
+- **GitHub**: Update the href in the GitHub icon link
+- **Discord**: Update the Discord server invitation URL
+- **Folo**: Update the Folo user profile URL
+
+### IP Address Tracking
+
+For accurate visitor IP tracking behind reverse proxies (nginx):
+
+1. **Fiber Configuration**: The app is configured to trust proxy headers
+2. **Nginx Setup**: Ensure your nginx configuration passes the real client IP:
+   ```nginx
+   location /api/ {
+       proxy_pass http://localhost:3002;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header X-Forwarded-Proto $scheme;
+       proxy_set_header Host $host;
+   }
+   ```
 
 ## Project Structure
 

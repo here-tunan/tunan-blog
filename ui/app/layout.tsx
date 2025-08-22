@@ -22,6 +22,7 @@ export default function RootLayout({
     <head>
       <title>tunan&apos;s blog</title>
       <link rel="shortcut icon" href="/favicon/favicon.ico?v=2"/>
+      <link rel="alternate" type="application/rss+xml" title="tunan's blog RSS Feed" href="/rss.xml"/>
       <meta name="google-site-verification" content="xxxx"/>
     </head>
     <body className="relative bg-skin-base">

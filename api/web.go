@@ -96,6 +96,9 @@ func Start() {
 	admin.Get("/analytics/views", GetAnalyticsViews)
 	admin.Get("/analytics/path-views", GetPathViewAnalytics)
 
+	// RSS generation route
+	admin.Post("/rss/generate", GenerateRSSAdmin)
+
 	log.Fatal(app.Listen(":3002"))
 }
 
