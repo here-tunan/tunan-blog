@@ -15,6 +15,9 @@ func Start() {
 
 	app := fiber.New(fiber.Config{
 		//EnablePrintRoutes: true,
+		EnableTrustedProxyCheck: true,
+		TrustedProxies:          []string{"127.0.0.1", "::1"}, // 信任本地nginx
+		ProxyHeader:             fiber.HeaderXForwardedFor,    // 使用X-Forwarded-For头
 	})
 
 	app.Use(cors.New(cors.Config{
