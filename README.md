@@ -6,6 +6,10 @@
 
 A full-stack blog application built with Go and Next.js, featuring a modern, feature-rich admin panel and a clean, responsive public-facing interface.
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=here-tunan/tunan-blog&type=Date)](https://www.star-history.com/#here-tunan/tunan-blog&Date)
+
 ## Live Demo
 
 [https://www.tunan.fun](https://www.tunan.fun)
