@@ -1,19 +1,58 @@
-import {ProjectItem} from "@/app/components/project/ProjectItem";
+import { ProjectItem } from "@/app/components/project/ProjectItem";
 
-const projectList = [
-  {title: "Hope Is the Key", description: "这是我的第一个项目", link: "/123", img: ""},
-  {title: "项目二", description: "这个项目的描述将特别asadsasdasdadasdasdadasda的长深爱的啊是的爱上大是的啊是的啊是的爱上大是大是的啊是的阿斯顿啊是的爱上的啊s 这个项目的描述将特别的长深爱的啊是的爱上大是的啊是的啊是的爱上大是大是的啊是的阿斯顿啊是的爱上的啊sda", link: "asd", img: ""},
-  {title: "项目三", description: "", link: "", img: ""},
-  {title: "我的标题很长我的标题很长我的标题很长我的标题很长我的标题很长我的标题很长我的标题很长我的标题很长我的标题很长", description: "", link: "", img: ""},
-]
+interface GitHubInfo {
+  name: string;
+  description: string;
+  htmlUrl: string;
+  language: string;
+  stars: number;
+  forks: number;
+  updatedAt: string;
+}
 
+interface Project {
+  id: number;
+  name: string;
+  description: string;
+  githubUrl: string;
+  demoUrl: string;
+  techStack: string;
+  featured: boolean;
+  sortOrder: number;
+  gitHubInfo?: GitHubInfo;
+}
 
-export default function ProjectGrid() {
+interface ProjectGridProps {
+  projects: Project[];
+}
+
+export default function ProjectGrid({ projects }: ProjectGridProps) {
+  if (projects.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <div className="mb-6">
+          <svg className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Projects Yet</h3>
+          <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+            Projects will appear here once they're added to the collection.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`grid ${ projectList.length > 4 ? 'grid-cols-3' : 'grid-cols-2'} gap-3 `}>
-      {projectList.map((project, index) => (
-        <ProjectItem title={project.title} description={project.description} link={project.link} key={index}/>
+    <div className={`grid gap-8 ${projects.length === 1 ? 'grid-cols-1 max-w-3xl mx-auto' : 
+      projects.length === 2 ? 'grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto' : 
+      'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3'}`}>
+      {projects.map((project) => (
+        <ProjectItem 
+          key={project.id}
+          project={project}
+        />
       ))}
     </div>
-  )
+  );
 }

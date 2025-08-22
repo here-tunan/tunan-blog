@@ -11,6 +11,7 @@ import {
   DashboardOutlined, 
   FileTextOutlined, 
   BookOutlined, 
+  ProjectOutlined,
   MenuUnfoldOutlined, 
   MenuFoldOutlined 
 } from '@ant-design/icons';
@@ -29,6 +30,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const getTitle = () => {
     if (pathname.startsWith('/articles')) return 'Article Management';
     if (pathname.startsWith('/books')) return 'Book Management';
+    if (pathname.startsWith('/projects')) return 'Project Management';
     if (pathname.startsWith('/dashboard')) return 'Dashboard';
     return 'Admin';
   };
@@ -67,6 +69,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               { key: '/dashboard', icon: <DashboardOutlined />, label: <Link href="/dashboard">Dashboard</Link> },
               { key: '/articles', icon: <FileTextOutlined />, label: <Link href="/articles">Articles</Link> },
               { key: '/books', icon: <BookOutlined />, label: <Link href="/books">Books</Link> },
+              { key: '/projects', icon: <ProjectOutlined />, label: <Link href="/projects">Projects</Link> },
             ]}
           />
         </Sider>

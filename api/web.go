@@ -58,6 +58,7 @@ func Start() {
 	root.Mount("/rss", RssMount())
 	root.Mount("/book", BookMount())
 	root.Mount("/view", ViewMount())
+	root.Mount("/project", ProjectMount())
 
 	root.Get("/search", GetAllSearchItems)
 
@@ -91,6 +92,13 @@ func Start() {
 	admin.Get("/books/:id", GetBookAdmin)
 	admin.Put("/books/:id", UpdateBookAdmin)
 	admin.Delete("/books/:id", DeleteBookAdmin)
+
+	// Project management routes
+	admin.Get("/projects", GetAllProjectsForAdmin)
+	admin.Post("/projects", CreateProjectAdmin)
+	admin.Get("/projects/:id", GetProjectAdmin)
+	admin.Put("/projects/:id", UpdateProjectAdmin)
+	admin.Delete("/projects/:id", DeleteProjectAdmin)
 
 	// Analytics routes
 	admin.Get("/analytics/views", GetAnalyticsViews)

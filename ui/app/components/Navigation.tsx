@@ -31,12 +31,12 @@ const items = [
     "img": "/assets/icons/cool.png",
     "target": "_self",
   },
-  // {
-  //   "name": "Projects",
-  //   "href": "/projects",
-  //   "img": "/assets/icons/project.png",
-  //   "target": "_self",
-  // },
+  {
+    "name": "Projects",
+    "href": "/projects",
+    "img": "/assets/icons/project.png",
+    "target": "_self",
+  },
 
 ]
 

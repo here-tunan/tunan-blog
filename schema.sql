@@ -91,4 +91,25 @@ CREATE TABLE `page_views` (
   KEY `idx_path` (`path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- ----------------------------
+-- Table structure for project
+-- ----------------------------
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE `project` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `github_url` varchar(500) DEFAULT NULL,
+  `demo_url` varchar(500) DEFAULT NULL,
+  `tech_stack` json DEFAULT NULL,
+  `featured` tinyint(1) DEFAULT '0',
+  `sort_order` int DEFAULT '0',
+  `is_deleted` tinyint(1) DEFAULT '0',
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_featured` (`featured`),
+  KEY `idx_sort_order` (`sort_order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;
