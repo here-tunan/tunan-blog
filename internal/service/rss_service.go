@@ -94,8 +94,8 @@ func RssXmlCreat() error {
 		item := Item{
 			Title:          article.Title,
 			Link:           fmt.Sprintf("%s/blog/%s", env.Prop.Website.Url, article.Slug),
-			Description:    summary, // 使用摘要而不是标题
-			ContentEncoded: summary, // 也使用摘要，而不是全文
+			Description:    summary,         // 使用摘要而不是标题
+			ContentEncoded: article.Content, // 使用完整内容
 			PubDate:        article.GmtCreate.Format(time.RFC822),
 		}
 		items = append(items, item)
