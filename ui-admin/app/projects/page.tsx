@@ -11,13 +11,13 @@ interface Project {
   id: number;
   name: string;
   description: string;
-  github_url: string;
-  demo_url: string;
-  tech_stack: string;
+  githubUrl: string;
+  demoUrl: string;
+  techStack: string;
   featured: boolean;
-  sort_order: number;
-  gmt_create: string;
-  gmt_modified: string;
+  sortOrder: number;
+  gmtCreate: string;
+  gmtModified: string;
 }
 
 const ProjectsPage = () => {

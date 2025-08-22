@@ -36,7 +36,7 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
           </svg>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Projects Yet</h3>
           <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-            Projects will appear here once they're added to the collection.
+            Projects will appear here once they`&apos;re added to the collection.
           </p>
         </div>
       </div>

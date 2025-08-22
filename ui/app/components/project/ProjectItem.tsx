@@ -30,6 +30,7 @@ export function ProjectItem({ project }: ProjectItemProps) {
   const displayDescription = project.gitHubInfo?.description || project.description;
   const techStack = project.techStack ? JSON.parse(project.techStack) : [];
   
+  
   return (
     <div className="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 hover:shadow-xl hover:shadow-blue-100 dark:hover:shadow-blue-900/20 transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-600 hover:-translate-y-1 h-full flex flex-col">
       {/* Featured Badge */}
@@ -55,7 +56,7 @@ export function ProjectItem({ project }: ProjectItemProps) {
 
       {/* GitHub Stats - Fixed Height */}
       <div className="mb-6 h-20">
-        {project.gitHubInfo ? (
+        {project.gitHubInfo && project.githubUrl ? (
           <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg space-y-3 h-full">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -97,7 +98,9 @@ export function ProjectItem({ project }: ProjectItemProps) {
           </div>
         ) : (
           <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg h-full flex items-center justify-center">
-            <span className="text-sm text-gray-500 dark:text-gray-400">No GitHub info available</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {project.githubUrl ? 'Loading GitHub info...' : 'No GitHub URL'}
+            </span>
           </div>
         )}
       </div>

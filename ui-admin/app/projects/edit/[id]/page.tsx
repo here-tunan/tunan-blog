@@ -12,11 +12,11 @@ interface Project {
   id: number;
   name: string;
   description: string;
-  github_url: string;
-  demo_url: string;
-  tech_stack: string;
+  githubUrl: string;
+  demoUrl: string;
+  techStack: string;
   featured: boolean;
-  sort_order: number;
+  sortOrder: number;
 }
 
 const EditProjectPage = () => {

@@ -36,6 +36,10 @@ type Properties struct {
 		AdminPassword string `json:"admin_password" yaml:"admin_password"`
 		JwtSecret     string `json:"jwt_secret" yaml:"jwt_secret"`
 	} `json:"auth"`
+
+	Github struct {
+		Token string `json:"token" yaml:"token"`
+	} `json:"github"`
 }
 
 var Prop *Properties

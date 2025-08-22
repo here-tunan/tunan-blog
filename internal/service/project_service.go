@@ -7,7 +7,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
+	"tunan-blog/env"
 	"tunan-blog/internal/repository"
 )
 
@@ -37,6 +39,21 @@ type GitHubAPIResponse struct {
 type ProjectWithGitHubInfo struct {
 	*repository.Project
 	GitHubInfo *GitHubRepo `json:"gitHubInfo,omitempty"`
+}
+
+// GitHub info cache
+type GitHubCache struct {
+	data  map[string]*GitHubCacheItem
+	mutex sync.RWMutex
+}
+
+type GitHubCacheItem struct {
+	data      *GitHubRepo
+	timestamp time.Time
+}
+
+var githubCache = &GitHubCache{
+	data: make(map[string]*GitHubCacheItem),
 }
 
 // CreateProject creates a new project
@@ -95,15 +112,23 @@ func GetAllProjectsWithGitHub() ([]*ProjectWithGitHubInfo, error) {
 		return nil, err
 	}
 
+	fmt.Printf("Found %d projects to process\n", len(projects))
 	var result []*ProjectWithGitHubInfo
 	for _, project := range projects {
 		projectWithGitHub := &ProjectWithGitHubInfo{Project: project}
 
+		fmt.Printf("Processing project: %s, GitHub URL: '%s'\n", project.Name, project.GithubUrl)
 		if project.GithubUrl != "" {
+			fmt.Printf("Fetching GitHub info for: %s\n", project.GithubUrl)
 			gitHubInfo, err := fetchGitHubInfo(project.GithubUrl)
 			if err == nil {
+				fmt.Printf("✅ Successfully fetched GitHub info for %s\n", project.Name)
 				projectWithGitHub.GitHubInfo = gitHubInfo
+			} else {
+				fmt.Printf("❌ Failed to fetch GitHub info for %s: %v\n", project.Name, err)
 			}
+		} else {
+			fmt.Printf("⚠️  No GitHub URL for project: %s\n", project.Name)
 		}
 
 		result = append(result, projectWithGitHub)
@@ -124,15 +149,23 @@ func GetFeaturedProjectsWithGitHub() ([]*ProjectWithGitHubInfo, error) {
 		return nil, err
 	}
 
+	fmt.Printf("Found %d featured projects to process\n", len(projects))
 	var result []*ProjectWithGitHubInfo
 	for _, project := range projects {
 		projectWithGitHub := &ProjectWithGitHubInfo{Project: project}
 
+		fmt.Printf("Processing featured project: %s, GitHub URL: '%s'\n", project.Name, project.GithubUrl)
 		if project.GithubUrl != "" {
+			fmt.Printf("Fetching GitHub info for featured project: %s\n", project.GithubUrl)
 			gitHubInfo, err := fetchGitHubInfo(project.GithubUrl)
 			if err == nil {
+				fmt.Printf("✅ Successfully fetched GitHub info for featured project %s\n", project.Name)
 				projectWithGitHub.GitHubInfo = gitHubInfo
+			} else {
+				fmt.Printf("❌ Failed to fetch GitHub info for featured project %s: %v\n", project.Name, err)
 			}
+		} else {
+			fmt.Printf("⚠️  No GitHub URL for featured project: %s\n", project.Name)
 		}
 
 		result = append(result, projectWithGitHub)
@@ -141,8 +174,19 @@ func GetFeaturedProjectsWithGitHub() ([]*ProjectWithGitHubInfo, error) {
 	return result, nil
 }
 
-// fetchGitHubInfo fetches repository information from GitHub API
+// fetchGitHubInfo fetches repository information from GitHub API with caching
 func fetchGitHubInfo(githubUrl string) (*GitHubRepo, error) {
+	// Check cache first
+	githubCache.mutex.RLock()
+	if cached, exists := githubCache.data[githubUrl]; exists {
+		// Cache is valid for 1 hour
+		if time.Since(cached.timestamp) < time.Hour {
+			fmt.Printf("Using cached GitHub info for: %s\n", githubUrl)
+			githubCache.mutex.RUnlock()
+			return cached.data, nil
+		}
+	}
+	githubCache.mutex.RUnlock()
 	// Extract owner and repo from GitHub URL
 	// e.g., https://github.com/user/repo -> user/repo
 	parts := strings.Split(githubUrl, "/")
@@ -161,8 +205,26 @@ func fetchGitHubInfo(githubUrl string) (*GitHubRepo, error) {
 		Timeout: 10 * time.Second,
 	}
 
+	// Create request with headers
+	req, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Add User-Agent header (required by GitHub API)
+	req.Header.Set("User-Agent", "Tunan-Blog/1.0")
+
+	// Add GitHub token if available (recommended to avoid rate limiting)
+	githubToken := env.Prop.Github.Token
+	if githubToken != "" {
+		req.Header.Set("Authorization", "token "+githubToken)
+		fmt.Printf("Using GitHub token for API request\n")
+	} else {
+		fmt.Printf("No GitHub token found, using unauthenticated requests (limited to 60/hour)\n")
+	}
+
 	// Make request
-	resp, err := client.Get(apiURL)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +236,19 @@ func fetchGitHubInfo(githubUrl string) (*GitHubRepo, error) {
 	}(resp.Body)
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("GitHub API returned status: %d", resp.StatusCode)
+		// Handle different error status codes
+		switch resp.StatusCode {
+		case 403:
+			// Check if it's rate limiting
+			if resp.Header.Get("X-RateLimit-Remaining") == "0" {
+				return nil, fmt.Errorf("GitHub API rate limit exceeded. Try again later")
+			}
+			return nil, fmt.Errorf("GitHub API access forbidden (403). Consider adding a GitHub token")
+		case 404:
+			return nil, fmt.Errorf("GitHub repository not found (404)")
+		default:
+			return nil, fmt.Errorf("GitHub API returned status: %d", resp.StatusCode)
+		}
 	}
 
 	// Read response
@@ -200,6 +274,14 @@ func fetchGitHubInfo(githubUrl string) (*GitHubRepo, error) {
 		Forks:       apiResponse.ForksCount,
 		UpdatedAt:   apiResponse.UpdatedAt,
 	}
+
+	// Cache the result
+	githubCache.mutex.Lock()
+	githubCache.data[githubUrl] = &GitHubCacheItem{
+		data:      gitHubRepo,
+		timestamp: time.Now(),
+	}
+	githubCache.mutex.Unlock()
 
 	return gitHubRepo, nil
 }
