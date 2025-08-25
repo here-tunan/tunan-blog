@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 async function getArticle(slug: string) {
   try {
     const response = await fetch(`${API_URL}/article?slug=${slug}`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+      next: { revalidate: 300 }, // Revalidate every hour
     });
 
     if (!response.ok) {
