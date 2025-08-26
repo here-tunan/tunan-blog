@@ -3,8 +3,10 @@ package service
 import (
 	"encoding/xml"
 	"fmt"
+	"log"
 	_ "log"
 	"os"
+	"os/exec"
 	"regexp"
 	"strings"
 	"time"
@@ -90,12 +92,21 @@ func RssXmlCreat() error {
 		// 生成文章摘要（约200字符）
 		summary := generateSummary(article.Content, 200)
 
+		// 使用 Pandoc 转换 Markdown 为 HTML
+		cmd := exec.Command("pandoc", "-f", "markdown", "-t", "html")
+		cmd.Stdin = strings.NewReader(article.Content)
+		htmlOutput, err := cmd.Output()
+		if err != nil {
+			log.Printf("Pandoc error for ID %d: %v", article.Id, err)
+			continue
+		}
+
 		// 创建 RSS 项
 		item := Item{
 			Title:          article.Title,
 			Link:           fmt.Sprintf("%s/blog/%s", env.Prop.Website.Url, article.Slug),
-			Description:    summary,         // 使用摘要而不是标题
-			ContentEncoded: article.Content, // 使用完整内容
+			Description:    summary,            // 使用摘要而不是标题
+			ContentEncoded: string(htmlOutput), // 使用完整内容
 			PubDate:        article.GmtCreate.Format(time.RFC822),
 		}
 		items = append(items, item)
