@@ -39,11 +39,20 @@ export default async function BlogsSection() {
   const blogs = await getBlogs();
 
   return (
-    <section className="section">
-      <header className="section-header">
-        <h3 className="title">Latest Blogs</h3>
-        <a href="/blog" className="viewall">
+    <section className="section mt-2">
+      <header className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <div className="w-0.5 h-5 bg-green-500 rounded-full"></div>
+          <h3 className="font-mono font-semibold text-lg">Latest Blogs</h3>
+        </div>
+        <a 
+          href="/blog" 
+          className="text-sm font-medium text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors flex items-center gap-1 group hover:gap-2"
+        >
           <span>View all</span>
+          <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </a>
       </header>
 

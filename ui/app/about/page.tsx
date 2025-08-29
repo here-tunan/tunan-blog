@@ -26,25 +26,25 @@ export default async function About() {
     return (
         <main>
             <div className="container">
-                <div className="space-y-20">
+                <div className="space-y-12">
                     <div>
-                        <h3 className="font-mono font-bold text-3xl pb-10">About Me</h3>
+                        <h3 className="font-mono font-bold text-2xl pb-6">About Me</h3>
                         <div className="prose dark:prose-invert max-w-none">
                             <p>为什么不写中文介绍？ emm... 这是一个值得思考的问题...🤔</p>
 
-                            <h4 className="font-mono font-bold text-xl pt-5 pb-5">Who I Am</h4>
+                            <h4 className="font-mono font-bold text-lg pt-4 pb-3">Who I Am</h4>
                             <p>
                                 Hello there! I&apos;m Tunan, but you can also call me Aaron. I&apos;m a Java Backend Development Engineer from
                                 China 🇨🇳 and a passionate developer on a journey to become a full-stack engineer.
                             </p>
 
-                            <h4 className="font-mono font-bold text-xl pt-5 pb-5">Background</h4>
+                            <h4 className="font-mono font-bold text-lg pt-4 pb-3">Background</h4>
                             <p>
                                 I graduated from <strong>Hohai University</strong> with a degree in <strong>Computer
                                 Science and Technology</strong>, which laid a solid foundation for my career in tech.
                             </p>
 
-                            <h4 className="font-mono font-bold text-xl pt-5 pb-5">Personality</h4>
+                            <h4 className="font-mono font-bold text-lg pt-4 pb-3">Personality</h4>
                             <p>
                                 My personality, as measured by the Myers-Briggs Type Indicator, falls between <strong>INTJ
                                 and INFJ</strong>. This blend gives me a unique perspective, combining a love for
@@ -52,7 +52,7 @@ export default async function About() {
                                 impact on the world.
                             </p>
 
-                            <h4 className="font-mono font-bold text-xl pt-5 pb-5">Aspirations</h4>
+                            <h4 className="font-mono font-bold text-lg pt-4 pb-3">Aspirations</h4>
                             <p>
                                 My ambition is to contribute meaningfully to the open-source community and collaborate
                                 on exciting projects. Ultimately, I dream of embracing the lifestyle of a remote worker
@@ -60,7 +60,7 @@ export default async function About() {
                                 professionally.
                             </p>
 
-                            <h4 className="font-mono font-bold text-xl pt-5 pb-5">On this Blog</h4>
+                            <h4 className="font-mono font-bold text-lg pt-4 pb-3">On this Blog</h4>
                             <p>
                                 I&apos;m continuously improving my English 📚 and will be sharing my thoughts and technical
                                 explorations on this blog. Thanks for stopping by! 😊
@@ -69,27 +69,27 @@ export default async function About() {
                     </div>
 
                     <div>
-                        <h3 className="font-mono font-bold text-3xl pb-10">👨‍💻 GitHub Activity</h3>
+                        <h3 className="font-mono font-bold text-2xl pb-4">👨‍💻 GitHub Activity</h3>
                         <GitHubActivity />
                     </div>
 
                     <div>
-                        <h3 className="font-mono font-bold text-3xl pb-10">🛠️ Languages & Tools</h3>
+                        <h3 className="font-mono font-bold text-2xl pb-4">🛠️ Skills</h3>
                         <Skills/>
                     </div>
 
                     <div>
-                        <h3 className="font-mono font-bold text-3xl pb-6">📱 Devices & Apps</h3>
+                        <h3 className="font-mono font-bold text-2xl pb-4">📱 Devices & Apps</h3>
                         <DevicesAndApps/>
                     </div>
 
                     <div>
-                        <h3 className="font-mono font-bold text-3xl pb-6">📚 My Books</h3>
+                        <h3 className="font-mono font-bold text-2xl pb-4">📚 My Books</h3>
                         <Books books={books}/>
                     </div>
 
                     <div>
-                        <h3 className="font-mono font-bold text-3xl">🐳 Why not leave a comment?</h3>
+                        <h3 className="font-mono font-bold text-2xl pb-4">🐳 Why not leave a comment?</h3>
                         <Comments/>
                     </div>
                 </div>

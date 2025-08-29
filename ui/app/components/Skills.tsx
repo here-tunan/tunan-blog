@@ -24,33 +24,33 @@ const familiarSkills = [
 
 export default function Skills() {
   return (
-    <div>
+    <div className="space-y-4">
       <div>
-        <h3 className="font-bold text-lg mb-4">Proficient</h3>
-        <div className="grid grid-cols-8 gap-4">
+        <h4 className="font-semibold text-base mb-2 text-gray-700 dark:text-gray-300">Proficient</h4>
+        <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2">
           {proficientSkills.map((item, index) => (
-            <a href={item.href} key={index} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-              <img src={item.img} width={40} height={40} alt={item.name}/>
+            <a href={item.href} key={index} className="p-1.5 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center hover:shadow-sm transition-shadow">
+              <img src={item.img} width={30} height={30} alt={item.name}/>
             </a>
           ))}
         </div>
       </div>
-      <div className="mt-8">
-        <h3 className="font-bold text-lg mb-4">Experienced</h3>
-        <div className="grid grid-cols-8 gap-4">
+      <div>
+        <h4 className="font-semibold text-base mb-2 text-gray-700 dark:text-gray-300">Experienced</h4>
+        <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2">
           {experiencedSkills.map((item, index) => (
-            <a href={item.href} key={index} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-              <img src={item.img} width={40} height={40} alt={item.name}/>
+            <a href={item.href} key={index} className="p-1.5 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center hover:shadow-sm transition-shadow">
+              <img src={item.img} width={30} height={30} alt={item.name}/>
             </a>
           ))}
         </div>
       </div>
-      <div className="mt-8">
-        <h3 className="font-bold text-lg mb-4">Familiar</h3>
-        <div className="grid grid-cols-8 gap-4">
+      <div>
+        <h4 className="font-semibold text-base mb-2 text-gray-700 dark:text-gray-300">Familiar</h4>
+        <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2">
           {familiarSkills.map((item, index) => (
-            <a href={item.href} key={index} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-              <img src={item.img} width={40} height={40} alt={item.name}/>
+            <a href={item.href} key={index} className="p-1.5 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center hover:shadow-sm transition-shadow">
+              <img src={item.img} width={30} height={30} alt={item.name}/>
             </a>
           ))}
         </div>

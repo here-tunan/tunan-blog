@@ -26,15 +26,15 @@ const items = [
     "target": "_self",
   },
   {
-    "name": "About",
-    "href": "/about",
-    "img": "/assets/icons/cool.png",
-    "target": "_self",
-  },
-  {
     "name": "Projects",
     "href": "/projects",
     "img": "/assets/icons/project.png",
+    "target": "_self",
+  },
+  {
+    "name": "About",
+    "href": "/about",
+    "img": "/assets/icons/cool.png",
     "target": "_self",
   },
 

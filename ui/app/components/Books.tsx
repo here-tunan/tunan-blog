@@ -17,7 +17,7 @@ interface Book {
 
 const Star = ({filled}: { filled: boolean }) => {
     return (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill={filled ? 'gold' : 'gray'} stroke="gold" strokeWidth="1">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill={filled ? 'gold' : 'gray'} stroke="gold" strokeWidth="1">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.77 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/>
         </svg>
     );
@@ -43,24 +43,24 @@ const BookCard = ({book}: { book: Book }) => {
     return (
         <>
             <div
-                className="relative p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600"
+                className="relative p-2 border border-gray-200 dark:border-gray-700 rounded-md cursor-pointer transition-all hover:shadow-sm hover:border-gray-300 dark:hover:border-gray-600"
                 onClick={handleClick}
                 title={book.name}
             >
                 {blogLink && (
                     <div
-                        className="absolute top-1.5 right-1.5 w-4 h-4 bg-green-500 text-white rounded-full flex items-center justify-center"
+                        className="absolute top-1 right-1 w-3 h-3 bg-green-500 text-white rounded-full flex items-center justify-center"
                         title="有书评">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        <svg className="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                              xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3"
                                   d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.536L16.732 3.732z"></path>
                         </svg>
                     </div>
                 )}
-                <h3 className="font-bold text-base truncate pr-5">{book.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{book.author}</p>
-                <div className="flex items-center mt-1.5">
+                <h3 className="font-semibold text-sm truncate pr-4">{book.name}</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{book.author}</p>
+                <div className="flex items-center mt-1">
                     {[...Array(5)].map((_, i) => (
                         <Star key={i} filled={i < book.score}/>
                     ))}
@@ -121,14 +121,14 @@ export default function Books({ books }: { books: Book[] }) {
     }, {} as Record<string, Book[]>);
 
     return (
-        <div className="prose dark:prose-invert max-w-none">
-            <div className="max-h-96 overflow-y-auto pr-4">
-                <div className="space-y-8">
+        <div className="max-w-none">
+            <div className="max-h-80 overflow-y-auto pr-2">
+                <div className="space-y-4">
                     {Object.keys(groupedBooks).map(category => (
                         groupedBooks[category] && (
                             <div key={category}>
-                                <h4 className="font-mono font-bold text-xl pt-4 pb-1 mb-3 border-b border-gray-200 dark:border-gray-700">{category}</h4>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                <h4 className="font-semibold text-base mb-2 text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700 pb-1">{category}</h4>
+                                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                                     {groupedBooks[category].map((book, index) => (
                                         <BookCard key={index} book={book}/>
                                     ))}

@@ -112,4 +112,24 @@ CREATE TABLE `project` (
   KEY `idx_sort_order` (`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- ----------------------------
+-- Table structure for device_app
+-- ----------------------------
+DROP TABLE IF EXISTS `device_app`;
+CREATE TABLE `device_app` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `category` varchar(50) NOT NULL,
+  `description` text,
+  `icon` varchar(500) DEFAULT NULL,
+  `link` varchar(500) DEFAULT NULL,
+  `sort_order` int DEFAULT '0',
+  `is_deleted` tinyint(1) DEFAULT '0',
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_category` (`category`),
+  KEY `idx_sort_order` (`sort_order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

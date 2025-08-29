@@ -12,6 +12,7 @@ import {
   FileTextOutlined, 
   BookOutlined, 
   ProjectOutlined,
+  AppstoreOutlined,
   MenuUnfoldOutlined, 
   MenuFoldOutlined 
 } from '@ant-design/icons';
@@ -27,10 +28,21 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const { token } = antdTheme.useToken();
   const { theme } = useTheme();
 
+  // Get the base path for menu selection
+  const getMenuKey = () => {
+    if (pathname.startsWith('/articles')) return '/articles';
+    if (pathname.startsWith('/books')) return '/books';
+    if (pathname.startsWith('/projects')) return '/projects';
+    if (pathname.startsWith('/device-apps')) return '/device-apps';
+    if (pathname.startsWith('/dashboard')) return '/dashboard';
+    return pathname;
+  };
+
   const getTitle = () => {
     if (pathname.startsWith('/articles')) return 'Article Management';
     if (pathname.startsWith('/books')) return 'Book Management';
     if (pathname.startsWith('/projects')) return 'Project Management';
+    if (pathname.startsWith('/device-apps')) return 'Device & Apps Management';
     if (pathname.startsWith('/dashboard')) return 'Dashboard';
     return 'Admin';
   };
@@ -63,13 +75,14 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
         >
           <Menu 
             mode="inline"
-            selectedKeys={[pathname]}
+            selectedKeys={[getMenuKey()]}
             style={{ height: '100%', borderRight: 0 }}
             items={[
               { key: '/dashboard', icon: <DashboardOutlined />, label: <Link href="/dashboard">Dashboard</Link> },
               { key: '/articles', icon: <FileTextOutlined />, label: <Link href="/articles">Articles</Link> },
               { key: '/books', icon: <BookOutlined />, label: <Link href="/books">Books</Link> },
               { key: '/projects', icon: <ProjectOutlined />, label: <Link href="/projects">Projects</Link> },
+              { key: '/device-apps', icon: <AppstoreOutlined />, label: <Link href="/device-apps">Device & Apps</Link> },
             ]}
           />
         </Sider>

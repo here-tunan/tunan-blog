@@ -59,6 +59,7 @@ func Start() {
 	root.Mount("/book", BookMount())
 	root.Mount("/view", ViewMount())
 	root.Mount("/project", ProjectMount())
+	root.Mount("/device-app", DeviceAppMount())
 
 	root.Get("/search", GetAllSearchItems)
 
@@ -107,6 +108,13 @@ func Start() {
 	// RSS generation route
 	admin.Post("/rss/generate", GenerateRSSAdmin)
 
+	// Device App management routes
+	admin.Get("/device-apps", GetAllDeviceAppsAdmin)
+	admin.Post("/device-apps", CreateDeviceAppAdmin)
+	admin.Get("/device-apps/:id", GetDeviceAppAdmin)
+	admin.Put("/device-apps/:id", UpdateDeviceAppAdmin)
+	admin.Delete("/device-apps/:id", DeleteDeviceAppAdmin)
+
 	log.Fatal(app.Listen(":3002"))
 }
 
@@ -114,6 +122,14 @@ func BookMount() *fiber.App {
 	book := fiber.New()
 	book.Get("/list", GetAllBooks)
 	return book
+}
+
+func DeviceAppMount() *fiber.App {
+	deviceApp := fiber.New()
+	deviceApp.Get("/list", GetAllDeviceApps)
+	deviceApp.Get("/grouped", GetGroupedDeviceApps)
+	deviceApp.Get("/category/:category", GetDeviceAppsByCategory)
+	return deviceApp
 }
 
 func isNeedAuth(api string) bool {
