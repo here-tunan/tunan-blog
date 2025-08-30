@@ -6,9 +6,22 @@
 
 一个使用 Go 和 Next.js 构建的全栈博客应用，拥有一个功能丰富的现代化后台管理面板，以及一个设计简洁、响应迅速的前台界面。
 
+**✨ 完美适配低配置服务器**：这个博客系统完全可以部署在最低配置（1核1G）的服务器上，非常适合预算有限的开发者或刚开始尝试自托管的用户。
+
 ## 在线 Demo
 
 [https://www.tunan.fun](https://www.tunan.fun)
+
+## 技术栈
+
+- **后端**: Go (Golang)，使用 [Fiber](https://gofiber.io/) Web 框架。
+- **前台 (公开)**: [Next.js](https://nextjs.org/) (React), TypeScript, Tailwind CSS。
+- **前台 (管理)**: [Next.js](https://nextjs.org/) (React), TypeScript, [Ant Design](https://ant.design/)。
+- **数据库**: 设计上兼容 MySQL 和 SQLite。
+
+### 为什么同时支持 MySQL 和 SQLite？
+
+很多开发者的服务器性能都不高，可能也没有 MySQL 数据库服务，而博客系统本身就对数据库要求不高，所以支持 SQLite 数据库作为轻量级的替代方案。
 
 ## 功能特性
 
@@ -16,7 +29,7 @@
 
 - **博客文章**: 简洁、易于阅读的文章界面，支持完整的 Markdown 渲染。
 - **命令面板搜索**: 一个可通过键盘快速驱动的搜索界面（类似 VS Code 或 GitHub），用于快速查找文章和导航站点。
-- **交互式评论系统**: 集成了 [Remark42](https://remark42.com/)，提供一个注重隐私、可自托管的评论体验。
+- **交互式评论系统**: 集成了 [Remark42](https://remark42.com/)，提供一个注重隐私、可自托管的评论体验。如何使用该系统请看我的这篇文章：[Use remark42 comment system](https://www.tunan.fun/blog/blog-embrace-remark42)。我也正在考虑在本博客中搭建自己的评论系统，敬请期待。
 - **浏览量跟踪**: 跟踪并显示每篇文章的浏览次数。
 - **RSS Feed 生成**: 自动为博客更新生成 RSS feed，兼容所有 RSS 阅读器。
 - **Folo 阅读器集成**: 包含为 [Folo](https://folo.im/) RSS 阅读器定制的追踪埋点。
@@ -34,13 +47,6 @@
 - **书籍全功能管理 (CRUD)**: 轻松管理书籍推荐列表。
 - **现代化 UI**: 基于 Ant Design 构建，提供专业、直观的用户体验。
 - **主题化**: 支持浅色和深色两种模式。
-
-## 技术栈
-
-- **后端**: Go (Golang)，使用 [Fiber](https://gofiber.io/) Web 框架。
-- **前台 (公开)**: [Next.js](https://nextjs.org/) (React), TypeScript, Tailwind CSS。
-- **前台 (管理)**: [Next.js](https://nextjs.org/) (React), TypeScript, [Ant Design](https://ant.design/)。
-- **数据库**: 设计上兼容 MySQL 和 SQLite。
 
 ## 本地启动
 
@@ -62,11 +68,15 @@
     ```
 
 2.  **设置数据库:**
-    - 如果使用 MySQL，请创建一个新的数据库 (例如 `tunan`)。
-    - 执行项目根目录下的 `schema.sql` 文件来导入表结构。
+    - 如果使用 MySQL，请创建一个新的数据库 (例如 `blog`) 并导入表结构：
       ```sh
       # MySQL 示例
       mysql -u your_user -p your_database < schema.sql
+      ```
+    - 如果使用 SQLite，请使用 SQLite 专用的架构文件：
+      ```sh
+      # SQLite 示例
+      sqlite3 your_database.db < schema_sqlite.sql
       ```
 
 3.  **配置并运行后端:**
@@ -108,9 +118,46 @@
       ```
     - 后台管理面板将在 `http://localhost:3001` 上可用。
 
+### 低配置服务器性能说明
+
+如果你的服务器性能很差（比如和我的一样是1核1G的），那么你在服务器上运行 `npm install` 和 `npm run build` 可能会有问题，但这里有相应的简单的解决方案，请见我的博客文章：[npm install ends with "Killed"](https://www.tunan.fun/blog/personal-cloud-server-tools#%E9%85%8D%E7%BD%AE%E5%A4%AA%E4%BD%8E%E5%AF%BC%E8%87%B4%E7%9A%84-npm-install-ends-with-killed-%E7%9A%84%E5%A4%84%E7%90%86)。
+
 ## 配置说明
 
 所有后端配置都通过 `/env` 目录下的 YAML 文件进行管理。应用默认加载 `dev.yaml`，如果 `GO_TUNAN_BLOG_ENV` 环境变量被设为 `prod`，则会加载 `prod.yaml`。
+
+### 数据库配置
+
+本应用支持 SQLite 和 MySQL 两种数据库。你可以通过在配置文件中设置 `database_type` 字段来选择使用哪种数据库：
+
+#### 使用 SQLite（默认）
+```yaml
+# 数据库类型: sqlite3 或 mysql  
+database_type: sqlite3  # 或留空使用默认值
+
+sqlite3:
+  file: /path/to/your/database.db
+```
+
+#### 使用 MySQL
+```yaml
+# 数据库类型: sqlite3 或 mysql
+database_type: mysql
+
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  username: 你的用户名
+  password: 你的密码
+  database: 你的数据库名
+```
+
+**重要说明：**
+- 如果未指定 `database_type` 或留空，将默认使用 SQLite
+- 确保在运行应用前先创建 MySQL 数据库
+- 根据你选择的数据库使用相应的架构文件：
+  - MySQL: `schema.sql`
+  - SQLite: `schema_sqlite.sql`
 
 ### 后台管理员认证
 
@@ -152,6 +199,10 @@ website:
   follow_feed_id: "YOUR_FOLO_FEED_ID"
   follow_user_id: "YOUR_FOLO_USER_ID"
 ```
+
+### 生产环境部署
+
+如果你要在自己的服务器上部署你的博客，那我推荐你使用Nginx来做反向代理，这里也有一篇相应的介绍文章：[Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1)。
 
 ## 项目结构
 

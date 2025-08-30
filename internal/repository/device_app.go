@@ -26,19 +26,19 @@ func (DeviceApp) TableName() string {
 
 func FindAllDeviceApps() ([]*DeviceApp, error) {
 	var deviceApps []*DeviceApp
-	err := infrastructure.Sqlite.Where("is_deleted = ?", 0).OrderBy("category, sort_order, gmt_modified desc").Find(&deviceApps)
+	err := infrastructure.GetDB().Where("is_deleted = ?", 0).OrderBy("category, sort_order, gmt_modified desc").Find(&deviceApps)
 	return deviceApps, err
 }
 
 func FindDeviceAppsByCategory(category string) ([]*DeviceApp, error) {
 	var deviceApps []*DeviceApp
-	err := infrastructure.Sqlite.Where("is_deleted = ? AND category = ?", 0, category).OrderBy("sort_order, gmt_modified desc").Find(&deviceApps)
+	err := infrastructure.GetDB().Where("is_deleted = ? AND category = ?", 0, category).OrderBy("sort_order, gmt_modified desc").Find(&deviceApps)
 	return deviceApps, err
 }
 
 func GetDeviceAppByID(id int64) (*DeviceApp, error) {
 	var deviceApp DeviceApp
-	has, err := infrastructure.Sqlite.Where("is_deleted = ?", 0).ID(id).Get(&deviceApp)
+	has, err := infrastructure.GetDB().Where("is_deleted = ?", 0).ID(id).Get(&deviceApp)
 	if err != nil {
 		return nil, err
 	}
@@ -59,6 +59,6 @@ func UpdateDeviceApp(session *xorm.Session, deviceApp *DeviceApp) error {
 }
 
 func DeleteDeviceApp(id int64) error {
-	_, err := infrastructure.Sqlite.ID(id).Cols("is_deleted").Update(&DeviceApp{IsDeleted: true})
+	_, err := infrastructure.GetDB().ID(id).Cols("is_deleted").Update(&DeviceApp{IsDeleted: true})
 	return err
 }

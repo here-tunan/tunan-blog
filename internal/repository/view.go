@@ -18,17 +18,17 @@ func (v *View) TableName() string {
 }
 
 func CreateView(view *View) error {
-	_, err := infrastructure.Sqlite.Insert(view)
+	_, err := infrastructure.GetDB().Insert(view)
 	return err
 }
 
 func CountByPath(path string) (int64, error) {
-	count, err := infrastructure.Sqlite.Where("path = ?", path).Count(new(View))
+	count, err := infrastructure.GetDB().Where("path = ?", path).Count(new(View))
 	return count, err
 }
 
 func CountTotalViews() (int64, error) {
-	count, err := infrastructure.Sqlite.Count(new(View))
+	count, err := infrastructure.GetDB().Count(new(View))
 	return count, err
 }
 
@@ -47,7 +47,7 @@ type DailyViewCount struct {
 func GetViewsGroupedByPath() ([]*PathViewCount, error) {
 	var results []*PathViewCount
 	sql := "SELECT path, COUNT(*) as views FROM page_views GROUP BY path ORDER BY views DESC"
-	err := infrastructure.Sqlite.SQL(sql).Find(&results)
+	err := infrastructure.GetDB().SQL(sql).Find(&results)
 	return results, err
 }
 
@@ -60,6 +60,6 @@ func GetDailyViewCounts(days int) ([]*DailyViewCount, error) {
 	// The SQL query for SQLite. The DATE() function extracts the date part.
 	sql := "SELECT DATE(created_at) as date, COUNT(*) as views FROM page_views WHERE created_at >= ? GROUP BY date ORDER BY date ASC"
 
-	err := infrastructure.Sqlite.SQL(sql, startDate).Find(&results)
+	err := infrastructure.GetDB().SQL(sql, startDate).Find(&results)
 	return results, err
 }

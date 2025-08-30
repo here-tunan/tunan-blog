@@ -1,23 +1,12 @@
 package infrastructure
 
 import (
-	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-	"tunan-blog/env"
 	"xorm.io/xorm"
-	"xorm.io/xorm/names"
 )
 
 var Mysql *xorm.Engine
 
-func init() {
-	dataSourName := fmt.Sprintf("%s:%s@tcp(%s:%d)/life?charset=utf8mb4",
-		env.Prop.Mysql.Username, env.Prop.Mysql.Password, env.Prop.Mysql.Host, env.Prop.Mysql.Port)
-
-	newEngine, _ := xorm.NewEngine("mysql", dataSourName)
-
-	// 设置驼峰转换
-	newEngine.SetMapper(names.GonicMapper{})
-
-	Mysql = newEngine
-}
+// init函数已废弃，数据库初始化现在在db.go中统一处理
+// func init() {
+//	// 数据库初始化已移至 db.go
+// }

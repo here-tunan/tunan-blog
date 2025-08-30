@@ -6,6 +6,8 @@
 
 A full-stack blog application built with Go and Next.js, featuring a modern, feature-rich admin panel and a clean, responsive public-facing interface.
 
+**✨ Perfect for Low-Spec Servers**: This blog system can be fully deployed on minimal server configurations (as low as 1-core, 1GB RAM), making it ideal for developers on a budget or those just starting with self-hosting.
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=here-tunan/tunan-blog&type=Date)](https://www.star-history.com/#here-tunan/tunan-blog&Date)
@@ -14,13 +16,24 @@ A full-stack blog application built with Go and Next.js, featuring a modern, fea
 
 [https://www.tunan.fun](https://www.tunan.fun)
 
+## Tech Stack
+
+- **Backend**: Go (Golang) with the [Fiber](https://gofiber.io/) web framework.
+- **Frontend (Public)**: [Next.js](https://nextjs.org/) (React), TypeScript, Tailwind CSS.
+- **Frontend (Admin)**: [Next.js](https://nextjs.org/) (React), TypeScript, [Ant Design](https://ant.design/).
+- **Database**: Designed to be compatible with MySQL and SQLite.
+
+### Why Support Both MySQL and SQLite?
+
+Many developers run their projects on servers with limited resources and may not have MySQL database services available. Since blog systems generally have low database requirements, we support SQLite as a lightweight alternative.
+
 ## Features
 
 ### Public-Facing Site (`/ui`)
 
 - **Blog & Articles**: Clean and readable interface for blog posts, with full Markdown rendering support.
 - **Command Palette Search**: A fast, keyboard-driven search interface (like VS Code or GitHub) to quickly find articles and navigate the site.
-- **Interactive Comment System**: Integrated with [Remark42](https://remark42.com/) for a privacy-focused, self-hosted commenting experience.
+- **Interactive Comment System**: Integrated with [Remark42](https://remark42.com/) for a privacy-focused, self-hosted commenting experience. For setup instructions, see: [Use remark42 comment system](https://www.tunan.fun/blog/blog-embrace-remark42). We're also considering developing a custom comment system - stay tuned!
 - **View Count Tracking**: Tracks and displays view counts for each article with real client IP detection.
 - **RSS Feed Generation**: Automatically generates RSS feeds with article summaries (optimized for performance).
 - **Social Integration**: Header icons for easy access to GitHub, Discord, Folo, and RSS feeds.
@@ -40,13 +53,6 @@ A full-stack blog application built with Go and Next.js, featuring a modern, fea
 - **Full CRUD for Books**: Easily manage the book recommendation list.
 - **Modern UI**: Built with Ant Design for a professional and intuitive user experience.
 - **Themeable**: Supports both light and dark modes.
-
-## Tech Stack
-
-- **Backend**: Go (Golang) with the [Fiber](https://gofiber.io/) web framework.
-- **Frontend (Public)**: [Next.js](https://nextjs.org/) (React), TypeScript, Tailwind CSS.
-- **Frontend (Admin)**: [Next.js](https://nextjs.org/) (React), TypeScript, [Ant Design](https://ant.design/).
-- **Database**: Designed to be compatible with MySQL and SQLite.
 
 ## Getting Started
 
@@ -68,11 +74,15 @@ To get a local copy up and running, follow these simple steps.
     ```
 
 2.  **Setup the Database:**
-    - For MySQL, create a new database (e.g., `tunan`).
-    - Import the table structure by executing the `schema.sql` file located in the root of the project.
+    - For MySQL, create a new database (e.g., `blog`) and import the table structure:
       ```sh
       # Example for MySQL
       mysql -u your_user -p your_database < schema.sql
+      ```
+    - For SQLite, use the SQLite-specific schema file:
+      ```sh
+      # Example for SQLite
+      sqlite3 your_database.db < schema_sqlite.sql
       ```
 
 3.  **Configure and Run the Backend:**
@@ -114,9 +124,46 @@ To get a local copy up and running, follow these simple steps.
       ```
     - The admin panel will be available at `http://localhost:3001`.
 
+### Performance Notes for Low-Spec Servers
+
+If you're running on a low-spec server (like 1-core, 1GB RAM), you might encounter issues with `npm install` and `npm run build`. For solutions to common problems like "npm install ends with 'Killed'", please see this blog post: [npm install ends with "Killed"](https://www.tunan.fun/blog/personal-cloud-server-tools#%E9%85%8D%E7%BD%AE%E5%A4%AA%E4%BD%8E%E5%AF%BC%E8%87%B4%E7%9A%84-npm-install-ends-with-killed-%E7%9A%84%E5%A4%84%E7%90%86).
+
 ## Configuration
 
 All backend configuration is managed via YAML files in the `/env` directory. The application loads `dev.yaml` by default, or `prod.yaml` if the `GO_TUNAN_BLOG_ENV` environment variable is set to `prod`.
+
+### Database Configuration
+
+The application supports both SQLite and MySQL databases. You can configure which database to use by setting the `database_type` field in your configuration file:
+
+#### Using SQLite (Default)
+```yaml
+# Database type: sqlite3 or mysql  
+database_type: sqlite3  # or leave empty for default
+
+sqlite3:
+  file: /path/to/your/database.db
+```
+
+#### Using MySQL
+```yaml
+# Database type: sqlite3 or mysql
+database_type: mysql
+
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  username: your_username
+  password: your_password
+  database: your_database_name
+```
+
+**Important Notes:**
+- If `database_type` is not specified or empty, SQLite will be used by default
+- Make sure to create your MySQL database before running the application
+- Use the appropriate schema file for your chosen database:
+  - For MySQL: `schema.sql`
+  - For SQLite: `schema_sqlite.sql`
 
 ### Admin Authentication
 
@@ -191,6 +238,10 @@ For accurate visitor IP tracking behind reverse proxies (nginx):
        proxy_set_header Host $host;
    }
    ```
+
+### Production Deployment with Nginx
+
+If you want to deploy your blog on your own server, we recommend using Nginx as a reverse proxy. For detailed guidance on Nginx multi-domain configuration and HTTPS certificates, see: [Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1).
 
 ## Project Structure
 

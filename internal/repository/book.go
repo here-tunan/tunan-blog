@@ -26,13 +26,13 @@ func (Book) TableName() string {
 
 func FindAllBooks() ([]*Book, error) {
 	var books []*Book
-	err := infrastructure.Sqlite.Where("is_deleted = ?", 0).OrderBy("gmt_modified desc").Find(&books)
+	err := infrastructure.GetDB().Where("is_deleted = ?", 0).OrderBy("gmt_modified desc").Find(&books)
 	return books, err
 }
 
 func GetBookByID(id uint) (*Book, error) {
 	var book Book
-	has, err := infrastructure.Sqlite.Where("is_deleted = ?", 0).ID(id).Get(&book)
+	has, err := infrastructure.GetDB().Where("is_deleted = ?", 0).ID(id).Get(&book)
 	if err != nil {
 		return nil, err
 	}
@@ -53,6 +53,6 @@ func UpdateBook(session *xorm.Session, book *Book) error {
 }
 
 func DeleteBook(id uint) error {
-	_, err := infrastructure.Sqlite.ID(id).Cols("is_deleted").Update(&Book{IsDeleted: true})
+	_, err := infrastructure.GetDB().ID(id).Cols("is_deleted").Update(&Book{IsDeleted: true})
 	return err
 }

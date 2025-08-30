@@ -34,7 +34,7 @@ type ArticleQueryParam struct {
 }
 
 func GetArticleBySlug(slug string) (Article, error) {
-	session := infrastructure.Sqlite.Where("is_deleted = 0")
+	session := infrastructure.GetDB().Where("is_deleted = 0")
 	session.And("slug = ?", slug)
 	var article Article
 
@@ -47,13 +47,13 @@ func GetArticleBySlug(slug string) (Article, error) {
 
 func GetArticleByID(id int64) (Article, error) {
 	var article Article
-	_, err := infrastructure.Sqlite.Where("is_deleted = 0").ID(id).Get(&article)
+	_, err := infrastructure.GetDB().Where("is_deleted = 0").ID(id).Get(&article)
 	return article, err
 }
 
 // QueryArticle 查询符合查询参数的文章
 func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
-	session := infrastructure.Sqlite.Where("is_deleted = 0")
+	session := infrastructure.GetDB().Where("is_deleted = 0")
 	if param.Type != 0 {
 		session = session.And("type = ?", param.Type)
 	}
@@ -103,7 +103,7 @@ func CreateArticle(session *xorm.Session, article *Article) error {
 }
 
 func DeleteArticleById(id int64) error {
-	_, err := infrastructure.Sqlite.ID(id).Cols("is_deleted").Update(&Article{IsDeleted: true})
+	_, err := infrastructure.GetDB().ID(id).Cols("is_deleted").Update(&Article{IsDeleted: true})
 	return err
 }
 

@@ -53,6 +53,6 @@ func FindOrCreateTags(session *xorm.Session, tagNames []string) ([]int64, error)
 
 func GetAllTags() ([]*ArticleTag, error) {
 	var tags []*ArticleTag
-	err := infrastructure.Sqlite.Find(&tags)
+	err := infrastructure.GetDB().Find(&tags)
 	return tags, err
 }

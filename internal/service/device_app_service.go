@@ -24,7 +24,7 @@ func (s *DeviceAppService) GetDeviceAppByID(id int64) (*repository.DeviceApp, er
 }
 
 func (s *DeviceAppService) CreateDeviceApp(deviceApp *repository.DeviceApp) error {
-	session := infrastructure.Sqlite.NewSession()
+	session := infrastructure.GetDB().NewSession()
 	defer session.Close()
 
 	if err := session.Begin(); err != nil {
@@ -40,7 +40,7 @@ func (s *DeviceAppService) CreateDeviceApp(deviceApp *repository.DeviceApp) erro
 }
 
 func (s *DeviceAppService) UpdateDeviceApp(deviceApp *repository.DeviceApp) error {
-	session := infrastructure.Sqlite.NewSession()
+	session := infrastructure.GetDB().NewSession()
 	defer session.Close()
 
 	if err := session.Begin(); err != nil {

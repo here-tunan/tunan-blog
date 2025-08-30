@@ -1,3 +1,6 @@
+# 数据库类型选择: sqlite3 或 mysql
+database_type: mysql
+
 sqlite3:
   file: /Users/yaodao/devTools/sqlite/sqlite.db
 mysql:
@@ -5,6 +8,7 @@ mysql:
   port: 3306
   username: root
   password: root
+  database: blog
 apikey: rss_api_secret_key
 website:
   url: your_website_url

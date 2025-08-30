@@ -31,13 +31,13 @@ type ProjectQueryParam struct {
 
 // CreateProject creates a new project
 func CreateProject(project *Project) error {
-	_, err := infrastructure.Sqlite.Insert(project)
+	_, err := infrastructure.GetDB().Insert(project)
 	return err
 }
 
 // UpdateProject updates an existing project
 func UpdateProject(project *Project) error {
-	_, err := infrastructure.Sqlite.ID(project.Id).
+	_, err := infrastructure.GetDB().ID(project.Id).
 		Cols("name", "description", "github_url", "demo_url", "tech_stack", "featured", "sort_order").
 		Update(project)
 	return err
@@ -46,14 +46,14 @@ func UpdateProject(project *Project) error {
 // DeleteProject soft deletes a project
 func DeleteProject(id int64) error {
 	project := &Project{IsDeleted: true}
-	_, err := infrastructure.Sqlite.ID(id).Cols("is_deleted").Update(project)
+	_, err := infrastructure.GetDB().ID(id).Cols("is_deleted").Update(project)
 	return err
 }
 
 // GetProjectById gets a project by id
 func GetProjectById(id int64) (*Project, error) {
 	project := &Project{}
-	has, err := infrastructure.Sqlite.ID(id).Where("is_deleted = ?", false).Get(project)
+	has, err := infrastructure.GetDB().ID(id).Where("is_deleted = ?", false).Get(project)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func GetProjectById(id int64) (*Project, error) {
 // QueryProject queries projects with pagination
 func QueryProject(param ProjectQueryParam) ([]*Project, int64, error) {
 	var projects []*Project
-	session := infrastructure.Sqlite.Where("is_deleted = ?", false)
+	session := infrastructure.GetDB().Where("is_deleted = ?", false)
 
 	if param.Featured != nil {
 		session = session.And("featured = ?", *param.Featured)
@@ -92,7 +92,7 @@ func QueryProject(param ProjectQueryParam) ([]*Project, int64, error) {
 // GetAllProjects gets all non-deleted projects
 func GetAllProjects() ([]*Project, error) {
 	var projects []*Project
-	err := infrastructure.Sqlite.Where("is_deleted = ?", false).
+	err := infrastructure.GetDB().Where("is_deleted = ?", false).
 		OrderBy("sort_order ASC, gmt_create DESC").Find(&projects)
 	return projects, err
 }
@@ -100,7 +100,7 @@ func GetAllProjects() ([]*Project, error) {
 // GetFeaturedProjects gets featured projects
 func GetFeaturedProjects() ([]*Project, error) {
 	var projects []*Project
-	err := infrastructure.Sqlite.Where("is_deleted = ? AND featured = ?", false, true).
+	err := infrastructure.GetDB().Where("is_deleted = ? AND featured = ?", false, true).
 		OrderBy("sort_order ASC, gmt_create DESC").Find(&projects)
 	return projects, err
 }
