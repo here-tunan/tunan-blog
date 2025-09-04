@@ -221,7 +221,7 @@ h1, h2, h3, h4, h5, p, li, ul, span {
 
 /* Blog header标题字体 - 霞鹜文楷 */
 .blog-header h1 {
-  font-family: "LXGW WenKai", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 }
 
 

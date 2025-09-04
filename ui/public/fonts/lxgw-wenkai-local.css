@@ -1,0 +1,8 @@
+/* 霞鹜文楷字体定义 - 仅Regular版本 */
+@font-face {
+  font-family: 'LXGW WenKai';
+  src: url('./LXGWWenKai-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

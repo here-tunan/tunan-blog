@@ -1,15 +1,15 @@
 /** markdown style **/
-/** 引入霞鹜文楷字体 **/
-@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css');
-@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css');
+/** 引入本地霞鹜文楷字体 **/
+@import url('@/public/fonts/lxgw-wenkai-local.css');
 
 /** 中英文混排字体优化 **/
 .markdown-body {
-    font-family: "LXGW WenKai Screen", "LXGW WenKai", -apple-system, BlinkMacSystemFont, 
+    font-family: "LXGW WenKai", -apple-system, BlinkMacSystemFont, 
                  "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", 
                  "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", 
                  "WenQuanYi Micro Hei", sans-serif;
     font-feature-settings: "kern" 1;
+    font-display: swap; /* 字体加载期间显示备选字体 */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -40,7 +40,7 @@
     margin-bottom: 16px;
     font-weight: 600;
     line-height: 1.25;
-    font-family: "LXGW WenKai", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, 
+    font-family: "LXGW WenKai", -apple-system, BlinkMacSystemFont, 
                  "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", sans-serif;
 }
 
