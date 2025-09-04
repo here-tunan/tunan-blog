@@ -78,6 +78,35 @@
         --markdown-blockquote-letf: #86d5a8;
         --markdown-blockquote-text: var(--gray-5);
         --markdown-blockquote-background: var(--gray-3);
+        
+        /* Table colors for light mode */
+        --markdown-table-border: #e5e7eb;
+        --markdown-table-header-bg: #f8fafc;
+        --markdown-table-header-bg-end: #f1f5f9;
+        --markdown-table-header-text: #1f2937;
+        --markdown-table-header-border: #3b82f6;
+        --markdown-table-text: #374151;
+        --markdown-table-caption: #374151;
+        --markdown-table-stripe: rgba(249, 250, 251, 0.5);
+        --markdown-table-hover: rgba(59, 130, 246, 0.05);
+        --markdown-table-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        
+        /* Link colors for light mode */
+        --markdown-link-color: #3b82f6;
+        --markdown-link-hover-color: #2563eb;
+        --markdown-link-hover-bg: rgba(59, 130, 246, 0.1);
+        --markdown-code-border: rgba(175, 184, 193, 0.25);
+        
+        /* Scrollbar colors for light mode */
+        --markdown-scrollbar-track: #f1f1f1;
+        --markdown-scrollbar-thumb: #c1c1c1;
+        --markdown-scrollbar-thumb-hover: #a8a8a8;
+        
+        /* H4 title color for light mode */
+        --markdown-h4-color: #6b7280;
+        
+        /* Horizontal rule colors for light mode */
+        --markdown-hr-gradient: #3b82f6;
 
 
 
@@ -115,6 +144,35 @@
         --markdown-blockquote-letf: #de5555;
         --markdown-blockquote-text: var(--gray-5);
         --markdown-blockquote-background: var(--gray-7);
+        
+        /* Table colors for dark mode */
+        --markdown-table-border: #374151;
+        --markdown-table-header-bg: #1f2937;
+        --markdown-table-header-bg-end: #111827;
+        --markdown-table-header-text: #f3f4f6;
+        --markdown-table-header-border: #3b82f6;
+        --markdown-table-text: #d1d5db;
+        --markdown-table-caption: #f3f4f6;
+        --markdown-table-stripe: rgba(55, 65, 81, 0.3);
+        --markdown-table-hover: rgba(59, 130, 246, 0.2);
+        --markdown-table-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        
+        /* Link colors for dark mode */
+        --markdown-link-color: #60a5fa;
+        --markdown-link-hover-color: #3b82f6;
+        --markdown-link-hover-bg: rgba(96, 165, 250, 0.15);
+        --markdown-code-border: rgba(156, 163, 175, 0.3);
+        
+        /* Scrollbar colors for dark mode */
+        --markdown-scrollbar-track: #374151;
+        --markdown-scrollbar-thumb: #6b7280;
+        --markdown-scrollbar-thumb-hover: #9ca3af;
+        
+        /* H4 title color for dark mode */
+        --markdown-h4-color: #9ca3af;
+        
+        /* Horizontal rule colors for dark mode */
+        --markdown-hr-gradient: #60a5fa;
 
 
 
@@ -158,6 +216,12 @@
 /* Texts */
 h1, h2, h3, h4, h5, p, li, ul, span {
   color: var(--color-text-base);
+}
+
+
+/* Blog header标题字体 - 霞鹜文楷 */
+.blog-header h1 {
+  font-family: "LXGW WenKai", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 }
 
 

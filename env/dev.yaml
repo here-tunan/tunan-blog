@@ -1,5 +1,5 @@
 # 数据库类型选择: sqlite3 或 mysql
-database_type: mysql
+database_type: sqlite3
 
 sqlite3:
   file: /Users/yaodao/devTools/sqlite/sqlite.db

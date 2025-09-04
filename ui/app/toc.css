@@ -1,33 +1,100 @@
 .table-of-contents {
+    font-family: "LXGW WenKai Screen", "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+
     .level0 {
-        font-weight: normal;
-        font-size: 14pt;
-        font-family: "Microsoft YaHei", serif;
-        padding-bottom: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
         color: var(--color-toc-text-base);
         padding-left: 0;
+        transition: all 0.2s ease;
     }
     .level1 {
-        font-weight: normal;
-        font-size: 12pt;
-        padding-bottom: 6px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-bottom: 0.375rem;
         color: var(--color-toc-text-base);
-        padding-left: 6px;
+        padding-left: 1rem;
+        transition: all 0.2s ease;
     }
     .level2 {
-        font-weight: lighter;
-        font-size: 11pt;
-        font-family: "Microsoft YaHei", serif;
-        padding-bottom: 4px;
-        padding-left: 10px;
+        font-weight: 400;
+        font-size: 0.8125rem;
+        margin-bottom: 0.25rem;
+        padding-left: 2rem;
         color: var(--color-toc-text-base);
+        transition: all 0.2s ease;
     }
     .level3 {
-        font-weight: lighter;
-        font-size: 9pt;
-        font-family: "Microsoft YaHei", serif;
-        padding-bottom: 2px;
-        padding-left: 15px;
+        font-weight: 400;
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+        padding-left: 3rem;
         color: var(--color-toc-text-base);
+        opacity: 0.8;
+        transition: all 0.2s ease;
     }
+
+    /* 移除默认列表样式 */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+        list-style: none;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        margin: 0.125rem 0;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        border-radius: inherit;
+    }
+    
+    /* 交互状态 */
+    li:hover {
+        background-color: var(--color-toc-hover-bg, rgba(0, 0, 0, 0.05));
+        transform: translateX(2px);
+    }
+    
+    li:hover a {
+        color: var(--color-toc-hover-text, var(--color-toc-text-base));
+    }
+    
+    li:active {
+        transform: translateX(1px);
+        background-color: var(--color-toc-active-bg, rgba(0, 0, 0, 0.1));
+    }
+    
+    /* 当前活跃项样式 */
+    li.active {
+        background-color: var(--color-toc-current-bg, rgba(59, 130, 246, 0.1));
+        border-left: 3px solid var(--color-toc-current-border, #3b82f6);
+        padding-left: calc(0.5rem - 3px);
+    }
+    
+    li.active a {
+        color: var(--color-toc-current-text, #3b82f6);
+        font-weight: 500;
+    }
+    
+    /* 深色模式下的交互效果 */
+    @media (prefers-color-scheme: dark) {
+        li:hover {
+            background-color: var(--color-toc-hover-bg, rgba(255, 255, 255, 0.08));
+        }
+        
+        li:active {
+            background-color: var(--color-toc-active-bg, rgba(255, 255, 255, 0.12));
+        }
+    }
+}
+
+/* TOC标题样式 - 使用霞鹜文楷字体 */
+.pb-10.font-mono.font-bold.text-2xl {
+    font-family: "LXGW WenKai", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 }
