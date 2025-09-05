@@ -10,7 +10,7 @@ import (
 // GetAllArticlesForAdmin handles fetching all articles for the admin panel.
 func GetAllArticlesForAdmin(c *fiber.Ctx) error {
 	// Use a default query param to get all articles without pagination
-	param := repository.ArticleQueryParam{PageSize: 999, PageIndex: 1}
+	param := repository.ArticleQueryParam{PageSize: 9999, PageIndex: 1}
 
 	articles, _, err := service.QueryArticle(param)
 	if err != nil {

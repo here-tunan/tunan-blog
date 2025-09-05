@@ -1,6 +1,8 @@
 import React from "react";
 import BlogsSection from "@/app/components/home/BlogsSection";
 import WeeklySection from "@/app/components/home/WeeklySection";
+import TranslationsSection from "@/app/components/home/TranslationsSection";
+import HistorySection from "@/app/components/home/HistorySection";
 import AnimatedSubtitle from "@/app/components/AnimatedSubtitle";
 
 export default function Home() {
@@ -33,6 +35,8 @@ export default function Home() {
         <div className="space-y-12">
           <WeeklySection/>
           <BlogsSection/>
+          <TranslationsSection/>
+          <HistorySection/>
         </div>
         
         {/*<ProjectsSection/>*/}

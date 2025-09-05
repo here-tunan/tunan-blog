@@ -51,6 +51,8 @@ const ArticleEditorForm: React.FC<ArticleEditorFormProps> = ({ initialValues, on
         <Radio.Group>
           <Radio value={1}>Blog Post</Radio>
           <Radio value={2}>Weekly Report</Radio>
+          <Radio value={3}>Translation</Radio>
+          <Radio value={4}>Blog History</Radio>
         </Radio.Group>
       </Form.Item>
 

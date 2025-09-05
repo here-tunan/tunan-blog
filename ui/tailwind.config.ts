@@ -25,6 +25,25 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }: any) {
+      addUtilities({
+        '.scrollbar-none': {
+          'scrollbar-width': 'none',
+          '-ms-overflow-style': 'none',
+        },
+        '.scrollbar-none::-webkit-scrollbar': {
+          'display': 'none',
+        },
+        '.custom-scroll': {
+          'scrollbar-width': 'none',
+          '-ms-overflow-style': 'none',
+        },
+        '.custom-scroll::-webkit-scrollbar': {
+          'display': 'none',
+        },
+      });
+    },
+  ],
 };
 export default config;

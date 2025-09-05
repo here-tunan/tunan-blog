@@ -14,8 +14,24 @@ interface ArticleData {
   id: number;
   title: string;
   slug: string;
+  type: number;
   gmtCreate: string;
 }
+
+const getTypeLabel = (type: number) => {
+  switch (type) {
+    case 1:
+      return { label: 'Blog Post', color: '#52c41a' };
+    case 2:
+      return { label: 'Weekly Report', color: '#1890ff' };
+    case 3:
+      return { label: 'Translation', color: '#722ed1' };
+    case 4:
+      return { label: 'Blog History', color: '#fa8c16' };
+    default:
+      return { label: 'Unknown', color: '#d9d9d9' };
+  }
+};
 
 const ArticlesPage = () => {
   const [data, setData] = useState<ArticleData[]>([]);
@@ -58,6 +74,35 @@ const ArticlesPage = () => {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+      render: (type: number) => {
+        const { label, color } = getTypeLabel(type);
+        return (
+          <span
+            style={{
+              padding: '4px 8px',
+              borderRadius: '4px',
+              backgroundColor: `${color}20`,
+              color: color,
+              fontSize: '12px',
+              fontWeight: '500',
+            }}
+          >
+            {label}
+          </span>
+        );
+      },
+      filters: [
+        { text: 'Blog Post', value: 1 },
+        { text: 'Weekly Report', value: 2 },
+        { text: 'Translation', value: 3 },
+        { text: 'Blog History', value: 4 },
+      ],
+      onFilter: (value, record) => record.type === value,
     },
     {
       title: 'Slug',

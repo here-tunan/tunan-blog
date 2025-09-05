@@ -2,6 +2,7 @@
 
 import React, {useEffect, useState} from "react";
 import NavButton from "@/app/components/NavButton";
+import ArticleDropdown from "@/app/components/ArticleDropdown";
 import {useTheme} from "next-themes";
 import {themes} from "@/app/themes";
 
@@ -11,18 +12,6 @@ const items = [
     "name": "Home",
     "href": "/",
     "img": "/assets/icons/home.png",
-    "target": "_self",
-  },
-  {
-    "name": "Blog",
-    "href": "/blog",
-    "img": "/assets/icons/blog.png",
-    "target": "_self",
-  },
-  {
-    "name": "Weekly",
-    "href": "/weekly",
-    "img": "/assets/icons/7-days.png",
     "target": "_self",
   },
   {
@@ -37,7 +26,30 @@ const items = [
     "img": "/assets/icons/cool.png",
     "target": "_self",
   },
+]
 
+// 文章相关的下拉菜单内容
+const articleItems = [
+  {
+    "name": "Blog Posts",
+    "href": "/blog",
+    "description": "Personal thoughts and insights"
+  },
+  {
+    "name": "Weekly Reports",
+    "href": "/weekly",
+    "description": "Weekly updates and summaries"
+  },
+  {
+    "name": "Translations",
+    "href": "/translations",
+    "description": "Translated articles from other languages"
+  },
+  {
+    "name": "Blog History",
+    "href": "/history",
+    "description": "Timeline of blog evolution and milestones"
+  },
 ]
 
 export default function Navigation({ setCommandPaletteOpen }: { setCommandPaletteOpen: (open: boolean) => void }) {
@@ -82,15 +94,16 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
 
   return (
     <div
-      className={`fixed z-50 flex inset-x-0 top-4 mx-auto h-[55px] max-w-screen-lg items-center justify-between rounded-2xl bg-background/30 shadow-sm saturate-100 backdrop-blur-[10px] transition-colors 
+      className={`fixed z-50 flex inset-x-0 top-4 mx-auto h-[55px] max-w-screen-lg items-center justify-between rounded-2xl bg-background/30 shadow-sm saturate-100 backdrop-blur-[10px] transition-colors px-2 sm:px-4 
       ${isScrolled && 'bg-background/80'}`}>
-      <nav className="flex items-center gap-3">
+      <nav className="flex items-center gap-1 sm:gap-3">
         {items.map((item, i) => (
           <NavButton item={item} key={i}/>
         ))}
+        <ArticleDropdown items={articleItems} />
       </nav>
-      <div className="flex items-center gap-3">
-        {/* Social Icons Group */}
+      <div className="flex items-center gap-1 sm:gap-3">
+        {/* Social Icons Group - hide some on small screens */}
         <div className="flex items-center gap-1">
           <a 
             href="https://github.com/here-tunan" 
@@ -108,7 +121,7 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
             href="https://discord.gg/AQzmnCHbNE" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-indigo-100/70 dark:hover:bg-indigo-900/30 transition-colors group"
+            className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full hover:bg-indigo-100/70 dark:hover:bg-indigo-900/30 transition-colors group"
             title="Join Discord Server"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-indigo-600 group-hover:text-indigo-700 transition-colors">
@@ -120,7 +133,7 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
             href="https://app.folo.is/share/users/56967488590381056" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-orange-50 dark:hover:bg-orange-950 transition-colors group"
+            className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full hover:bg-orange-50 dark:hover:bg-orange-950 transition-colors group"
             title="Follow on Folo"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" className="flex-shrink-0">
@@ -136,7 +149,7 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
             href="/rss.xml" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-orange-100/70 dark:hover:bg-orange-900/30 transition-colors group"
+            className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full hover:bg-orange-100/70 dark:hover:bg-orange-900/30 transition-colors group"
             title="RSS Feed"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-orange-500 group-hover:text-orange-600 transition-colors">
@@ -151,8 +164,9 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
           onClick={() => setCommandPaletteOpen(true)}
           className="flex items-center gap-2 rounded-full border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
-          <span>Search...</span>
-          <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+          <span className="hidden sm:inline">Search...</span>
+          <span className="sm:hidden">🔍</span>
+          <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 md:flex">
             <span className="text-xs">⌘</span>K
           </kbd>
         </button>

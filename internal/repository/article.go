@@ -85,7 +85,7 @@ func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
 	session.Desc("gmt_create")
 
 	var articles []Article
-	columns := []string{"id", "title", "slug", "view_number", "like_number", "gmt_create"}
+	columns := []string{"id", "title", "slug", "view_number", "type", "like_number", "gmt_create"}
 	if !param.IgnoreContent {
 		columns = append(columns, "content")
 	}
