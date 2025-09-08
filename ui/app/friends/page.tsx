@@ -86,7 +86,7 @@ export default function FriendsPage() {
             Friends & Links
           </h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Amazing websites and talented friends I'd love to share with you
+            Amazing websites and talented friends I`&apos`d love to share with you
           </p>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default function FriendsPage() {
               Want to be friends?
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              If you have an amazing website, drop a comment in the article below and let's connect!
+              If you have an amazing website, drop a comment in the article below and let`&apos`s connect!
             </p>
             
             <a
@@ -254,7 +254,7 @@ export default function FriendsPage() {
               <svg className="w-4 h-4 transition-transform duration-300 hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>Let's Go!</span>
+              <span>Let`&apos`s Go!</span>
             </button>
           </div>
         </div>
