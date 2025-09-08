@@ -113,11 +113,14 @@ export default function FriendsPage() {
                 animation: 'fadeInUp 0.6s ease-out forwards'
               }}
             >
+              {/* Subtle gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.02] to-purple-500/[0.02] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block"
+                className="relative z-10 block"
               >
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
@@ -127,14 +130,15 @@ export default function FriendsPage() {
                         alt={`${link.title} favicon`}
                         className="w-6 h-6 object-contain"
                         onError={(e) => {
-                          // 如果 favicon 加载失败，显示首字母
+                          // 如果 favicon 加载失败，显示首字母/首字符
                           e.currentTarget.style.display = 'none';
                           const fallback = e.currentTarget.nextElementSibling as HTMLElement;
                           if (fallback) fallback.style.display = 'flex';
                         }}
                       />
-                      <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ display: 'none' }}>
-                        {link.title.charAt(0).toUpperCase()}
+                      <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-inner" style={{ display: 'none' }}>
+                        {/* 获取标题的第一个字符，支持中文和英文 */}
+                        {link.title.trim().charAt(0).toUpperCase()}
                       </div>
                     </div>
                   </div>
@@ -166,9 +170,6 @@ export default function FriendsPage() {
                   </div>
                 </div>
               </a>
-
-              {/* Subtle gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.02] to-purple-500/[0.02] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
           ))}
         </div>
