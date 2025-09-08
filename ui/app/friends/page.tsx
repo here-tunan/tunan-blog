@@ -29,6 +29,21 @@ export default function FriendsPage() {
   const [friendLinks, setFriendLinks] = useState<FriendLink[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // 为fallback生成不同的颜色主题
+  const getColorTheme = (index: number) => {
+    const themes = [
+      'from-blue-500 via-blue-600 to-blue-700',
+      'from-purple-500 via-purple-600 to-purple-700',
+      'from-pink-500 via-pink-600 to-pink-700',
+      'from-green-500 via-green-600 to-green-700',
+      'from-yellow-500 via-yellow-600 to-yellow-700',
+      'from-red-500 via-red-600 to-red-700',
+      'from-indigo-500 via-indigo-600 to-indigo-700',
+      'from-teal-500 via-teal-600 to-teal-700',
+    ];
+    return themes[index % themes.length];
+  };
+
   useEffect(() => {
     const fetchFriendLinks = async () => {
       try {
@@ -136,7 +151,10 @@ export default function FriendsPage() {
                           if (fallback) fallback.style.display = 'flex';
                         }}
                       />
-                      <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-inner" style={{ display: 'none' }}>
+                      <div 
+                        className={`w-full h-full bg-gradient-to-br ${getColorTheme(index)} rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-inner`} 
+                        style={{ display: 'none' }}
+                      >
                         {/* 获取标题的第一个字符，支持中文和英文 */}
                         {link.title.trim().charAt(0).toUpperCase()}
                       </div>
