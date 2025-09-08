@@ -60,6 +60,7 @@ func Start() {
 	root.Mount("/view", ViewMount())
 	root.Mount("/project", ProjectMount())
 	root.Mount("/device-app", DeviceAppMount())
+	root.Mount("/friend-links", FriendLinksMount())
 
 	root.Get("/search", GetAllSearchItems)
 
@@ -115,6 +116,13 @@ func Start() {
 	admin.Put("/device-apps/:id", UpdateDeviceAppAdmin)
 	admin.Delete("/device-apps/:id", DeleteDeviceAppAdmin)
 
+	// Friend Links management routes
+	admin.Get("/friend-links", GetAllFriendLinksAdmin)
+	admin.Post("/friend-links", CreateFriendLinkAdmin)
+	admin.Get("/friend-links/:id", GetFriendLinkAdmin)
+	admin.Put("/friend-links/:id", UpdateFriendLinkAdmin)
+	admin.Delete("/friend-links/:id", DeleteFriendLinkAdmin)
+
 	log.Fatal(app.Listen(":3002"))
 }
 
@@ -130,6 +138,12 @@ func DeviceAppMount() *fiber.App {
 	deviceApp.Get("/grouped", GetGroupedDeviceApps)
 	deviceApp.Get("/category/:category", GetDeviceAppsByCategory)
 	return deviceApp
+}
+
+func FriendLinksMount() *fiber.App {
+	friendLinks := fiber.New()
+	friendLinks.Get("/", GetAllFriendLinks)
+	return friendLinks
 }
 
 func isNeedAuth(api string) bool {

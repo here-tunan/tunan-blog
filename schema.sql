@@ -132,4 +132,21 @@ CREATE TABLE `device_app` (
   KEY `idx_sort_order` (`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- ----------------------------
+-- Table structure for friend_link
+-- ----------------------------
+DROP TABLE IF EXISTS `friend_link`;
+CREATE TABLE `friend_link` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL COMMENT '友链标题',
+  `url` varchar(500) NOT NULL COMMENT '友链地址',
+  `description` varchar(50) DEFAULT NULL COMMENT '友链描述',
+  `sort_order` int DEFAULT '0' COMMENT '排序',
+  `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
+  `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_sort_order` (`sort_order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

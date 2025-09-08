@@ -120,4 +120,22 @@ CREATE TABLE `device_app` (
 CREATE INDEX `idx_category` ON `device_app` (`category`);
 CREATE INDEX `idx_sort_order` ON `device_app` (`sort_order`);
 
+-- ----------------------------
+-- Table structure for friend_link
+-- ----------------------------
+DROP TABLE IF EXISTS `friend_link`;
+CREATE TABLE `friend_link` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `title` VARCHAR(100) NOT NULL,
+  `url` VARCHAR(500) NOT NULL,
+  `description` VARCHAR(50) DEFAULT NULL,
+  `sort_order` INTEGER DEFAULT 0,
+  `is_deleted` INTEGER DEFAULT 0,
+  `gmt_create` DATETIME DEFAULT NULL,
+  `gmt_modified` DATETIME DEFAULT NULL
+);
+
+-- Create index for friend_link
+CREATE INDEX `idx_sort_order` ON `friend_link` (`sort_order`);
+
 PRAGMA foreign_keys = ON;

@@ -13,6 +13,7 @@ import {
   BookOutlined, 
   ProjectOutlined,
   AppstoreOutlined,
+  LinkOutlined,
   MenuUnfoldOutlined, 
   MenuFoldOutlined 
 } from '@ant-design/icons';
@@ -34,6 +35,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     if (pathname.startsWith('/books')) return '/books';
     if (pathname.startsWith('/projects')) return '/projects';
     if (pathname.startsWith('/device-apps')) return '/device-apps';
+    if (pathname.startsWith('/friend-links')) return '/friend-links';
     if (pathname.startsWith('/dashboard')) return '/dashboard';
     return pathname;
   };
@@ -43,6 +45,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     if (pathname.startsWith('/books')) return 'Book Management';
     if (pathname.startsWith('/projects')) return 'Project Management';
     if (pathname.startsWith('/device-apps')) return 'Device & Apps Management';
+    if (pathname.startsWith('/friend-links')) return 'Friend Links Management';
     if (pathname.startsWith('/dashboard')) return 'Dashboard';
     return 'Admin';
   };
@@ -83,6 +86,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
               { key: '/books', icon: <BookOutlined />, label: <Link href="/books">Books</Link> },
               { key: '/projects', icon: <ProjectOutlined />, label: <Link href="/projects">Projects</Link> },
               { key: '/device-apps', icon: <AppstoreOutlined />, label: <Link href="/device-apps">Device & Apps</Link> },
+              { key: '/friend-links', icon: <LinkOutlined />, label: <Link href="/friend-links">Friend Links</Link> },
             ]}
           />
         </Sider>

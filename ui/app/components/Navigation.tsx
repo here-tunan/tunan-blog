@@ -106,6 +106,14 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
         {/* Social Icons Group - hide some on small screens */}
         <div className="flex items-center gap-1">
           <a 
+            href="/friends" 
+            className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-blue-100/70 dark:hover:bg-blue-900/30 transition-colors group"
+            title="friends"
+          >
+            <img src="/assets/icons/paper-flight.png" alt="friends" className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
+          </a>
+
+          <a 
             href="https://github.com/here-tunan" 
             target="_blank" 
             rel="noopener noreferrer"
