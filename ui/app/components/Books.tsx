@@ -122,6 +122,7 @@ export default function Books({ books }: { books: Book[] }) {
 
     return (
         <div className="max-w-none">
+            <h3 className="font-mono font-bold text-2xl pb-4">📚 My Books</h3>
             <div className="max-h-80 overflow-y-auto pr-2">
                 <div className="space-y-4">
                     {Object.keys(groupedBooks).map(category => (

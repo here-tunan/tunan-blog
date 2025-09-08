@@ -3,25 +3,34 @@ import Skills from "@/app/components/Skills";
 import {Comments} from "@/app/components/blog/comment";
 import DevicesAndApps from "@/app/components/DevicesAndApps";
 import Books from "@/app/components/Books";
-import GitHubActivity from "@/app/components/home/GitHubActivity";
-import { API_URL } from "@/lib/config";
+import {API_URL} from "@/lib/config";
 
 async function getBooks() {
-  try {
-    const response = await fetch(`${API_URL}/book/list`, {
-      method: 'GET',
-      cache: 'no-store', // Or a revalidation strategy
-    });
-    if (!response.ok) throw new Error('Failed to fetch books');
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching books:", error);
-    return [];
-  }
+    try {
+        const response = await fetch(`${API_URL}/book/list`, {
+            method: 'GET',
+            cache: 'no-store', // Or a revalidation strategy
+        });
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching books:", error);
+        return [];
+    }
+}
+
+async function getDevicesAndApps() {
+    try {
+        const response = await fetch(`${API_URL}/device-app/grouped`);
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching device apps:', error);
+        return [];
+    }
 }
 
 export default async function About() {
-  const books = await getBooks();
+    const books = await getBooks();
+    const deviceApps = await getDevicesAndApps();
 
     return (
         <main>
@@ -34,13 +43,14 @@ export default async function About() {
 
                             <h4 className="font-mono font-bold text-lg pt-4 pb-3">Who I Am</h4>
                             <p>
-                                Hello there! I&apos;m Tunan, but you can also call me Aaron. I&apos;m a Java Backend Development Engineer from
+                                Hello there! I&apos;m Tunan, but you can also call me Aaron. I&apos;m a Java Backend
+                                Development Engineer from
                                 China 🇨🇳 and a passionate developer on a journey to become a full-stack engineer.
                             </p>
 
                             <h4 className="font-mono font-bold text-lg pt-4 pb-3">Background</h4>
                             <p>
-                                I graduated from <strong>Hohai University</strong> with a degree in <strong>Computer
+                                I graduated from <strong>HoHai University</strong> with a degree in <strong>Computer
                                 Science and Technology</strong>, which laid a solid foundation for my career in tech.
                             </p>
 
@@ -62,36 +72,22 @@ export default async function About() {
 
                             <h4 className="font-mono font-bold text-lg pt-4 pb-3">On this Blog</h4>
                             <p>
-                                I&apos;m continuously improving my English 📚 and will be sharing my thoughts and technical
+                                I&apos;m continuously improving my English 📚 and will be sharing my thoughts and
+                                technical
                                 explorations on this blog. Thanks for stopping by! 😊
                             </p>
                         </div>
                     </div>
 
-                    <div>
-                        <h3 className="font-mono font-bold text-2xl pb-4">👨‍💻 GitHub Activity</h3>
-                        <GitHubActivity />
-                    </div>
+                    {/*<GitHubActivity/>*/}
 
-                    <div>
-                        <h3 className="font-mono font-bold text-2xl pb-4">🛠️ Skills</h3>
-                        <Skills/>
-                    </div>
+                    <Skills/>
 
-                    <div>
-                        <h3 className="font-mono font-bold text-2xl pb-4">📱 Devices & Apps</h3>
-                        <DevicesAndApps/>
-                    </div>
+                    <DevicesAndApps devicesAndApps={deviceApps}/>
 
-                    <div>
-                        <h3 className="font-mono font-bold text-2xl pb-4">📚 My Books</h3>
-                        <Books books={books}/>
-                    </div>
+                    <Books books={books}/>
 
-                    <div>
-                        <h3 className="font-mono font-bold text-2xl pb-4">🐳 Why not leave a comment?</h3>
-                        <Comments/>
-                    </div>
+                    <Comments/>
                 </div>
             </div>
         </main>
