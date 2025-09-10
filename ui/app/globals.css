@@ -63,7 +63,7 @@
         --color-toc-text-base: #596869;
 
         /* Markdown 渲染的一些颜色 */
-        --markdwon-code-backgroud: var(--gray-1);
+        --markdwon-code-backgroud: rgba(59, 130, 246, 0.04);
         --markdwon-code-text: #ea4c9b;
         --markdwon-text-base: var(--gray-10);
         --markdown-divide: #eb2344;
@@ -95,7 +95,7 @@
         --markdown-link-color: #3b82f6;
         --markdown-link-hover-color: #2563eb;
         --markdown-link-hover-bg: rgba(59, 130, 246, 0.1);
-        --markdown-code-border: rgba(175, 184, 193, 0.25);
+        --markdown-code-border: rgba(209, 213, 219, 0.6);
         
         /* Scrollbar colors for light mode */
         --markdown-scrollbar-track: #f1f1f1;

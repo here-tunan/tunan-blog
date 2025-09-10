@@ -159,18 +159,17 @@
 
 /** markdown style - code**/
 .markdown-body code, .markdown-body tt {
-    padding: 0.125rem 0.25rem;
-    font-size: 0.875em;
-    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', 
-                 'Source Code Pro', 'Fira Code', 'JetBrains Mono',
-                 'Consolas', 'Liberation Mono', 'Noto Sans Mono CJK SC',
-                 'Source Han Mono SC', 'Microsoft YaHei Mono', monospace;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.85em;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 
+                 'Cascadia Code', 'Roboto Mono', 'Source Code Pro',
+                 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+    font-weight: 500;
     white-space: break-spaces;
     background-color: var(--markdwon-code-backgroud, rgba(175, 184, 193, 0.2));
-    border: 1px solid var(--markdown-code-border, rgba(175, 184, 193, 0.25));
-    border-radius: 0.375rem;
+    border: none;
+    border-radius: 0.25rem;
     color: var(--markdwon-code-text, #d73a49);
-    font-weight: 500;
 }
 
 /* 代码块内的 code 不需要额外样式 */
@@ -304,12 +303,12 @@
     display: block;
     overflow-x: auto;
     padding: 1.25rem;
-    font-size: 0.875rem;
-    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', 
-                 'Source Code Pro', 'Fira Code', 'JetBrains Mono',
-                 'Consolas', 'Liberation Mono', 'Noto Sans Mono CJK SC',
-                 'Source Han Mono SC', 'Microsoft YaHei Mono', monospace;
-    line-height: 1.5;
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, 
+                 'Cascadia Code', 'Roboto Mono', 'Source Code Pro',
+                 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+    font-weight: 400;
+    line-height: 1.6;
     background-color: transparent;
     color: var(--markdown-blockquote-text, #24292e);
 }
@@ -319,8 +318,156 @@
     content: '';
     display: block;
     height: 3px;
-    background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+    background: var(--markdown-code-border, #e1e4e8);
     width: 100%;
+}
+
+/* 不同语言的代码块主题 */
+/* JavaScript/TypeScript - 黄色主题 */
+.markdown-body pre:has(.language-javascript):before,
+.markdown-body pre:has(.language-js):before,
+.markdown-body pre:has(.language-typescript):before,
+.markdown-body pre:has(.language-ts):before {
+    background: linear-gradient(90deg, #f7df1e 0%, #ffd600 100%);
+}
+
+.markdown-body pre:has(.language-javascript),
+.markdown-body pre:has(.language-js),
+.markdown-body pre:has(.language-typescript),
+.markdown-body pre:has(.language-ts) {
+    border-left: 4px solid #f7df1e;
+}
+
+/* Python - 蓝绿色主题 */
+.markdown-body pre:has(.language-python):before,
+.markdown-body pre:has(.language-py):before {
+    background: linear-gradient(90deg, #3776ab 0%, #4b8bbe 100%);
+}
+
+.markdown-body pre:has(.language-python),
+.markdown-body pre:has(.language-py) {
+    border-left: 4px solid #3776ab;
+}
+
+/* Java - 红橙色主题 */
+.markdown-body pre:has(.language-java):before {
+    background: linear-gradient(90deg, #ed8b00 0%, #f89820 100%);
+}
+
+.markdown-body pre:has(.language-java) {
+    border-left: 4px solid #ed8b00;
+}
+
+/* C/C++ - 蓝色主题 */
+.markdown-body pre:has(.language-c):before,
+.markdown-body pre:has(.language-cpp):before,
+.markdown-body pre:has(.language-cc):before {
+    background: linear-gradient(90deg, #00599c 0%, #004482 100%);
+}
+
+.markdown-body pre:has(.language-c),
+.markdown-body pre:has(.language-cpp),
+.markdown-body pre:has(.language-cc) {
+    border-left: 4px solid #00599c;
+}
+
+/* Rust - 橙色主题 */
+.markdown-body pre:has(.language-rust):before,
+.markdown-body pre:has(.language-rs):before {
+    background: linear-gradient(90deg, #ce422b 0%, #b33819 100%);
+}
+
+.markdown-body pre:has(.language-rust),
+.markdown-body pre:has(.language-rs) {
+    border-left: 4px solid #ce422b;
+}
+
+/* Go - 青蓝色主题 */
+.markdown-body pre:has(.language-go):before,
+.markdown-body pre:has(.language-golang):before {
+    background: linear-gradient(90deg, #00add8 0%, #007d9c 100%);
+}
+
+.markdown-body pre:has(.language-go),
+.markdown-body pre:has(.language-golang) {
+    border-left: 4px solid #00add8;
+}
+
+/* HTML - 橙红色主题 */
+.markdown-body pre:has(.language-html):before,
+.markdown-body pre:has(.language-xml):before {
+    background: linear-gradient(90deg, #e34c26 0%, #f06529 100%);
+}
+
+.markdown-body pre:has(.language-html),
+.markdown-body pre:has(.language-xml) {
+    border-left: 4px solid #e34c26;
+}
+
+/* CSS - 蓝色主题 */
+.markdown-body pre:has(.language-css):before,
+.markdown-body pre:has(.language-scss):before,
+.markdown-body pre:has(.language-sass):before {
+    background: linear-gradient(90deg, #1572b6 0%, #33a9dc 100%);
+}
+
+.markdown-body pre:has(.language-css),
+.markdown-body pre:has(.language-scss),
+.markdown-body pre:has(.language-sass) {
+    border-left: 4px solid #1572b6;
+}
+
+/* React/JSX - 青色主题 */
+.markdown-body pre:has(.language-jsx):before,
+.markdown-body pre:has(.language-tsx):before,
+.markdown-body pre:has(.language-react):before {
+    background: linear-gradient(90deg, #61dafb 0%, #21d4fd 100%);
+}
+
+.markdown-body pre:has(.language-jsx),
+.markdown-body pre:has(.language-tsx),
+.markdown-body pre:has(.language-react) {
+    border-left: 4px solid #61dafb;
+}
+
+/* Vue - 绿色主题 */
+.markdown-body pre:has(.language-vue):before {
+    background: linear-gradient(90deg, #4fc08d 0%, #42b883 100%);
+}
+
+.markdown-body pre:has(.language-vue) {
+    border-left: 4px solid #4fc08d;
+}
+
+/* Shell/Bash - 绿色主题 */
+.markdown-body pre:has(.language-bash):before,
+.markdown-body pre:has(.language-shell):before,
+.markdown-body pre:has(.language-sh):before {
+    background: linear-gradient(90deg, #4eaa25 0%, #89e051 100%);
+}
+
+.markdown-body pre:has(.language-bash),
+.markdown-body pre:has(.language-shell),
+.markdown-body pre:has(.language-sh) {
+    border-left: 4px solid #4eaa25;
+}
+
+/* SQL - 紫色主题 */
+.markdown-body pre:has(.language-sql):before {
+    background: linear-gradient(90deg, #336791 0%, #4f8cc9 100%);
+}
+
+.markdown-body pre:has(.language-sql) {
+    border-left: 4px solid #336791;
+}
+
+/* JSON - 灰色主题 */
+.markdown-body pre:has(.language-json):before {
+    background: linear-gradient(90deg, #292929 0%, #525252 100%);
+}
+
+.markdown-body pre:has(.language-json) {
+    border-left: 4px solid #292929;
 }
 
 
