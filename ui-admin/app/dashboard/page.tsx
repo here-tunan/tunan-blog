@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Typography, message, Spin, Button, Card, Space } from 'antd';
 import { CloudDownloadOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 
 const { Title } = Typography;
 
@@ -36,25 +36,8 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('jwt_token');
-      if (!token) {
-        message.error('Authentication token not found. Please log in again.');
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`${API_URL}/admin/analytics/path-views`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch analytics data');
-        }
-
-        const result = await response.json();
+        const result = await apiRequestJson<PathViewData[]>('/admin/analytics/path-views');
         setData(Array.isArray(result) ? result : []);
       } catch (error) {
         console.error(error);
@@ -69,28 +52,11 @@ const DashboardPage = () => {
 
   const handleGenerateRSS = async () => {
     setRssLoading(true);
-    const token = localStorage.getItem('jwt_token');
-    
-    if (!token) {
-      message.error('Authentication token not found. Please log in again.');
-      setRssLoading(false);
-      return;
-    }
 
     try {
-      const response = await fetch(`${API_URL}/admin/rss/generate`, {
+      const result = await apiRequestJson('/admin/rss/generate', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate RSS');
-      }
-
-      const result = await response.json();
       message.success(result.message || 'RSS feed generated successfully!');
     } catch (error) {
       console.error(error);

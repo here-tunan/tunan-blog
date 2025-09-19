@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -83,26 +83,9 @@ const BooksPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('jwt_token');
-      if (!token) {
-        message.error('Authentication token not found.');
-        setLoading(false);
-        return;
-      }
-
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/admin/books`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch books');
-        }
-
-        const result = await response.json();
+        const result = await apiRequestJson<Book[]>('/admin/books');
         setData(Array.isArray(result) ? result : []);
       } catch (error) {
         console.error(error);

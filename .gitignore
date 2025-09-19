@@ -30,3 +30,4 @@ go.work
 /ui-admin/node_modules/
 /ui-admin/package-lock.json
 /ui-admin/.next/
+/.claude/settings.local.json

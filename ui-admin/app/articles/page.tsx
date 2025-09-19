@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -139,25 +139,8 @@ const ArticlesPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('jwt_token');
-      if (!token) {
-        message.error('Authentication token not found.');
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`${API_URL}/admin/articles`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch articles');
-        }
-
-        const result = await response.json();
+        const result = await apiRequestJson<Article[]>('/admin/articles');
         setData(Array.isArray(result) ? result : []);
       } catch (error) {
         console.error(error);
