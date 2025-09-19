@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip, Tag } from 'antd';
 import type { TableProps } from 'antd';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson, apiRequest } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -33,26 +33,17 @@ const DeviceAppsPage = () => {
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
-        const token = localStorage.getItem('jwt_token');
-        fetch(`${API_URL}/admin/device-apps/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        })
-        .then(response => {
-          if (response.ok) {
-            message.success('Device/App deleted successfully');
-            setData(data.filter(item => item.id !== id));
-          } else {
-            throw new Error('Failed to delete device/app');
-          }
-        })
-        .catch(error => {
+      async onOk() {
+        try {
+          await apiRequest(`/admin/device-apps/${id}`, {
+            method: 'DELETE',
+          });
+          message.success('Device/App deleted successfully');
+          setData(data.filter(item => item.id !== id));
+        } catch (error) {
           console.error(error);
           message.error('Failed to delete device/app');
-        });
+        }
       },
     });
   };
@@ -126,20 +117,8 @@ const DeviceAppsPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('jwt_token');
-      
       try {
-        const response = await fetch(`${API_URL}/admin/device-apps`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-
-        const result = await response.json();
+        const result = await apiRequestJson('/admin/device-apps');
         setData(result);
       } catch (error) {
         console.error('Error fetching data:', error);

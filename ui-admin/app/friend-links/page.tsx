@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, InputNumber, Space, Popconfirm, message, Tag } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, LinkOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson, apiRequest } from '@/lib/api';
 
 interface FriendLink {
   id: number;
@@ -27,18 +27,8 @@ const FriendLinksPage: React.FC = () => {
   const fetchFriendLinks = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('jwt_token');
-      const response = await fetch(`${API_URL}/admin/friend-links`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setFriendLinks(data.data || []);
-      } else {
-        message.error('获取友链列表失败');
-      }
+      const data = await apiRequestJson('/admin/friend-links');
+      setFriendLinks(data.data || []);
     } catch (error) {
       message.error('获取友链列表失败');
     } finally {
@@ -53,28 +43,19 @@ const FriendLinksPage: React.FC = () => {
   // 新增或编辑友链
   const handleSave = async (values: any) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      const url = editingLink ? `${API_URL}/admin/friend-links/${editingLink.id}` : `${API_URL}/admin/friend-links`;
+      const endpoint = editingLink ? `/admin/friend-links/${editingLink.id}` : '/admin/friend-links';
       const method = editingLink ? 'PUT' : 'POST';
-      
-      const response = await fetch(url, {
+
+      await apiRequestJson(endpoint, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
         body: JSON.stringify(values),
       });
 
-      if (response.ok) {
-        message.success(editingLink ? '友链更新成功' : '友链创建成功');
-        setIsModalOpen(false);
-        setEditingLink(null);
-        form.resetFields();
-        fetchFriendLinks();
-      } else {
-        message.error(editingLink ? '友链更新失败' : '友链创建失败');
-      }
+      message.success(editingLink ? '友链更新成功' : '友链创建成功');
+      setIsModalOpen(false);
+      setEditingLink(null);
+      form.resetFields();
+      fetchFriendLinks();
     } catch (error) {
       message.error(editingLink ? '友链更新失败' : '友链创建失败');
     }
@@ -83,20 +64,12 @@ const FriendLinksPage: React.FC = () => {
   // 删除友链
   const handleDelete = async (id: number) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      const response = await fetch(`${API_URL}/admin/friend-links/${id}`, {
+      await apiRequest(`/admin/friend-links/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
       });
 
-      if (response.ok) {
-        message.success('友链删除成功');
-        fetchFriendLinks();
-      } else {
-        message.error('友链删除失败');
-      }
+      message.success('友链删除成功');
+      fetchFriendLinks();
     } catch (error) {
       message.error('友链删除失败');
     }

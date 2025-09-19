@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { message, Spin, Typography } from 'antd';
 import { useParams, useRouter } from 'next/navigation';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 import BookEditorForm from '../../components/BookEditorForm';
 
 const { Title } = Typography;
@@ -21,19 +21,8 @@ const EditBookPage = () => {
 
     const fetchBook = async () => {
       setLoading(true);
-      const token = localStorage.getItem('jwt_token');
       try {
-        const response = await fetch(`${API_URL}/admin/books/${id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch book');
-        }
-
-        const result = await response.json();
+        const result = await apiRequestJson(`/admin/books/${id}`);
         setInitialData(result);
       } catch (error) {
         console.error(error);
@@ -48,23 +37,12 @@ const EditBookPage = () => {
 
   const onFinish = async (values: any) => {
     setSubmitting(true);
-    const token = localStorage.getItem('jwt_token');
 
     try {
-      const response = await fetch(`${API_URL}/admin/books/${id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(values),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to update book');
-      }
+      await apiRequestJson(`/admin/books/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(values),
+      });
 
       message.success('Book updated successfully');
       router.push('/books');

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
-import { apiRequestJson } from '@/lib/api';
+import { apiRequestJson, apiRequest } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -30,26 +30,22 @@ const BooksPage = () => {
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
-        const token = localStorage.getItem('jwt_token');
-        fetch(`${API_URL}/admin/books/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        })
-        .then(response => {
+      async onOk() {
+        try {
+          const response = await apiRequest(`/admin/books/${id}`, {
+            method: 'DELETE',
+          });
+
           if (response.ok) {
             message.success('Book deleted successfully');
             setData(data.filter(item => item.id !== id));
           } else {
             throw new Error('Failed to delete book');
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error(error);
           message.error('Could not delete book.');
-        });
+        }
       },
     });
   };
@@ -85,7 +81,7 @@ const BooksPage = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const result = await apiRequestJson<Book[]>('/admin/books');
+        const result = await apiRequestJson<BookData[]>('/admin/books');
         setData(Array.isArray(result) ? result : []);
       } catch (error) {
         console.error(error);

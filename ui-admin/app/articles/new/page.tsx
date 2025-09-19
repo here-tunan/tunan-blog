@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, message } from 'antd';
 import { useRouter } from 'next/navigation';
 import ArticleEditorForm from '../components/ArticleEditorForm';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 
 const { Title } = Typography;
 
@@ -15,18 +15,10 @@ const NewArticlePage = () => {
 
   useEffect(() => {
     const fetchTags = async () => {
-      const token = localStorage.getItem('jwt_token');
       try {
-        const response = await fetch(`${API_URL}/admin/tags`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          const tagOptions = data.map((tag: { name: string }) => ({ label: tag.name, value: tag.name }));
-          setTags(tagOptions);
-        }
+        const data = await apiRequestJson<{ name: string }[]>('/admin/tags');
+        const tagOptions = data.map((tag) => ({ label: tag.name, value: tag.name }));
+        setTags(tagOptions);
       } catch (error) {
         console.error("Failed to fetch tags", error);
       }
@@ -37,28 +29,18 @@ const NewArticlePage = () => {
 
   const handleFinish = async (values: any) => {
     setLoading(true);
-    const token = localStorage.getItem('jwt_token');
 
     try {
-      const response = await fetch(`${API_URL}/admin/articles`, {
+      await apiRequestJson('/admin/articles', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
         body: JSON.stringify(values),
       });
 
-      if (response.ok) {
-        message.success('Article created successfully!');
-        router.push('/articles');
-      } else {
-        const errorData = await response.json();
-        message.error(`Failed to create article: ${errorData.error}`);
-      }
-    } catch (error) {
+      message.success('Article created successfully!');
+      router.push('/articles');
+    } catch (error: any) {
       console.error(error);
-      message.error('An error occurred while creating the article.');
+      message.error(error.message || 'An error occurred while creating the article.');
     } finally {
       setLoading(false);
     }

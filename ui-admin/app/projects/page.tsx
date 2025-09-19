@@ -5,7 +5,7 @@ import { Table, Button, Space, Tag, Switch, message, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
 import { useRouter } from 'next/navigation';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 
 interface Project {
   id: number;
@@ -140,25 +140,8 @@ const ProjectsPage = () => {
   ];
 
   const fetchProjects = async () => {
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      message.error('Authentication token not found. Please log in again.');
-      setLoading(false);
-      return;
-    }
-
     try {
-      const response = await fetch(`${API_URL}/admin/projects`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch projects');
-      }
-
-      const result = await response.json();
+      const result = await apiRequestJson('/admin/projects');
       if (result.success) {
         setProjects(result.data || []);
       }
@@ -171,33 +154,19 @@ const ProjectsPage = () => {
   };
 
   const handleToggleFeatured = async (id: number, featured: boolean) => {
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      message.error('Authentication token not found.');
-      return;
-    }
-
     try {
       const project = projects.find(p => p.id === id);
       if (!project) return;
 
-      const response = await fetch(`${API_URL}/admin/projects/${id}`, {
+      await apiRequestJson(`/admin/projects/${id}`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           ...project,
           featured,
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to update project');
-      }
-
-      setProjects(prev => prev.map(p => 
+      setProjects(prev => prev.map(p =>
         p.id === id ? { ...p, featured } : p
       ));
       message.success('Project updated successfully');
@@ -208,23 +177,10 @@ const ProjectsPage = () => {
   };
 
   const handleDelete = async (id: number) => {
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      message.error('Authentication token not found.');
-      return;
-    }
-
     try {
-      const response = await fetch(`${API_URL}/admin/projects/${id}`, {
+      await apiRequestJson(`/admin/projects/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete project');
-      }
 
       setProjects(prev => prev.filter(p => p.id !== id));
       message.success('Project deleted successfully');

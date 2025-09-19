@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Switch, InputNumber, Button, message, Space, Tag, Spin } from 'antd';
 import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { useRouter, useParams } from 'next/navigation';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 
 const { TextArea } = Input;
 
@@ -30,27 +30,12 @@ const EditProjectPage = () => {
   const projectId = params.id;
 
   const fetchProject = async () => {
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      message.error('Authentication token not found. Please log in again.');
-      return;
-    }
-
     try {
-      const response = await fetch(`${API_URL}/admin/projects/${projectId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const result = await apiRequestJson(`/admin/projects/${projectId}`);
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch project');
-      }
-
-      const result = await response.json();
       if (result.success && result.data) {
         const project = result.data;
-        
+
         // Parse tech stack
         let parsedTechStack: string[] = [];
         if (project.techStack) {
@@ -60,9 +45,9 @@ const EditProjectPage = () => {
             console.error('Failed to parse tech stack:', e);
           }
         }
-        
+
         setTechStack(parsedTechStack);
-        
+
         // Set form values
         form.setFieldsValue({
           name: project.name,
@@ -86,13 +71,6 @@ const EditProjectPage = () => {
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
-    const token = localStorage.getItem('jwt_token');
-    
-    if (!token) {
-      message.error('Authentication token not found. Please log in again.');
-      setLoading(false);
-      return;
-    }
 
     try {
       const projectData = {
@@ -105,20 +83,11 @@ const EditProjectPage = () => {
         sortOrder: values.sort_order,
       };
 
-      const response = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+      const result = await apiRequestJson(`/admin/projects/${projectId}`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(projectData),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to update project');
-      }
-
-      const result = await response.json();
       if (result.success) {
         message.success('Project updated successfully!');
         router.push('/projects');

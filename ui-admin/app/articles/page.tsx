@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
-import { apiRequestJson } from '@/lib/api';
+import { apiRequestJson, apiRequest } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -45,26 +45,22 @@ const ArticlesPage = () => {
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
-        const token = localStorage.getItem('jwt_token');
-        fetch(`${API_URL}/admin/articles/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        })
-        .then(response => {
+      async onOk() {
+        try {
+          const response = await apiRequest(`/admin/articles/${id}`, {
+            method: 'DELETE',
+          });
+
           if (response.ok) {
             message.success('Article deleted successfully');
             setData(data.filter(item => item.id !== id));
           } else {
             throw new Error('Failed to delete article');
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error(error);
           message.error('Could not delete article.');
-        });
+        }
       },
     });
   };
@@ -140,7 +136,7 @@ const ArticlesPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await apiRequestJson<Article[]>('/admin/articles');
+        const result = await apiRequestJson<ArticleData[]>('/admin/articles');
         setData(Array.isArray(result) ? result : []);
       } catch (error) {
         console.error(error);

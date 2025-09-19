@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { message, Spin, Typography } from 'antd';
 import { useParams, useRouter } from 'next/navigation';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 import ArticleEditorForm from '../../components/ArticleEditorForm';
 
 const { Title } = Typography;
@@ -21,18 +21,10 @@ const EditArticlePage = () => {
     if (!id) return;
 
     const fetchTags = async () => {
-      const token = localStorage.getItem('jwt_token');
       try {
-        const response = await fetch(`${API_URL}/admin/tags`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          const tagOptions = data.map((tag: { name: string }) => ({ label: tag.name, value: tag.name }));
-          setTags(tagOptions);
-        }
+        const data = await apiRequestJson<{ name: string }[]>('/admin/tags');
+        const tagOptions = data.map((tag) => ({ label: tag.name, value: tag.name }));
+        setTags(tagOptions);
       } catch (error) {
         console.error("Failed to fetch tags", error);
       }
@@ -40,19 +32,8 @@ const EditArticlePage = () => {
 
     const fetchArticle = async () => {
       setLoading(true);
-      const token = localStorage.getItem('jwt_token');
       try {
-        const response = await fetch(`${API_URL}/admin/articles/${id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch article');
-        }
-
-        const result = await response.json();
+        const result = await apiRequestJson(`/admin/articles/${id}`);
         setInitialData({
           title: result.title,
           slug: result.slug,
@@ -74,23 +55,12 @@ const EditArticlePage = () => {
 
   const onFinish = async (values: any) => {
     setSubmitting(true);
-    const token = localStorage.getItem('jwt_token');
 
     try {
-      const response = await fetch(`${API_URL}/admin/articles/${id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(values),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to update article');
-      }
+      await apiRequestJson(`/admin/articles/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(values),
+      });
 
       message.success('Article updated successfully');
       router.push('/articles');

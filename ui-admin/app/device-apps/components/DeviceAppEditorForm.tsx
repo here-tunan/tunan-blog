@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, message, Card, InputNumber, Select } from 'antd';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -35,19 +35,8 @@ const DeviceAppEditorForm: React.FC<DeviceAppEditorFormProps> = ({ id }) => {
   }, [id]);
 
   const fetchDeviceApp = async () => {
-    const token = localStorage.getItem('jwt_token');
     try {
-      const response = await fetch(`${API_URL}/admin/device-apps/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch device app');
-      }
-
-      const data = await response.json();
+      const data = await apiRequestJson(`/admin/device-apps/${id}`);
       form.setFieldsValue(data);
     } catch (error) {
       console.error('Error fetching device app:', error);
@@ -59,27 +48,18 @@ const DeviceAppEditorForm: React.FC<DeviceAppEditorFormProps> = ({ id }) => {
 
   const onFinish = async (values: DeviceAppFormData) => {
     setLoading(true);
-    const token = localStorage.getItem('jwt_token');
 
     try {
-      const url = id 
-        ? `${API_URL}/admin/device-apps/${id}`
-        : `${API_URL}/admin/device-apps`;
-      
+      const endpoint = id
+        ? `/admin/device-apps/${id}`
+        : '/admin/device-apps';
+
       const method = id ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
+      await apiRequestJson(endpoint, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
         body: JSON.stringify(values),
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to ${id ? 'update' : 'create'} device app`);
-      }
 
       message.success(`Device/App ${id ? 'updated' : 'created'} successfully!`);
       router.push('/device-apps');

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Form, Input, Switch, InputNumber, Button, message, Space, Tag } from 'antd';
 import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import { API_URL } from '@/lib/config';
+import { apiRequestJson } from '@/lib/api';
 
 const { TextArea } = Input;
 
@@ -27,13 +27,6 @@ const NewProjectPage = () => {
 
   const handleSubmit = async (values: ProjectForm) => {
     setLoading(true);
-    const token = localStorage.getItem('jwt_token');
-    
-    if (!token) {
-      message.error('Authentication token not found. Please log in again.');
-      setLoading(false);
-      return;
-    }
 
     try {
       const projectData = {
@@ -46,20 +39,11 @@ const NewProjectPage = () => {
         sortOrder: values.sort_order,
       };
 
-      const response = await fetch(`${API_URL}/admin/projects`, {
+      const result = await apiRequestJson('/admin/projects', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(projectData),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to create project');
-      }
-
-      const result = await response.json();
       if (result.success) {
         message.success('Project created successfully!');
         router.push('/projects');
