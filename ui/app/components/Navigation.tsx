@@ -126,7 +126,7 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
           </a>
 
           <a 
-            href="https://discord.gg/AQzmnCHbNE" 
+            href="https://discord.gg/hYDRTFcf62"
             target="_blank" 
             rel="noopener noreferrer"
             className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full hover:bg-indigo-100/70 dark:hover:bg-indigo-900/30 transition-colors group"
