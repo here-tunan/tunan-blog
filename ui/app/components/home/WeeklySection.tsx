@@ -1,6 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { API_URL } from "@/lib/config";
+import { Locale } from "@/app/i18n/config";
+import { formatDate } from "@/app/i18n/format";
+import { getDictionary } from "@/app/i18n/get-dictionary";
+import { withLocale } from "@/app/i18n/routes";
+import { ARTICLE_TYPES, getArticles } from "@/lib/articles";
 
 interface Weekly {
   id: number;
@@ -10,55 +14,14 @@ interface Weekly {
   viewNumber: number;
 }
 
-async function getRecentWeeklies() {
-  try {
-    const response = await fetch(`${API_URL}/article/list`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: 2, // Type 2 for weeklies
-        pageSize: 3, // Get only 3 recent weeklies
-        pageIndex: 1,
-      }),
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    if (data && data.success) {
-      return data.data;
-    }
-  } catch (error) {
-    console.error("Error fetching recent weeklies:", error);
-  }
-  return [];
-}
-
-function formatDate(dateString: string) {
-  try {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return 'Invalid Date';
-    }
-    const options: Intl.DateTimeFormatOptions = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    };
-    return date.toLocaleDateString('en-US', options);
-  } catch (error) {
-    console.error('Error formatting date:', dateString, error);
-    return 'Invalid Date';
-  }
-}
-
-export default async function WeeklySection() {
-  const weeklies = await getRecentWeeklies();
+export default async function WeeklySection({ locale }: { locale: Locale }) {
+  const dictionary = getDictionary(locale);
+  const weeklies = await getArticles({
+    locale,
+    type: ARTICLE_TYPES.weekly,
+    pageSize: 3,
+    pageIndex: 1,
+  });
 
   if (weeklies.length === 0) {
     return null;
@@ -69,16 +32,16 @@ export default async function WeeklySection() {
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <div className="w-0.5 h-5 bg-blue-500 rounded-full"></div>
-          <h3 className="font-mono font-semibold text-lg">Recent Weekly</h3>
+          <h3 className="font-mono font-semibold text-lg">{dictionary.home.recentWeekly}</h3>
           <span className="text-[10px] px-1.5 py-0.5 bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded">
-            NEW
+            {dictionary.home.new}
           </span>
         </div>
-        <Link 
-          href="/weekly" 
+        <Link
+          href={withLocale(locale, '/weekly')}
           className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors flex items-center gap-1 group hover:gap-2"
         >
-          <span>View all</span>
+          <span>{dictionary.home.viewAll}</span>
           <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
@@ -90,29 +53,29 @@ export default async function WeeklySection() {
           // Extract week number from title (supports formats like "周报#21-xxx" or "Report#32-xxx")
           const weekNumberMatch = weekly.title.match(/#(\d+)/);
           const weekNumber = weekNumberMatch ? weekNumberMatch[1] : '?';
-          
+
           return (
             <Link
               key={weekly.id}
-              href={`/blog/${weekly.slug}`}
+              href={withLocale(locale, `/blog/${weekly.slug}`)}
               className="group relative block p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-750 border border-blue-100 dark:border-gray-700 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
             >
               {/* Week number badge */}
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-md">
                 #{weekNumber}
               </div>
-            
+
             <div className="flex flex-col h-full">
               <h3 className="font-semibold text-base mb-3 text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
                 {weekly.title}
               </h3>
-              
+
               <div className="mt-auto flex items-center justify-between text-xs">
                 <span className="text-gray-600 dark:text-gray-400 flex items-center gap-1">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  {formatDate(weekly.gmtCreate)}
+                  {formatDate(weekly.gmtCreate, locale, { year: 'numeric', month: 'short', day: 'numeric' })}
                 </span>
                 <span className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

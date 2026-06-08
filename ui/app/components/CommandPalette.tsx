@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { useRouter } from 'next/navigation';
 import { API_URL } from '@/lib/config';
+import { useLocale } from '@/app/i18n/locale-context';
+import { withLocale } from '@/app/i18n/routes';
 
 interface SearchItem {
   title: string;
@@ -19,6 +21,7 @@ interface CommandPaletteProps {
 export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
   const [items, setItems] = useState<SearchItem[]>([]);
   const router = useRouter();
+  const { locale, dictionary } = useLocale();
 
   // Fetch search data
   useEffect(() => {
@@ -49,25 +52,32 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
     return () => document.removeEventListener('keydown', down);
   }, [open, setOpen]);
 
+  const localizedUrl = (url: string) => {
+    if (!url.startsWith('/') || url.startsWith(`/${locale}`)) {
+      return url;
+    }
+    return withLocale(locale, url);
+  };
+
   const runCommand = (command: () => void) => {
     setOpen(false);
     command();
   };
 
   return (
-    <Command.Dialog 
-      open={open} 
-      onOpenChange={setOpen} 
-      label="Global Command Menu"
+    <Command.Dialog
+      open={open}
+      onOpenChange={setOpen}
+      label={dictionary.search.label}
     >
       {/* Overlay */}
-      <div 
+      <div
         className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
         onClick={() => setOpen(false)}
       />
 
       {/* Dialog Content */}
-      <div 
+      <div
         className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]"
         onClick={() => setOpen(false)} // Also close when clicking in the padding area
       >
@@ -75,51 +85,51 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
           className="w-full max-w-xl bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
           onClick={(e) => e.stopPropagation()} // Prevent clicks inside from closing the dialog
         >
-          <Command.Input 
-            placeholder="Search for articles, pages..." 
+          <Command.Input
+            placeholder={dictionary.search.placeholder}
             className="w-full px-4 py-3 text-lg bg-transparent border-b border-gray-200 dark:border-gray-700 focus:outline-none"
           />
           <Command.List className="max-h-[400px] overflow-y-auto p-2">
-            <Command.Empty className="p-4 text-sm text-center text-gray-500">No results found.</Command.Empty>
+            <Command.Empty className="p-4 text-sm text-center text-gray-500">{dictionary.search.empty}</Command.Empty>
 
-            <Command.Group heading="Pages" className="text-xs font-medium text-gray-400 px-2 py-1">
+            <Command.Group heading={dictionary.search.pages} className="text-xs font-medium text-gray-400 px-2 py-1">
               {items.filter(item => item.type === 'Page').map(item => (
                 <Command.Item
                   key={item.url}
                   value={item.title}
-                  onSelect={() => runCommand(() => router.push(item.url))}
+                  onSelect={() => runCommand(() => router.push(localizedUrl(item.url)))}
                   className="p-2 text-sm rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
                 >
                   {item.title}
-                  <span className="text-xs text-gray-400">Page</span>
+                  <span className="text-xs text-gray-400">{dictionary.search.page}</span>
                 </Command.Item>
               ))}
             </Command.Group>
 
-            <Command.Group heading="Blog" className="text-xs font-medium text-gray-400 px-2 py-1">
+            <Command.Group heading={dictionary.search.blog} className="text-xs font-medium text-gray-400 px-2 py-1">
               {items.filter(item => item.type === 'Blog').map(item => (
                 <Command.Item
                   key={item.url}
                   value={item.title}
-                  onSelect={() => runCommand(() => router.push(item.url))}
+                  onSelect={() => runCommand(() => router.push(localizedUrl(item.url)))}
                   className="p-2 text-sm rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
                 >
                   {item.title}
-                  <span className="text-xs text-gray-400">Blog Post</span>
+                  <span className="text-xs text-gray-400">{dictionary.search.blogPost}</span>
                 </Command.Item>
               ))}
             </Command.Group>
 
-            <Command.Group heading="Weekly" className="text-xs font-medium text-gray-400 px-2 py-1">
+            <Command.Group heading={dictionary.search.weekly} className="text-xs font-medium text-gray-400 px-2 py-1">
               {items.filter(item => item.type === 'Weekly').map(item => (
                 <Command.Item
                   key={item.url}
                   value={item.title}
-                  onSelect={() => runCommand(() => router.push(item.url))}
+                  onSelect={() => runCommand(() => router.push(localizedUrl(item.url)))}
                   className="p-2 text-sm rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
                 >
                   {item.title}
-                  <span className="text-xs text-gray-400">Weekly</span>
+                  <span className="text-xs text-gray-400">{dictionary.search.weekly}</span>
                 </Command.Item>
               ))}
             </Command.Group>

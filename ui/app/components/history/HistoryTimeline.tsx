@@ -1,3 +1,9 @@
+import Link from 'next/link';
+import { Locale } from '@/app/i18n/config';
+import { formatDate } from '@/app/i18n/format';
+import { withLocale } from '@/app/i18n/routes';
+import { getEventIcon } from './utils';
+
 interface HistoryEvent {
   id: number;
   title: string;
@@ -9,27 +15,10 @@ interface HistoryEvent {
 
 interface HistoryTimelineProps {
   events: HistoryEvent[];
+  locale: Locale;
 }
 
-function formatDate(dateString: string) {
-  try {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return 'Invalid Date';
-    }
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  } catch (error) {
-    return 'Invalid Date';
-  }
-}
-
-import { getEventIcon } from './utils';
-
-export default function HistoryTimeline({ events }: HistoryTimelineProps) {
+export default function HistoryTimeline({ events, locale }: HistoryTimelineProps) {
   if (events.length === 0) {
     return (
       <div className="text-center py-12">
@@ -43,7 +32,7 @@ export default function HistoryTimeline({ events }: HistoryTimelineProps) {
     <div className="relative">
       {/* Vertical timeline line */}
       <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-orange-500 via-red-500 to-purple-500"></div>
-      
+
       {/* Timeline start marker */}
       <div className="relative flex items-center mb-8">
         <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
@@ -53,15 +42,15 @@ export default function HistoryTimeline({ events }: HistoryTimelineProps) {
           <p className="text-muted-foreground italic">Journey continues...</p>
         </div>
       </div>
-      
+
       <div className="space-y-8">
-        {events.map((event, index) => (
+        {events.map((event) => (
           <div key={event.id} className="relative flex items-start">
             {/* Timeline node */}
             <div className="flex-shrink-0 w-16 h-16 bg-white dark:bg-gray-900 border-4 border-orange-500 rounded-full flex items-center justify-center shadow-lg z-10">
               <span className="text-xl">{getEventIcon(event.title, event.id)}</span>
             </div>
-            
+
             {/* Event content */}
             <div className="ml-6 flex-1 min-w-0">
               <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-750 border border-orange-100 dark:border-gray-700 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
@@ -70,19 +59,19 @@ export default function HistoryTimeline({ events }: HistoryTimelineProps) {
                   <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  {formatDate(event.gmtCreate)}
+                  {formatDate(event.gmtCreate, locale)}
                 </div>
-                
+
                 {/* Event title */}
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  <a 
-                    href={`/blog/${event.slug}`} 
+                  <Link
+                    href={withLocale(locale, `/blog/${event.slug}`)}
                     className="hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                   >
                     {event.title}
-                  </a>
+                  </Link>
                 </h3>
-                
+
               </div>
             </div>
           </div>

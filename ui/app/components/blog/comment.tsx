@@ -1,6 +1,7 @@
 'use client'
 
 import {Fragment, useEffect, useState} from 'react'
+import { useLocale } from '@/app/i18n/locale-context';
 
 declare global {
   interface Window {
@@ -11,7 +12,7 @@ declare global {
 
 // This function will insert the usual <script> tag of
 // Remark42 into the specified DOM location (parentElement)
-const insertScript = (id: string, parentElement: HTMLElement) => {
+const insertScript = (id: string, parentElement: HTMLElement, remarkLocale: string) => {
   const script = window.document.createElement('script')
   script.type = 'text/javascript'
   script.async = true
@@ -31,8 +32,8 @@ const insertScript = (id: string, parentElement: HTMLElement) => {
     max_shown_comments: 10,
     theme: "${theme}",
     page_title: 'Moving to Remark42',
-    locale: 'en',
-    show_email_subscription: false, 
+    locale: '${remarkLocale}',
+    show_email_subscription: false,
   };
   !function(e,n){for(var o=0;o<e.length;o++){var r=n.createElement("script"),c=".js",d=n.head||n.body;"noModule"in r?(r.type="module",c=".mjs"):r.async=!0,r.defer=!0,r.src=remark_config.host+"/web/"+e[o]+c,d.appendChild(r)}}(remark_config.components||["embed"],document);`;
   parentElement.appendChild(script);
@@ -51,14 +52,14 @@ const removeScript = (id: string, parentElement: HTMLElement) => {
 
 // This function will be provided to useEffect and will insert the script
 // when the component is mounted and remove it when it unmounts
-const manageScript = () => {
+const manageScript = (remarkLocale: string) => {
   if (!window) {
     return () => {
     };
   }
   const {document} = window;
   if (document.getElementById('remark42')) {
-    insertScript('comments-script', document.body);
+    insertScript('comments-script', document.body, remarkLocale);
   }
   return () => removeScript('comments-script', document.body);
 };
@@ -80,7 +81,9 @@ const recreateRemark42Instance = () => {
 // The location prop is {props.location.pathname} from the parent component.
 // I.e. invoke the component like this in the parent: <Comments location={props.location.pathname} />
 export function Comments() {
+  const { locale, dictionary } = useLocale();
   const [url, setUrl] = useState('');
+  const remarkLocale = locale === 'zh-CN' ? 'zh' : 'en';
 
   useEffect(() => {
     // 获取当前页面的 URL
@@ -90,13 +93,13 @@ export function Comments() {
 
 
   // Insert the two useEffect hooks. Maybe you can combine them into one? Feel free if you want to.
-  useEffect(manageScript);
+  useEffect(() => manageScript(remarkLocale), [remarkLocale]);
   useEffect(recreateRemark42Instance, []);
 
   return (
     <Fragment>
       <div className="mt-10 mb-5 border-t-2 pt-3">
-        <span className="text-2xl pr-1 font-extralight">Comments</span>
+        <span className="text-2xl pr-1 font-extralight">{dictionary.article.comments}</span>
         <span className="counter align-super font-bold"><span className="remark42__counter"
                                                               data-url={url}></span></span>
       </div>

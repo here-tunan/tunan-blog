@@ -2,6 +2,8 @@ import React from "react";
 import { API_URL } from "@/lib/config";
 import ProjectGrid from "@/app/components/project/ProjectGrid";
 import StarHistory from "@/app/components/project/StarHistory";
+import { getSafeLocale } from "@/app/i18n/config";
+import { getDictionary } from "@/app/i18n/get-dictionary";
 
 interface GitHubInfo {
   name: string;
@@ -45,7 +47,9 @@ async function getProjects(): Promise<Project[]> {
   return [];
 }
 
-export default async function Projects() {
+export default async function Projects({ params }: { params: { locale: string } }) {
+  const locale = getSafeLocale(params.locale);
+  const dictionary = getDictionary(locale);
   const projects = await getProjects();
 
   // Extract GitHub repositories from projects
@@ -69,17 +73,17 @@ export default async function Projects() {
         <div className="text-center mb-16">
           <div className="mb-6">
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent mb-4">
-              Featured Projects
+              {dictionary.projects.title}
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
           </div>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            A curated collection of my work spanning web development, open source contributions, and innovative solutions
+            {dictionary.projects.description}
           </p>
         </div>
-        
+
         <ProjectGrid projects={projects} />
-        
+
         {/* Star History Section */}
         {githubRepos.length > 0 && starHistoryLinkUrl && (
           <StarHistory repos={githubRepos} linkUrl={starHistoryLinkUrl} />

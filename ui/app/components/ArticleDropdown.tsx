@@ -12,9 +12,10 @@ interface ArticleItem {
 
 interface ArticleDropdownProps {
   items: ArticleItem[];
+  label: string;
 }
 
-export default function ArticleDropdown({ items }: ArticleDropdownProps) {
+export default function ArticleDropdown({ items, label }: ArticleDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -40,19 +41,19 @@ export default function ArticleDropdown({ items }: ArticleDropdownProps) {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:shadow-md hover:scale-105 ${
-          isActive 
-            ? 'bg-accent text-accent-foreground shadow-sm border border-accent/30' 
+          isActive
+            ? 'bg-accent text-accent-foreground shadow-sm border border-accent/30'
             : 'hover:bg-accent/30'
         } ${isOpen ? 'shadow-lg ring-2 ring-accent/50' : ''}`}
       >
-        <img 
-          src="/assets/icons/blog.png" 
-          alt="Articles" 
-          width="20" 
-          height="20" 
+        <img
+          src="/assets/icons/blog.png"
+          alt={label}
+          width="20"
+          height="20"
           className="opacity-80"
         />
-        <span>Articles</span>
+        <span>{label}</span>
         <svg
           className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
@@ -72,8 +73,8 @@ export default function ArticleDropdown({ items }: ArticleDropdownProps) {
                 href={item.href}
                 onClick={() => setIsOpen(false)}
                 className={`block px-4 py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] ${
-                  pathname.startsWith(item.href) 
-                    ? 'bg-accent/60 text-accent-foreground shadow-sm border border-accent/30' 
+                  pathname.startsWith(item.href)
+                    ? 'bg-accent/60 text-accent-foreground shadow-sm border border-accent/30'
                     : 'hover:bg-accent/30 hover:shadow-md'
                 }`}
               >

@@ -1,17 +1,22 @@
+import Link from "next/link";
+import { Locale } from "@/app/i18n/config";
+import { formatDate } from "@/app/i18n/format";
+
 interface TranslationItemProps {
   link: string;
   name: string;
   gmtCreate: string;
   tagNames: string[];
+  locale: Locale;
 }
 
-export function TranslationItem({link, name, gmtCreate, tagNames}: TranslationItemProps) {
+export function TranslationItem({link, name, gmtCreate, tagNames, locale}: TranslationItemProps) {
   const options = {year: "numeric", month: "long"} as Intl.DateTimeFormatOptions
-  const date = new Date(gmtCreate).toLocaleDateString(undefined, options)
+  const date = formatDate(gmtCreate, locale, options)
 
   return (
     <li className="border-b border-gray-100 dark:border-gray-800 last:border-0">
-      <a className="group py-3 px-2 -mx-2 flex place-content-between rounded-lg hover:bg-purple-50 dark:hover:bg-purple-950/20 transition-all duration-200" href={link}>
+      <Link className="group py-3 px-2 -mx-2 flex place-content-between rounded-lg hover:bg-purple-50 dark:hover:bg-purple-950/20 transition-all duration-200" href={link}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {/* Translation indicator */}
           <div className="flex-shrink-0 w-6 h-6 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center group-hover:bg-purple-200 dark:group-hover:bg-purple-800 transition-colors">
@@ -37,7 +42,7 @@ export function TranslationItem({link, name, gmtCreate, tagNames}: TranslationIt
           </div>
           <p className="font-serif text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{date}</p>
         </div>
-      </a>
+      </Link>
     </li>
   );
 }

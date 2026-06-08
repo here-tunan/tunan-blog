@@ -1,16 +1,19 @@
 import { ViewCounter } from "@/app/components/ViewCounter";
+import { Locale } from "@/app/i18n/config";
+import { formatDate } from "@/app/i18n/format";
 
 type HeaderProps = {
   date: string
   title: string
   tags: string[]
   path: string
+  locale: Locale
 }
 
 const Header = (props: HeaderProps) => {
 
   const options = { year: "numeric", month: "long", day: "numeric" } as Intl.DateTimeFormatOptions;
-  const date = new Date(props.date).toLocaleDateString(undefined, options);
+  const date = formatDate(props.date, props.locale, options);
   const tags = props.tags;
 
   return (

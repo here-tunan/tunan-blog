@@ -1,18 +1,22 @@
+import Link from "next/link";
+import { Locale } from "@/app/i18n/config";
+import { formatDate } from "@/app/i18n/format";
+
 interface BlogItemProps {
   link: string;
   name: string;
   gmtCreate: string;
   tagNames: string[];
+  locale: Locale;
 }
 
-export function BlogItem({link, name, gmtCreate, tagNames}: BlogItemProps) {
-  // There will be a error without 'as Intl.DateTimeFormatOptions' or 'as const'
+export function BlogItem({link, name, gmtCreate, tagNames, locale}: BlogItemProps) {
   const options = {year: "numeric", month: "long"} as Intl.DateTimeFormatOptions
-  const date = new Date(gmtCreate).toLocaleDateString(undefined, options)
+  const date = formatDate(gmtCreate, locale, options)
 
   return (
     <li className="border-b border-gray-100 dark:border-gray-800 last:border-0">
-      <a className="group py-3 px-2 -mx-2 flex place-content-between rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200" href={link}>
+      <Link className="group py-3 px-2 -mx-2 flex place-content-between rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200" href={link}>
         <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 font-medium font-mono text-sm sm:text-base transition-colors duration-200">{name}</span>
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex gap-1">
@@ -25,7 +29,7 @@ export function BlogItem({link, name, gmtCreate, tagNames}: BlogItemProps) {
           </div>
           <p className="font-serif text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{date}</p>
         </div>
-      </a>
+      </Link>
     </li>
   );
 }
