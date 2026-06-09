@@ -23,9 +23,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `content` longtext,
   `view_number` int DEFAULT '0',
   `like_number` int DEFAULT '0',
   `type` int DEFAULT NULL,

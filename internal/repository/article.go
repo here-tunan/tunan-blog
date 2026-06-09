@@ -10,9 +10,6 @@ import (
 
 type Article struct {
 	Id                  int64  `json:"id"`
-	Title               string `json:"title"`
-	Slug                string `json:"slug"`
-	Content             string `json:"content"`
 	ViewNumber          int    `json:"viewNumber"`
 	LikeNumber          int    `json:"likeNumber"`
 	Type                int    `json:"type"`
@@ -35,25 +32,13 @@ type ArticleQueryParam struct {
 	LanguageCode  string `json:"languageCode"`
 }
 
-func GetArticleBySlug(slug string) (Article, error) {
-	session := infrastructure.GetDB().Where("is_deleted = 0")
-	session.And("slug = ?", slug)
-	var article Article
-
-	_, err := session.Get(&article)
-	if err != nil {
-		return Article{}, err
-	}
-	return article, err
-}
-
 func GetArticleByID(id int64) (Article, error) {
 	var article Article
 	_, err := infrastructure.GetDB().Where("is_deleted = 0").ID(id).Get(&article)
 	return article, err
 }
 
-// QueryArticle 查询符合查询参数的文章
+// QueryArticle 查询符合查询参数的文章元信息
 func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
 	session := infrastructure.GetDB().Where("is_deleted = 0")
 	if param.Type != 0 {
@@ -87,10 +72,7 @@ func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
 	session.Desc("gmt_create")
 
 	var articles []Article
-	columns := []string{"id", "title", "slug", "view_number", "type", "like_number", "gmt_create"}
-	if !param.IgnoreContent {
-		columns = append(columns, "content")
-	}
+	columns := []string{"id", "view_number", "type", "like_number", "default_language_code", "gmt_create"}
 	err := session.Cols(columns...).Find(&articles)
 	if err != nil {
 		log.Println(err)

@@ -28,17 +28,21 @@ type ArticleResponse struct {
 }
 
 func QueryArticle(param repository.ArticleQueryParam) ([]ArticleResponse, int64, error) {
-	if param.LanguageCode != "" {
-		return queryArticleByLanguage(param)
+	if param.LanguageCode == "" {
+		param.LanguageCode = repository.DefaultLanguageCode
 	}
+	return queryArticleByLanguage(param)
+}
 
-	articles, total, err := repository.QueryArticle(param)
+func QueryArticleByDefaultLanguage(param repository.ArticleQueryParam) ([]ArticleResponse, int64, error) {
+	articles, total, err := repository.QueryArticleByDefaultLanguage(param)
 	if err != nil {
 		return nil, 0, err
 	}
+
 	var resList = make([]ArticleResponse, 0)
-	for _, article := range articles {
-		res, err := buildArticleResponse(article, repository.ArticleTranslation{})
+	for _, item := range articles {
+		res, err := buildArticleResponse(item.ToArticle(), item.ToTranslation())
 		if err != nil {
 			return nil, 0, err
 		}
@@ -81,12 +85,12 @@ func QueryArticleBySlugAndLanguage(slug string, languageCode string) (ArticleRes
 		}
 	}
 
-	article, err := repository.GetArticleBySlug(slug)
+	article, translation, err := repository.GetArticleBySlugAndDefaultLanguage(slug)
 	if err != nil || article.Id == 0 {
 		return ArticleResponse{}, err
 	}
 
-	return buildArticleResponse(article, repository.ArticleTranslation{})
+	return buildArticleResponse(article, translation)
 }
 
 func QueryArticleByID(id int64) (ArticleResponse, error) {
@@ -94,16 +98,17 @@ func QueryArticleByID(id int64) (ArticleResponse, error) {
 	if err != nil || article.Id == 0 {
 		return ArticleResponse{}, err
 	}
-	return buildArticleResponse(article, repository.ArticleTranslation{})
+	translation, err := repository.GetDefaultArticleTranslationByArticleId(article.Id, article.DefaultLanguageCode)
+	if err != nil {
+		return ArticleResponse{}, err
+	}
+	return buildArticleResponse(article, translation)
 }
 
 func buildArticleResponse(article repository.Article, translation repository.ArticleTranslation) (ArticleResponse, error) {
 	res := ArticleResponse{
 		Id:                  article.Id,
 		ArticleId:           article.Id,
-		Title:               article.Title,
-		Slug:                article.Slug,
-		Content:             article.Content,
 		ViewNumber:          article.ViewNumber,
 		LikeNumber:          article.LikeNumber,
 		Type:                article.Type,

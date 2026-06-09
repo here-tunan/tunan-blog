@@ -79,8 +79,10 @@ func RssXmlCreat() error {
 		PageIndex: 1,
 	}
 
+	param.LanguageCode = repository.DefaultLanguageCode
+
 	// 查询文章列表
-	articleList, _, _ := repository.QueryArticle(param)
+	articleList, _, _ := QueryArticle(param)
 
 	if len(articleList) == 0 {
 		return fmt.Errorf("no articles found")

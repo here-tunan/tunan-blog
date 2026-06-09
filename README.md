@@ -32,6 +32,7 @@ Many developers run their projects on servers with limited resources and may not
 ### Public-Facing Site (`/ui`)
 
 - **Blog & Articles**: Clean and readable interface for blog posts, with full Markdown rendering support.
+- **Multilingual Content**: Locale-prefixed routes such as `/zh-CN/blog/...` and `/en/blog/...`, localized UI text, localized article titles/slugs/content, language-aware search, and per-article fallback to the article's default language.
 - **Command Palette Search**: A fast, keyboard-driven search interface (like VS Code or GitHub) to quickly find articles and navigate the site.
 - **Interactive Comment System**: Integrated with [Remark42](https://remark42.com/) for a privacy-focused, self-hosted commenting experience. For setup instructions, see: [Use remark42 comment system](https://www.tunan.fun/blog/blog-embrace-remark42). We're also considering developing a custom comment system - stay tuned!
 - **View Count Tracking**: Tracks and displays view counts for each article with real client IP detection.
@@ -49,7 +50,9 @@ Many developers run their projects on servers with limited resources and may not
 - **Secure Authentication**: JWT-based login system to protect admin routes.
 - **Analytics Dashboard**: View key metrics including page view leaderboard and traffic analytics.
 - **RSS Management**: One-click RSS feed generation and management tools.
-- **Full CRUD for Articles**: Create, Read, Update, and Delete articles with a rich text editor.
+- **Full CRUD for Articles**: Create, Read, Update, and Delete articles with a Markdown editor.
+- **Multilingual Article Editor**: Manage per-article default language and multiple translation versions (`zh-CN` / `en`) from the admin panel.
+- **Server-Side Pagination**: Admin list pages use paginated API queries instead of loading all records at once.
 - **Full CRUD for Books**: Easily manage the book recommendation list.
 - **Modern UI**: Built with Ant Design for a professional and intuitive user experience.
 - **Themeable**: Supports both light and dark modes.
@@ -164,6 +167,17 @@ mysql:
 - Use the appropriate schema file for your chosen database:
   - For MySQL: `schema.sql`
   - For SQLite: `schema_sqlite.sql`
+
+### Multilingual Articles
+
+Article identity and localized article content are separated:
+
+- `article` stores article-level metadata such as type, default language, view count, like count, deletion state, and timestamps.
+- `article_translation` stores language-specific fields such as title, slug, Markdown content, SEO fields, publish state, and publish time.
+
+Each article can choose its own default language. If a visitor opens a language version that does not exist, the public site falls back to that article's default language. This allows Chinese-first, English-first, and partially translated articles to coexist.
+
+The public UI and command palette search are language-aware. The admin panel provides language tabs for editing translations and server-side pagination for large lists.
 
 ### Admin Authentication
 

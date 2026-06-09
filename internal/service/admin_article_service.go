@@ -64,9 +64,6 @@ func applyDefaultTranslation(article *repository.Article, translations []Article
 		return errors.New("default language translation is required")
 	}
 
-	article.Title = defaultTranslation.Title
-	article.Slug = defaultTranslation.Slug
-	article.Content = defaultTranslation.Content
 	return nil
 }
 
@@ -79,9 +76,6 @@ func CreateArticle(req ArticleCreationRequest) (*repository.Article, error) {
 	}
 
 	article := &repository.Article{
-		Title:               req.Title,
-		Slug:                req.Slug,
-		Content:             req.Content,
 		Type:                req.Type,
 		DefaultLanguageCode: normalizeDefaultLanguageCode(req.DefaultLanguageCode),
 	}
@@ -115,10 +109,8 @@ func CreateArticle(req ArticleCreationRequest) (*repository.Article, error) {
 			}
 		}
 	} else {
-		if err := repository.UpsertDefaultArticleTranslation(session, article); err != nil {
-			_ = session.Rollback()
-			return nil, err
-		}
+		_ = session.Rollback()
+		return nil, errors.New("at least one translation is required")
 	}
 
 	if len(req.Tags) > 0 {
@@ -151,9 +143,6 @@ func UpdateArticle(id int64, req ArticleUpdateRequest) (*repository.Article, err
 
 	article := &repository.Article{
 		Id:                  id,
-		Title:               req.Title,
-		Slug:                req.Slug,
-		Content:             req.Content,
 		Type:                req.Type,
 		DefaultLanguageCode: normalizeDefaultLanguageCode(req.DefaultLanguageCode),
 	}
@@ -193,10 +182,8 @@ func UpdateArticle(id int64, req ArticleUpdateRequest) (*repository.Article, err
 			}
 		}
 	} else {
-		if err := repository.UpsertDefaultArticleTranslation(session, article); err != nil {
-			_ = session.Rollback()
-			return nil, err
-		}
+		_ = session.Rollback()
+		return nil, errors.New("at least one translation is required")
 	}
 
 	if err := repository.DeleteArticleTagRelationshipsByArticleID(session, id); err != nil {

@@ -116,6 +116,38 @@ func GetArticleBySlugAndDefaultLanguage(slug string) (Article, ArticleTranslatio
 	return row.ToArticle(), row.ToTranslation(), nil
 }
 
+func QueryArticleByDefaultLanguage(param ArticleQueryParam) ([]ArticleWithTranslation, int64, error) {
+	where, args := articleTranslationWhere(param)
+
+	countArgs := append([]interface{}{}, args...)
+	var count countResult
+	_, err := infrastructure.GetDB().SQL(
+		"SELECT COUNT(*) AS total FROM article "+
+			"INNER JOIN article_translation default_translation ON article.id = default_translation.article_id AND default_translation.language_code = COALESCE(NULLIF(article.default_language_code, ''), ?) AND default_translation.is_published = 1 "+
+			"WHERE "+strings.Join(where, " AND "),
+		append([]interface{}{DefaultLanguageCode}, countArgs...)...,
+	).Get(&count)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	query := "SELECT " + articleTranslationSelectColumns("default_translation", !param.IgnoreContent) +
+		" FROM article " +
+		"INNER JOIN article_translation default_translation ON article.id = default_translation.article_id AND default_translation.language_code = COALESCE(NULLIF(article.default_language_code, ''), ?) AND default_translation.is_published = 1 " +
+		"WHERE " + strings.Join(where, " AND ") +
+		" ORDER BY article.gmt_create DESC"
+
+	queryArgs := append([]interface{}{DefaultLanguageCode}, args...)
+	if param.PageSize != 0 && param.PageIndex != 0 {
+		query += " LIMIT ? OFFSET ?"
+		queryArgs = append(queryArgs, param.PageSize, (param.PageIndex-1)*param.PageSize)
+	}
+
+	var articles []ArticleWithTranslation
+	err = infrastructure.GetDB().SQL(query, queryArgs...).Find(&articles)
+	return articles, count.Total, err
+}
+
 func QueryArticleByLanguage(param ArticleQueryParam) ([]ArticleWithTranslation, int64, error) {
 	languageCode := normalizeLanguageCode(param.LanguageCode)
 	where, args := articleTranslationWhere(param)
@@ -211,6 +243,16 @@ func GetAvailableArticleLanguages(articleId int64) ([]ArticleLanguageSummary, er
 	return languages, err
 }
 
+func GetDefaultArticleTranslationByArticleId(articleId int64, defaultLanguageCode string) (ArticleTranslation, error) {
+	defaultLanguageCode = normalizeLanguageCode(defaultLanguageCode)
+	var translation ArticleTranslation
+	_, err := infrastructure.GetDB().Where("article_id = ?", articleId).
+		And("language_code = ?", defaultLanguageCode).
+		And("is_published = ?", true).
+		Get(&translation)
+	return translation, err
+}
+
 func GetArticleTranslationsByArticleId(articleId int64) ([]ArticleTranslation, error) {
 	var translations []ArticleTranslation
 	err := infrastructure.GetDB().Where("article_id = ?", articleId).Find(&translations)
@@ -246,40 +288,6 @@ func UpsertArticleTranslation(session *xorm.Session, translation *ArticleTransla
 
 	if translation.IsPublished && translation.PublishedAt.IsZero() {
 		translation.PublishedAt = time.Now()
-	}
-	_, err = session.Insert(translation)
-	return err
-}
-
-func UpsertDefaultArticleTranslation(session *xorm.Session, article *Article) error {
-	translation := &ArticleTranslation{}
-	has, err := session.Where("article_id = ?", article.Id).
-		And("language_code = ?", DefaultLanguageCode).
-		Get(translation)
-	if err != nil {
-		return err
-	}
-
-	if has {
-		translation.Title = article.Title
-		translation.Slug = article.Slug
-		translation.Content = article.Content
-		translation.IsPublished = true
-		if translation.PublishedAt.IsZero() {
-			translation.PublishedAt = time.Now()
-		}
-		_, err = session.ID(translation.Id).Update(translation)
-		return err
-	}
-
-	translation = &ArticleTranslation{
-		ArticleId:    article.Id,
-		LanguageCode: DefaultLanguageCode,
-		Title:        article.Title,
-		Slug:         article.Slug,
-		Content:      article.Content,
-		IsPublished:  true,
-		PublishedAt:  time.Now(),
 	}
 	_, err = session.Insert(translation)
 	return err

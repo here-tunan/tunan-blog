@@ -12,9 +12,6 @@ PRAGMA foreign_keys = OFF;
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `title` VARCHAR(255) DEFAULT NULL,
-  `slug` VARCHAR(255) DEFAULT NULL,
-  `content` TEXT,
   `view_number` INTEGER DEFAULT 0,
   `like_number` INTEGER DEFAULT 0,
   `type` INTEGER DEFAULT NULL,

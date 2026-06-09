@@ -18,9 +18,9 @@ func GetAllArticlesForAdmin(c *fiber.Ctx) error {
 		pageSize = 10
 	}
 
-	param := repository.ArticleQueryParam{PageSize: pageSize, PageIndex: pageIndex, LanguageCode: repository.DefaultLanguageCode}
+	param := repository.ArticleQueryParam{PageSize: pageSize, PageIndex: pageIndex}
 
-	articles, total, err := service.QueryArticle(param)
+	articles, total, err := service.QueryArticleByDefaultLanguage(param)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch articles",
