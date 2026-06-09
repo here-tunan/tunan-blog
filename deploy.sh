@@ -7,6 +7,9 @@ set -e  # 遇到错误立即退出
 
 echo "================================="
 echo "🚀 开始部署 Tunan Blog"
+echo "💡 请在本地本地提前执行以下命令👇："
+echo "CGO_ENABLED=1 GOOS=linux  GOARCH=amd64  CC=x86_64-linux-musl-gcc  CXX=x86_64-linux-musl-g++ go build -o tunan-blog cmd/tunan-blog/main.go"
+echo "（服务端🈚go语言环境，只进行执行，请自行编译成二进制文件）"
 echo "================================="
 
 # 获取当前目录
