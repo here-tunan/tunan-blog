@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Typography, message } from 'antd';
+import { Button, Space, Typography, message } from 'antd';
 import { useRouter } from 'next/navigation';
 import ArticleEditorForm from '../components/ArticleEditorForm';
 import { apiRequestJson } from '@/lib/api';
@@ -48,7 +48,10 @@ const NewArticlePage = () => {
 
   return (
     <div>
-      <Title level={2}>New Article</Title>
+      <Space style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }} align="center">
+        <Title level={2} style={{ margin: 0 }}>New Article</Title>
+        <Button onClick={() => router.push('/articles')}>Back to list</Button>
+      </Space>
       <ArticleEditorForm onFinish={handleFinish} loading={loading} tagOptions={tags} />
     </div>
   );

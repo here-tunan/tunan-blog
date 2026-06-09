@@ -15,6 +15,10 @@ func (s *DeviceAppService) GetAllDeviceApps() ([]*repository.DeviceApp, error) {
 	return repository.FindAllDeviceApps()
 }
 
+func (s *DeviceAppService) QueryDeviceApps(pageIndex int, pageSize int) ([]*repository.DeviceApp, int64, error) {
+	return repository.QueryDeviceApps(pageIndex, pageSize)
+}
+
 func (s *DeviceAppService) GetDeviceAppsByCategory(category string) ([]*repository.DeviceApp, error) {
 	return repository.FindDeviceAppsByCategory(category)
 }

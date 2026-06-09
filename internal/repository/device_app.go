@@ -30,6 +30,28 @@ func FindAllDeviceApps() ([]*DeviceApp, error) {
 	return deviceApps, err
 }
 
+func QueryDeviceApps(pageIndex int, pageSize int) ([]*DeviceApp, int64, error) {
+	if pageIndex <= 0 {
+		pageIndex = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+
+	session := infrastructure.GetDB().Where("is_deleted = ?", 0)
+	total, err := session.Count(new(DeviceApp))
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var deviceApps []*DeviceApp
+	err = infrastructure.GetDB().Where("is_deleted = ?", 0).
+		OrderBy("category, sort_order, gmt_modified desc").
+		Limit(pageSize, (pageIndex-1)*pageSize).
+		Find(&deviceApps)
+	return deviceApps, total, err
+}
+
 func FindDeviceAppsByCategory(category string) ([]*DeviceApp, error) {
 	var deviceApps []*DeviceApp
 	err := infrastructure.GetDB().Where("is_deleted = ? AND category = ?", 0, category).OrderBy("sort_order, gmt_modified desc").Find(&deviceApps)

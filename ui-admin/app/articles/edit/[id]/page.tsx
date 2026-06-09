@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { message, Spin, Typography } from 'antd';
+import { Button, message, Space, Spin, Typography } from 'antd';
 import { useParams, useRouter } from 'next/navigation';
 import { apiRequestJson } from '@/lib/api';
 import ArticleEditorForm from '../../components/ArticleEditorForm';
@@ -34,12 +34,29 @@ const EditArticlePage = () => {
       setLoading(true);
       try {
         const result = await apiRequestJson(`/admin/articles/${id}`);
+        const translations = (result.translations || []).reduce((acc: any, translation: any) => {
+          acc[translation.languageCode] = {
+            title: translation.title,
+            slug: translation.slug,
+            content: translation.content,
+          };
+          return acc;
+        }, {});
+
+        const defaultLanguageCode = result.defaultLanguageCode || result.languageCode || 'zh-CN';
+        if (Object.keys(translations).length === 0) {
+          translations[defaultLanguageCode] = {
+            title: result.title,
+            slug: result.slug,
+            content: result.content,
+          };
+        }
+
         setInitialData({
-          title: result.title,
-          slug: result.slug,
-          content: result.content,
+          defaultLanguageCode,
           tags: result.tagNames || [],
           type: result.type,
+          translations,
         });
       } catch (error) {
         console.error(error);
@@ -74,7 +91,10 @@ const EditArticlePage = () => {
 
   return (
     <div>
-      <Title level={2}>Edit Article</Title>
+      <Space style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }} align="center">
+        <Title level={2} style={{ margin: 0 }}>Edit Article</Title>
+        <Button onClick={() => router.push('/articles')}>Back to list</Button>
+      </Space>
       {loading || !initialData ? (
         <Spin />
       ) : (

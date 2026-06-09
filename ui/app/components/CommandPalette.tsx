@@ -28,7 +28,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
     if (items.length === 0) { // Only fetch once
       async function fetchData() {
         try {
-          const res = await fetch(`${API_URL}/search`);
+          const res = await fetch(`${API_URL}/search?lang=${locale}`);
           const data = await res.json();
           setItems(data);
         } catch (error) {

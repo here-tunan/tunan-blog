@@ -11,7 +11,7 @@ export default async function HistorySection({ locale }: { locale: Locale }) {
   const historyEvents = await getArticles({
     locale,
     type: ARTICLE_TYPES.history,
-    pageSize: 10,
+    pageSize: 5,
     pageIndex: 1,
   });
 

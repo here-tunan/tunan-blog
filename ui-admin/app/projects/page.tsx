@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Tag, Switch, message, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import type { TableProps } from 'antd';
+import type { TablePaginationConfig, TableProps } from 'antd';
 import { useRouter } from 'next/navigation';
 import { apiRequestJson } from '@/lib/api';
 
@@ -23,6 +23,14 @@ interface Project {
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: (total) => `Total ${total} projects`,
+  });
   const router = useRouter();
 
   const columns: TableProps<Project>['columns'] = [
@@ -139,11 +147,18 @@ const ProjectsPage = () => {
     },
   ];
 
-  const fetchProjects = async () => {
+  const fetchProjects = async (page = 1, pageSize = 10) => {
+    setLoading(true);
     try {
-      const result = await apiRequestJson('/admin/projects');
+      const result = await apiRequestJson(`/admin/projects?page=${page}&pageSize=${pageSize}`);
       if (result.success) {
         setProjects(result.data || []);
+        setPagination((prev) => ({
+          ...prev,
+          current: page,
+          pageSize,
+          total: result.total || 0,
+        }));
       }
     } catch (error) {
       console.error(error);
@@ -182,8 +197,8 @@ const ProjectsPage = () => {
         method: 'DELETE',
       });
 
-      setProjects(prev => prev.filter(p => p.id !== id));
       message.success('Project deleted successfully');
+      fetchProjects(pagination.current || 1, pagination.pageSize || 10);
     } catch (error) {
       console.error(error);
       message.error('Failed to delete project');
@@ -191,8 +206,12 @@ const ProjectsPage = () => {
   };
 
   useEffect(() => {
-    fetchProjects();
+    fetchProjects(pagination.current || 1, pagination.pageSize || 10);
   }, []);
+
+  const handleTableChange = (nextPagination: TablePaginationConfig) => {
+    fetchProjects(nextPagination.current || 1, nextPagination.pageSize || 10);
+  };
 
   return (
     <div>
@@ -212,12 +231,8 @@ const ProjectsPage = () => {
         dataSource={projects}
         rowKey="id"
         loading={loading}
-        pagination={{
-          pageSize: 10,
-          showSizeChanger: true,
-          showQuickJumper: true,
-          showTotal: (total) => `Total ${total} projects`,
-        }}
+        pagination={pagination}
+        onChange={handleTableChange}
       />
     </div>
   );

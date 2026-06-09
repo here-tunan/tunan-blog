@@ -11,7 +11,11 @@ func ArticleMount() *fiber.App {
 
 	app.Get("", func(ctx *fiber.Ctx) error {
 		slug := ctx.Query("slug")
-		data, _ := service.QueryArticleBySlug(slug)
+		languageCode := ctx.Query("lang")
+		if languageCode == "" {
+			languageCode = ctx.Query("languageCode")
+		}
+		data, _ := service.QueryArticleBySlugAndLanguage(slug, languageCode)
 		return ctx.JSON(&fiber.Map{
 			"success": true,
 			"code":    "200",

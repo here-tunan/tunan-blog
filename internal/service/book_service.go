@@ -28,6 +28,10 @@ func GetAllBooks() ([]*repository.Book, error) {
 	return repository.FindAllBooks()
 }
 
+func QueryBooks(pageIndex int, pageSize int) ([]*repository.Book, int64, error) {
+	return repository.QueryBooks(pageIndex, pageSize)
+}
+
 func GetBookByID(id uint) (*repository.Book, error) {
 	return repository.GetBookByID(id)
 }

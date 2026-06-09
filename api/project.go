@@ -74,9 +74,18 @@ func ProjectMount() *fiber.App {
 	return app
 }
 
-// GetAllProjectsForAdmin gets all projects for admin
+// GetAllProjectsForAdmin gets projects for admin
 func GetAllProjectsForAdmin(c *fiber.Ctx) error {
-	projects, err := service.GetAllProjects()
+	pageIndex := c.QueryInt("page", 1)
+	pageSize := c.QueryInt("pageSize", 10)
+	if pageIndex <= 0 {
+		pageIndex = 1
+	}
+	if pageSize <= 0 || pageSize > 100 {
+		pageSize = 10
+	}
+
+	projects, total, err := service.QueryProject(repository.ProjectQueryParam{PageIndex: pageIndex, PageSize: pageSize})
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to get projects",
@@ -86,6 +95,7 @@ func GetAllProjectsForAdmin(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": true,
 		"data":    projects,
+		"total":   total,
 	})
 }
 

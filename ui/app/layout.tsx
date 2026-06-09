@@ -1,6 +1,5 @@
 import './globals.css';
 import React from 'react';
-import { defaultLocale } from '@/app/i18n/config';
 
 export default function RootLayout({
   children,
@@ -8,7 +7,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang={defaultLocale} suppressHydrationWarning={true}>
+    <html lang="zh-CN" suppressHydrationWarning={true}>
       <head>
         <link rel="shortcut icon" href="/assets/beer.jpeg" />
         <link rel="alternate" type="application/rss+xml" title="tunan's blog RSS Feed" href="/rss.xml" />

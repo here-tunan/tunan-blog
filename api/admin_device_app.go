@@ -9,12 +9,21 @@ import (
 )
 
 func GetAllDeviceAppsAdmin(c *fiber.Ctx) error {
+	pageIndex := c.QueryInt("page", 1)
+	pageSize := c.QueryInt("pageSize", 10)
+	if pageIndex <= 0 {
+		pageIndex = 1
+	}
+	if pageSize <= 0 || pageSize > 100 {
+		pageSize = 10
+	}
+
 	s := service.NewDeviceAppService()
-	deviceApps, err := s.GetAllDeviceApps()
+	deviceApps, total, err := s.QueryDeviceApps(pageIndex, pageSize)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	return c.JSON(deviceApps)
+	return c.JSON(fiber.Map{"data": deviceApps, "total": total})
 }
 
 func GetDeviceAppAdmin(c *fiber.Ctx) error {

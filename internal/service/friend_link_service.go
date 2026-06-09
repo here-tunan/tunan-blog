@@ -15,6 +15,10 @@ func (s *FriendLinkService) GetAllFriendLinks() ([]*repository.FriendLink, error
 	return repository.FindAllFriendLinks()
 }
 
+func (s *FriendLinkService) QueryFriendLinks(pageIndex int, pageSize int) ([]*repository.FriendLink, int64, error) {
+	return repository.QueryFriendLinks(pageIndex, pageSize)
+}
+
 func (s *FriendLinkService) GetFriendLinkByID(id int64) (*repository.FriendLink, error) {
 	return repository.GetFriendLinkByID(id)
 }

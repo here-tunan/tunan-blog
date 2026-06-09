@@ -9,13 +9,14 @@ import (
 )
 
 type Article struct {
-	Id         int64  `json:"id"`
-	Title      string `json:"title"`
-	Slug       string `json:"slug"`
-	Content    string `json:"content"`
-	ViewNumber int    `json:"viewNumber"`
-	LikeNumber int    `json:"likeNumber"`
-	Type       int    `json:"type"`
+	Id                  int64  `json:"id"`
+	Title               string `json:"title"`
+	Slug                string `json:"slug"`
+	Content             string `json:"content"`
+	ViewNumber          int    `json:"viewNumber"`
+	LikeNumber          int    `json:"likeNumber"`
+	Type                int    `json:"type"`
+	DefaultLanguageCode string `json:"defaultLanguageCode" xorm:"default_language_code"`
 	// 是否删除
 	IsDeleted bool `json:"isDeleted"`
 	// 系统创建时间
@@ -31,6 +32,7 @@ type ArticleQueryParam struct {
 	PageIndex     int    `json:"pageIndex"`
 	Type          int    `json:"type"`
 	IgnoreContent bool   `json:"ignoreContent"`
+	LanguageCode  string `json:"languageCode"`
 }
 
 func GetArticleBySlug(slug string) (Article, error) {

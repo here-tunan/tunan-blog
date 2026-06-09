@@ -7,15 +7,27 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// GetAllBooksAdmin handles fetching all books for the admin panel.
+// GetAllBooksAdmin handles fetching books for the admin panel.
 func GetAllBooksAdmin(c *fiber.Ctx) error {
-	books, err := service.GetAllBooks()
+	pageIndex := c.QueryInt("page", 1)
+	pageSize := c.QueryInt("pageSize", 10)
+	if pageIndex <= 0 {
+		pageIndex = 1
+	}
+	if pageSize <= 0 || pageSize > 100 {
+		pageSize = 10
+	}
+
+	books, total, err := service.QueryBooks(pageIndex, pageSize)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch books",
 		})
 	}
-	return c.JSON(books)
+	return c.JSON(fiber.Map{
+		"data":  books,
+		"total": total,
+	})
 }
 
 // GetBookAdmin handles fetching a single book by its ID.

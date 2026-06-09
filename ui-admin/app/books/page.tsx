@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip } from 'antd';
-import type { TableProps } from 'antd';
+import { Table, Typography, message, Button, Space, Modal, Tooltip } from 'antd';
+import type { TablePaginationConfig, TableProps } from 'antd';
 import { apiRequestJson, apiRequest } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -18,9 +18,40 @@ interface BookData {
   score: number;
 }
 
+interface BookListResponse {
+  data: BookData[];
+  total: number;
+}
+
 const BooksPage = () => {
   const [data, setData] = useState<BookData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    showSizeChanger: true,
+    showTotal: (total) => `Total ${total} books`,
+  });
+
+  const fetchData = async (page = 1, pageSize = 10) => {
+    setLoading(true);
+    try {
+      const result = await apiRequestJson<BookListResponse>(`/admin/books?page=${page}&pageSize=${pageSize}`);
+      setData(result.data || []);
+      setPagination((prev) => ({
+        ...prev,
+        current: page,
+        pageSize,
+        total: result.total || 0,
+      }));
+    } catch (error) {
+      console.error(error);
+      message.error('Could not load books.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = (id: number) => {
     confirm({
@@ -38,7 +69,7 @@ const BooksPage = () => {
 
           if (response.ok) {
             message.success('Book deleted successfully');
-            setData(data.filter(item => item.id !== id));
+            fetchData(pagination.current || 1, pagination.pageSize || 10);
           } else {
             throw new Error('Failed to delete book');
           }
@@ -78,21 +109,12 @@ const BooksPage = () => {
   ];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const result = await apiRequestJson<BookData[]>('/admin/books');
-        setData(Array.isArray(result) ? result : []);
-      } catch (error) {
-        console.error(error);
-        message.error('Could not load books.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchData(pagination.current || 1, pagination.pageSize || 10);
   }, []);
+
+  const handleTableChange = (nextPagination: TablePaginationConfig) => {
+    fetchData(nextPagination.current || 1, nextPagination.pageSize || 10);
+  };
 
   return (
     <div>
@@ -104,9 +126,14 @@ const BooksPage = () => {
           </Button>
         </Link>
       </div>
-      <Spin spinning={loading}>
-        <Table columns={columns} dataSource={data} rowKey="id" />
-      </Spin>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={pagination}
+        onChange={handleTableChange}
+      />
     </div>
   );
 };

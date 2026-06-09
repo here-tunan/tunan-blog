@@ -29,10 +29,35 @@ CREATE TABLE `article` (
   `view_number` int DEFAULT '0',
   `like_number` int DEFAULT '0',
   `type` int DEFAULT NULL,
+  `default_language_code` varchar(20) NOT NULL DEFAULT 'zh-CN',
   `is_deleted` tinyint(1) DEFAULT '0',
   `gmt_create` datetime DEFAULT NULL,
   `gmt_modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for article_translation
+-- ----------------------------
+DROP TABLE IF EXISTS `article_translation`;
+CREATE TABLE `article_translation` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `article_id` bigint NOT NULL,
+  `language_code` varchar(20) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `content` longtext,
+  `seo_title` varchar(255) DEFAULT NULL,
+  `seo_description` varchar(500) DEFAULT NULL,
+  `is_published` tinyint(1) DEFAULT '1',
+  `published_at` datetime DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_article_language` (`article_id`,`language_code`),
+  UNIQUE KEY `uk_language_slug` (`language_code`,`slug`),
+  KEY `idx_language_published_time` (`language_code`,`is_published`,`published_at`),
+  CONSTRAINT `fk_article_translation_article` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------

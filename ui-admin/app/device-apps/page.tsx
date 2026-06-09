@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip, Tag } from 'antd';
-import type { TableProps } from 'antd';
+import { Table, Typography, message, Button, Space, Modal, Tooltip, Tag } from 'antd';
+import type { TablePaginationConfig, TableProps } from 'antd';
 import { apiRequestJson, apiRequest } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -20,10 +20,41 @@ interface DeviceAppData {
   sort_order: number;
 }
 
+interface DeviceAppListResponse {
+  data: DeviceAppData[];
+  total: number;
+}
+
 const DeviceAppsPage = () => {
   const [data, setData] = useState<DeviceAppData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+  });
+
+  const fetchData = async (page = 1, pageSize = 10) => {
+    setLoading(true);
+    try {
+      const result = await apiRequestJson<DeviceAppListResponse>(`/admin/device-apps?page=${page}&pageSize=${pageSize}`);
+      setData(result.data || []);
+      setPagination((prev) => ({
+        ...prev,
+        current: page,
+        pageSize,
+        total: result.total || 0,
+      }));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      message.error('Failed to load device apps');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = (id: number) => {
     confirm({
@@ -39,7 +70,7 @@ const DeviceAppsPage = () => {
             method: 'DELETE',
           });
           message.success('Device/App deleted successfully');
-          setData(data.filter(item => item.id !== id));
+          fetchData(pagination.current || 1, pagination.pageSize || 10);
         } catch (error) {
           console.error(error);
           message.error('Failed to delete device/app');
@@ -103,10 +134,10 @@ const DeviceAppsPage = () => {
             </Tooltip>
           </Link>
           <Tooltip title="Delete">
-            <Button 
-              type="text" 
-              danger 
-              icon={<DeleteOutlined />} 
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
@@ -116,20 +147,12 @@ const DeviceAppsPage = () => {
   ];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await apiRequestJson('/admin/device-apps');
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        message.error('Failed to load device apps');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchData(pagination.current || 1, pagination.pageSize || 10);
   }, []);
+
+  const handleTableChange = (nextPagination: TablePaginationConfig) => {
+    fetchData(nextPagination.current || 1, nextPagination.pageSize || 10);
+  };
 
   return (
     <div className="p-6">
@@ -142,24 +165,14 @@ const DeviceAppsPage = () => {
         </Link>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <Spin size="large" />
-        </div>
-      ) : (
-        <Table 
-          columns={columns} 
-          dataSource={data} 
-          rowKey="id"
-          pagination={{
-            defaultPageSize: 10,
-            pageSizeOptions: ['10', '20', '50', '100'],
-            showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-            showQuickJumper: true,
-          }}
-        />
-      )}
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={pagination}
+        onChange={handleTableChange}
+      />
     </div>
   );
 };

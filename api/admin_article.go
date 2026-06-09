@@ -7,12 +7,20 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// GetAllArticlesForAdmin handles fetching all articles for the admin panel.
+// GetAllArticlesForAdmin handles fetching articles for the admin panel.
 func GetAllArticlesForAdmin(c *fiber.Ctx) error {
-	// Use a default query param to get all articles without pagination
-	param := repository.ArticleQueryParam{PageSize: 9999, PageIndex: 1}
+	pageIndex := c.QueryInt("page", 1)
+	pageSize := c.QueryInt("pageSize", 10)
+	if pageIndex <= 0 {
+		pageIndex = 1
+	}
+	if pageSize <= 0 || pageSize > 100 {
+		pageSize = 10
+	}
 
-	articles, _, err := service.QueryArticle(param)
+	param := repository.ArticleQueryParam{PageSize: pageSize, PageIndex: pageIndex, LanguageCode: repository.DefaultLanguageCode}
+
+	articles, total, err := service.QueryArticle(param)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch articles",
@@ -20,10 +28,13 @@ func GetAllArticlesForAdmin(c *fiber.Ctx) error {
 	}
 
 	if articles == nil {
-		return c.JSON([]service.ArticleResponse{})
+		articles = []service.ArticleResponse{}
 	}
 
-	return c.JSON(articles)
+	return c.JSON(fiber.Map{
+		"data":  articles,
+		"total": total,
+	})
 }
 
 // CreateArticleAdmin handles creating a new article from the admin panel.
@@ -35,7 +46,7 @@ func CreateArticleAdmin(c *fiber.Ctx) error {
 
 	article, err := service.CreateArticle(req)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create article"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(article)
@@ -69,7 +80,7 @@ func UpdateArticleAdmin(c *fiber.Ctx) error {
 
 	article, err := service.UpdateArticle(int64(id), req)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update article"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	return c.JSON(article)
@@ -87,5 +98,22 @@ func GetArticleAdmin(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch article"})
 	}
 
-	return c.JSON(article)
+	translations, err := repository.GetArticleTranslationsByArticleId(int64(id))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch article translations"})
+	}
+
+	return c.JSON(fiber.Map{
+		"id":                  article.ArticleId,
+		"title":               article.Title,
+		"slug":                article.Slug,
+		"content":             article.Content,
+		"type":                article.Type,
+		"tagNames":            article.TagNames,
+		"gmtCreate":           article.GmtCreate,
+		"languageCode":        article.LanguageCode,
+		"defaultLanguageCode": article.DefaultLanguageCode,
+		"availableLanguages":  article.AvailableLanguages,
+		"translations":        translations,
+	})
 }

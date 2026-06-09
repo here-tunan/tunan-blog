@@ -9,12 +9,21 @@ import (
 )
 
 func GetAllFriendLinksAdmin(c *fiber.Ctx) error {
+	pageIndex := c.QueryInt("page", 1)
+	pageSize := c.QueryInt("pageSize", 10)
+	if pageIndex <= 0 {
+		pageIndex = 1
+	}
+	if pageSize <= 0 || pageSize > 100 {
+		pageSize = 10
+	}
+
 	s := service.NewFriendLinkService()
-	friendLinks, err := s.GetAllFriendLinks()
+	friendLinks, total, err := s.QueryFriendLinks(pageIndex, pageSize)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	return c.JSON(fiber.Map{"data": friendLinks})
+	return c.JSON(fiber.Map{"data": friendLinks, "total": total})
 }
 
 func GetFriendLinkAdmin(c *fiber.Ctx) error {

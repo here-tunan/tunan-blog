@@ -60,6 +60,23 @@ export async function getArticles({
   return [];
 }
 
+async function fetchArticleByParams(params: URLSearchParams): Promise<Article | null> {
+  const response = await fetch(`${API_URL}/article?${params.toString()}`, {
+    next: { revalidate: 300 },
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const data = await response.json();
+  if (data?.success && data.data?.slug && data.data?.title) {
+    return data.data;
+  }
+
+  return null;
+}
+
 export async function getArticle({
   locale,
   slug,
@@ -68,19 +85,12 @@ export async function getArticle({
   slug: string;
 }): Promise<Article | null> {
   try {
-    const params = new URLSearchParams({ slug, lang: locale });
-    const response = await fetch(`${API_URL}/article?${params.toString()}`, {
-      next: { revalidate: 300 },
-    });
-
-    if (!response.ok) {
-      return null;
+    const localizedArticle = await fetchArticleByParams(new URLSearchParams({ slug, lang: locale }));
+    if (localizedArticle) {
+      return localizedArticle;
     }
 
-    const data = await response.json();
-    if (data && data.success && data.data?.id !== 0) {
-      return data.data;
-    }
+    return await fetchArticleByParams(new URLSearchParams({ slug }));
   } catch (error) {
     console.error('Failed to fetch article:', error);
   }

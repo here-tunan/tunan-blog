@@ -17,7 +17,7 @@ export default async function History({ params }: { params: { locale: string } }
   return (
     <main>
       <div className="container">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <header className="mb-8 text-center">
             <h1 className="text-3xl font-bold font-mono mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
               {dictionary.history.title}

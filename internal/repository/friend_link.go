@@ -28,6 +28,28 @@ func FindAllFriendLinks() ([]*FriendLink, error) {
 	return friendLinks, err
 }
 
+func QueryFriendLinks(pageIndex int, pageSize int) ([]*FriendLink, int64, error) {
+	if pageIndex <= 0 {
+		pageIndex = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+
+	session := infrastructure.GetDB().Where("is_deleted = ?", 0)
+	total, err := session.Count(new(FriendLink))
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var friendLinks []*FriendLink
+	err = infrastructure.GetDB().Where("is_deleted = ?", 0).
+		OrderBy("sort_order, gmt_modified desc").
+		Limit(pageSize, (pageIndex-1)*pageSize).
+		Find(&friendLinks)
+	return friendLinks, total, err
+}
+
 func GetFriendLinkByID(id int64) (*FriendLink, error) {
 	var friendLink FriendLink
 	has, err := infrastructure.GetDB().Where("is_deleted = ?", 0).ID(id).Get(&friendLink)

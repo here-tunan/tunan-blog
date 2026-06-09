@@ -18,10 +18,35 @@ CREATE TABLE `article` (
   `view_number` INTEGER DEFAULT 0,
   `like_number` INTEGER DEFAULT 0,
   `type` INTEGER DEFAULT NULL,
+  `default_language_code` VARCHAR(20) NOT NULL DEFAULT 'zh-CN',
   `is_deleted` INTEGER DEFAULT 0,
   `gmt_create` DATETIME DEFAULT NULL,
   `gmt_modified` DATETIME DEFAULT NULL
 );
+
+-- ----------------------------
+-- Table structure for article_translation
+-- ----------------------------
+DROP TABLE IF EXISTS `article_translation`;
+CREATE TABLE `article_translation` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `article_id` INTEGER NOT NULL,
+  `language_code` VARCHAR(20) NOT NULL,
+  `title` VARCHAR(255) NOT NULL,
+  `slug` VARCHAR(255) NOT NULL,
+  `content` TEXT,
+  `seo_title` VARCHAR(255) DEFAULT NULL,
+  `seo_description` VARCHAR(500) DEFAULT NULL,
+  `is_published` INTEGER DEFAULT 1,
+  `published_at` DATETIME DEFAULT NULL,
+  `gmt_create` DATETIME DEFAULT NULL,
+  `gmt_modified` DATETIME DEFAULT NULL,
+  UNIQUE(`article_id`, `language_code`),
+  UNIQUE(`language_code`, `slug`),
+  FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)
+);
+
+CREATE INDEX `idx_article_translation_language_published_time` ON `article_translation` (`language_code`, `is_published`, `published_at`);
 
 -- ----------------------------
 -- Table structure for article_tag

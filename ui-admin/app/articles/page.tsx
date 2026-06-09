@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, message, Spin, Button, Space, Modal, Tooltip } from 'antd';
-import type { TableProps } from 'antd';
+import { Table, Typography, message, Button, Space, Modal, Tooltip } from 'antd';
+import type { TablePaginationConfig, TableProps } from 'antd';
 import { apiRequestJson, apiRequest } from '@/lib/api';
 import { PlusOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -16,6 +16,11 @@ interface ArticleData {
   slug: string;
   type: number;
   gmtCreate: string;
+}
+
+interface ArticleListResponse {
+  data: ArticleData[];
+  total: number;
 }
 
 const getTypeLabel = (type: number) => {
@@ -36,6 +41,32 @@ const getTypeLabel = (type: number) => {
 const ArticlesPage = () => {
   const [data, setData] = useState<ArticleData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    showSizeChanger: true,
+    showTotal: (total) => `Total ${total} articles`,
+  });
+
+  const fetchData = async (page = 1, pageSize = 10) => {
+    setLoading(true);
+    try {
+      const result = await apiRequestJson<ArticleListResponse>(`/admin/articles?page=${page}&pageSize=${pageSize}`);
+      setData(result.data || []);
+      setPagination((prev) => ({
+        ...prev,
+        current: page,
+        pageSize,
+        total: result.total || 0,
+      }));
+    } catch (error) {
+      console.error(error);
+      message.error('Could not load articles.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = (id: number) => {
     confirm({
@@ -53,7 +84,7 @@ const ArticlesPage = () => {
 
           if (response.ok) {
             message.success('Article deleted successfully');
-            setData(data.filter(item => item.id !== id));
+            fetchData(pagination.current || 1, pagination.pageSize || 10);
           } else {
             throw new Error('Failed to delete article');
           }
@@ -92,13 +123,6 @@ const ArticlesPage = () => {
           </span>
         );
       },
-      filters: [
-        { text: 'Blog Post', value: 1 },
-        { text: 'Weekly Report', value: 2 },
-        { text: 'Translation', value: 3 },
-        { text: 'Blog History', value: 4 },
-      ],
-      onFilter: (value, record) => record.type === value,
     },
     {
       title: 'Slug',
@@ -134,20 +158,12 @@ const ArticlesPage = () => {
   ];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await apiRequestJson<ArticleData[]>('/admin/articles');
-        setData(Array.isArray(result) ? result : []);
-      } catch (error) {
-        console.error(error);
-        message.error('Could not load articles.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchData(pagination.current || 1, pagination.pageSize || 10);
   }, []);
+
+  const handleTableChange = (nextPagination: TablePaginationConfig) => {
+    fetchData(nextPagination.current || 1, nextPagination.pageSize || 10);
+  };
 
   return (
     <div>
@@ -159,9 +175,14 @@ const ArticlesPage = () => {
           </Button>
         </Link>
       </div>
-      <Spin spinning={loading}>
-        <Table columns={columns} dataSource={data} rowKey="id" />
-      </Spin>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={pagination}
+        onChange={handleTableChange}
+      />
     </div>
   );
 };

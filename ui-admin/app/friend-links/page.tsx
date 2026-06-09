@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, InputNumber, Space, Popconfirm, message, Tag } from 'antd';
+import type { TablePaginationConfig } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, LinkOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { apiRequestJson, apiRequest } from '@/lib/api';
@@ -16,19 +17,38 @@ interface FriendLink {
   gmt_modified?: string;
 }
 
+interface FriendLinkListResponse {
+  data: FriendLink[];
+  total: number;
+}
+
 const FriendLinksPage: React.FC = () => {
   const [friendLinks, setFriendLinks] = useState<FriendLink[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<FriendLink | null>(null);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: (total) => `共 ${total} 条记录`,
+  });
   const [form] = Form.useForm();
 
   // 获取友链列表
-  const fetchFriendLinks = async () => {
+  const fetchFriendLinks = async (page = 1, pageSize = 10) => {
     setLoading(true);
     try {
-      const data = await apiRequestJson('/admin/friend-links');
-      setFriendLinks(data.data || []);
+      const result = await apiRequestJson<FriendLinkListResponse>(`/admin/friend-links?page=${page}&pageSize=${pageSize}`);
+      setFriendLinks(result.data || []);
+      setPagination((prev) => ({
+        ...prev,
+        current: page,
+        pageSize,
+        total: result.total || 0,
+      }));
     } catch (error) {
       message.error('获取友链列表失败');
     } finally {
@@ -37,7 +57,7 @@ const FriendLinksPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchFriendLinks();
+    fetchFriendLinks(pagination.current || 1, pagination.pageSize || 10);
   }, []);
 
   // 新增或编辑友链
@@ -55,7 +75,7 @@ const FriendLinksPage: React.FC = () => {
       setIsModalOpen(false);
       setEditingLink(null);
       form.resetFields();
-      fetchFriendLinks();
+      fetchFriendLinks(pagination.current || 1, pagination.pageSize || 10);
     } catch (error) {
       message.error(editingLink ? '友链更新失败' : '友链创建失败');
     }
@@ -69,7 +89,7 @@ const FriendLinksPage: React.FC = () => {
       });
 
       message.success('友链删除成功');
-      fetchFriendLinks();
+      fetchFriendLinks(pagination.current || 1, pagination.pageSize || 10);
     } catch (error) {
       message.error('友链删除失败');
     }
@@ -87,6 +107,10 @@ const FriendLinksPage: React.FC = () => {
     setEditingLink(null);
     form.resetFields();
     setIsModalOpen(true);
+  };
+
+  const handleTableChange = (nextPagination: TablePaginationConfig) => {
+    fetchFriendLinks(nextPagination.current || 1, nextPagination.pageSize || 10);
   };
 
   // 表格列定义
@@ -189,11 +213,8 @@ const FriendLinksPage: React.FC = () => {
         dataSource={friendLinks}
         rowKey="id"
         loading={loading}
-        pagination={{
-          showSizeChanger: true,
-          showQuickJumper: true,
-          showTotal: (total) => `共 ${total} 条记录`,
-        }}
+        pagination={pagination}
+        onChange={handleTableChange}
       />
 
       <Modal

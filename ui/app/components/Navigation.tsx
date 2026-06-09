@@ -10,6 +10,7 @@ import {themes} from "@/app/themes";
 import { localeLabels, Locale } from "@/app/i18n/config";
 import { useLocale } from "@/app/i18n/locale-context";
 import { replaceLocale, withLocale } from "@/app/i18n/routes";
+import { API_URL } from "@/lib/config";
 
 export default function Navigation({ setCommandPaletteOpen }: { setCommandPaletteOpen: (open: boolean) => void }) {
   const { locale, dictionary } = useLocale();
@@ -103,6 +104,35 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
     return query ? `${nextPath}?${query}` : nextPath;
   };
 
+  const languageHrefForArticle = async (targetLocale: Locale) => {
+    const match = pathname.match(/^\/(en|zh-CN)\/blog\/([^/?#]+)/);
+    if (!match) {
+      return languageHref(targetLocale);
+    }
+
+    const slug = decodeURIComponent(match[2]);
+    try {
+      const params = new URLSearchParams({ slug, lang: locale });
+      const response = await fetch(`${API_URL}/article?${params.toString()}`);
+      if (!response.ok) {
+        return languageHref(targetLocale);
+      }
+
+      const data = await response.json();
+      const target = data?.data?.availableLanguages?.find((item: { languageCode: string }) => item.languageCode === targetLocale);
+      if (!target?.slug) {
+        return languageHref(targetLocale);
+      }
+
+      const nextPath = withLocale(targetLocale, `/blog/${target.slug}`);
+      const query = searchParams.toString();
+      return query ? `${nextPath}?${query}` : nextPath;
+    } catch (error) {
+      console.error('Failed to resolve localized article slug:', error);
+      return languageHref(targetLocale);
+    }
+  };
+
   return (
     <div
       className={`fixed z-50 flex inset-x-0 top-4 mx-auto h-[55px] max-w-screen-lg items-center justify-between rounded-2xl bg-background/30 shadow-sm saturate-100 backdrop-blur-[10px] transition-colors px-2 sm:px-4
@@ -178,9 +208,9 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
         </div>
 
         <button
-          onClick={() => {
+          onClick={async () => {
             const target = locale === 'en' ? 'zh-CN' : 'en';
-            window.location.href = languageHref(target);
+            window.location.href = await languageHrefForArticle(target);
           }}
           title={dictionary.nav.language}
           className="hidden sm:flex items-center justify-center w-9 h-9 rounded-full border hover:bg-accent/40 hover:text-accent-foreground transition-colors group"
