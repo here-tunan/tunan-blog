@@ -11,39 +11,53 @@ type HeaderProps = {
 }
 
 const Header = (props: HeaderProps) => {
-
   const options = { year: "numeric", month: "long", day: "numeric" } as Intl.DateTimeFormatOptions;
   const date = formatDate(props.date, props.locale, options);
   const tags = props.tags;
 
   return (
-    <div className="blog-header">
-      <h1 className="font-bold font-mono text-4xl mb-4">{props.title}</h1>
+    <header className="blog-header">
+      {/*
+        标题：现代无衬线（继承 Inter），字重降到 semibold，tracking 收紧一点，
+        大屏用 4xl，小屏 3xl 避免撑爆 720px 列宽
+      */}
+      <h1 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-900 dark:text-slate-100">
+        {props.title}
+      </h1>
 
-      {/* Meta-information line */}
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500">
-        {/* Date */}
-        <p className="font-serif">{date}</p>
+      {/*
+        Meta 一行 Substack 风：日期 · 浏览量 · #tag
+        使用 · 中点分隔；tag 保留极简药丸（灰底灰字）+ hover 变主色
+      */}
+      <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+        <time>{date}</time>
 
-        {/* Views */}
-        <div className="flex items-center gap-1 font-serif">
-          <span>👀</span>
-          <ViewCounter path={props.path} className="font-medium" />
-        </div>
+        <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">·</span>
 
-        {/* Tags */}
+        <span className="inline-flex items-center gap-1">
+          <ViewCounter path={props.path} className="font-medium tabular-nums" />
+          <span>views</span>
+        </span>
+
         {tags && tags.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2">
-            {tags.map((tag) => (
-              <div key={tag}
-                   className="px-3 py-1 text-xs font-medium text-indigo-800 bg-indigo-100 rounded-full">
-                #{tag}
-              </div>
-            ))}
-          </div>
+          <>
+            <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">·</span>
+            <ul className="flex flex-wrap items-center gap-1.5">
+              {tags.map((tag) => (
+                <li key={tag}>
+                  <span className="inline-block rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-xs text-slate-600 dark:text-slate-300 transition-colors hover:text-indigo-600 dark:hover:text-indigo-400">
+                    #{tag}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </div>
-    </div>
+
+      {/* 装饰短线，为正文创造清晰的呼吸空间；不用满屏 hr，避免和内容里的 hr 冲突 */}
+      <div className="mt-8 h-px w-12 bg-slate-200 dark:bg-slate-700" />
+    </header>
   );
 }
 

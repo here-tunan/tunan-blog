@@ -37,7 +37,8 @@
     "remark-lint": "^10.0.0",
     "remark-parse": "^11.0.0",
     "remark-remove-comments": "^1.1.1",
-    "remark-toc": "^9.0.0"
+    "remark-toc": "^9.0.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@fec/remark-a11y-emoji": "^4.0.2",

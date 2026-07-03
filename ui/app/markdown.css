@@ -4,9 +4,12 @@
 
 /** 中英文混排字体优化 **/
 .markdown-body {
-    font-family: "LXGW WenKai", -apple-system, BlinkMacSystemFont, 
-                 "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", 
-                 "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", 
+    /* 英文/数字/连字符用 Inter，中文自动回退到 LXGW WenKai */
+    font-family: var(--font-inter),
+                 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial,
+                 "LXGW WenKai", "PingFang SC", "Hiragino Sans GB",
+                 "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei",
                  "WenQuanYi Micro Hei", sans-serif;
     font-feature-settings: "kern" 1;
     font-display: swap; /* 字体加载期间显示备选字体 */
@@ -14,15 +17,19 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.75;
-    letter-spacing: 0.02em;
+    /* 全局不加 letter-spacing，避免拉大英文字母与连字符之间的距离 */
 }
 
 /* 英文段落优化 */
-.markdown-body p, 
+.markdown-body p,
 .markdown-body li {
-    text-align: justify;
-    text-justify: inter-ideograph;
-    word-break: break-word;
+    /* 左对齐右侧自然锯齿，避免 justify 拉大空格造成的忽宽忽窄 */
+    text-align: left;
+    /* 长单词按音节断行并自动加连字符（如 abi-lity），需要 lang 属性配合 */
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    /* 仅在真正超出容器时才断，替代 word-break: break-word 的硬切行为 */
     overflow-wrap: break-word;
 }
 
@@ -40,8 +47,9 @@
     margin-bottom: 16px;
     font-weight: 600;
     line-height: 1.25;
-    font-family: "LXGW WenKai", -apple-system, BlinkMacSystemFont, 
-                 "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", sans-serif;
+    font-family: var(--font-inter),
+                 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "LXGW WenKai", "PingFang SC", "Hiragino Sans GB", sans-serif;
 }
 
 .markdown-body h1 {
@@ -184,16 +192,16 @@
 
 /** markdown style - blockquote **/
 .markdown-body blockquote {
-    border-left: 4px solid var(--markdown-blockquote-letf, #3b82f6);
+    border-left: 3px solid var(--markdown-blockquote-letf, #4f46e5);
     border-radius: 0 0.5rem 0.5rem 0;
     font-size: 0.95em;
-    background: linear-gradient(90deg, 
-        var(--markdown-blockquote-background, rgba(59, 130, 246, 0.05)) 0%, 
+    background: linear-gradient(90deg,
+        var(--markdown-blockquote-background, rgba(79, 70, 229, 0.04)) 0%,
         transparent 100%);
     margin: 1.5rem 0;
     padding: 1rem 0;
     position: relative;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .markdown-body blockquote:before {
@@ -202,7 +210,7 @@
     left: 0.5rem;
     top: -0.5rem;
     font-size: 3rem;
-    color: var(--markdown-blockquote-letf, #3b82f6);
+    color: var(--markdown-blockquote-letf, #4f46e5);
     opacity: 0.2;
     font-family: "LXGW WenKai", Georgia, "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", serif;
     line-height: 1;

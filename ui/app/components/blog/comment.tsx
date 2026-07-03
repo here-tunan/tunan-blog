@@ -98,10 +98,19 @@ export function Comments() {
 
   return (
     <Fragment>
-      <div className="mt-10 mb-5 border-t-2 pt-3">
-        <span className="text-2xl pr-1 font-extralight">{dictionary.article.comments}</span>
-        <span className="counter align-super font-bold"><span className="remark42__counter"
-                                                              data-url={url}></span></span>
+      {/*
+        评论区分界：大上间距 (mt-24 = 96px) + 细分割线 + uppercase 小写标题
+        标题用 tracking-widest 让排版感更强，和 TOC label 呼应
+      */}
+      <div className="mt-24 border-t border-slate-200 dark:border-slate-700 pt-6 mb-6">
+        <div className="flex items-baseline gap-2">
+          <span className="text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+            {dictionary.article.comments}
+          </span>
+          <span className="counter text-xs text-slate-400 dark:text-slate-500">
+            <span className="remark42__counter" data-url={url}></span>
+          </span>
+        </div>
       </div>
       {/* This div is the target for actual comments insertion */}
       <div id="remark42"/>

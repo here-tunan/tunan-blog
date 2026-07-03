@@ -91,10 +91,10 @@
         --markdown-table-hover: rgba(59, 130, 246, 0.05);
         --markdown-table-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         
-        /* Link colors for light mode */
-        --markdown-link-color: #3b82f6;
-        --markdown-link-hover-color: #2563eb;
-        --markdown-link-hover-bg: rgba(59, 130, 246, 0.1);
+        /* Link colors for light mode — 统一到 indigo-600 主色 */
+        --markdown-link-color: #4f46e5;
+        --markdown-link-hover-color: #4338ca;
+        --markdown-link-hover-bg: rgba(79, 70, 229, 0.08);
         --markdown-code-border: rgba(209, 213, 219, 0.6);
         
         /* Scrollbar colors for light mode */

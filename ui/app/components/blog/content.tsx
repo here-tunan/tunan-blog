@@ -10,6 +10,7 @@ import rehypeRaw from 'rehype-raw'
 
 type ContentProps = {
   content: string
+  locale?: string
   // slug: string
 }
 
@@ -24,14 +25,18 @@ const Content = async (props: ContentProps) => {
     },
   };
 
-  return (
-    <Markdown className="markdown-body"
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight, rehypeSlug, [rehypeAutolinkHeadings, autolinkHeadingsOptions], rehypeRaw]}
-    >
-      {markdown}
-    </Markdown>
+  // lang 属性用于让 CSS 的 hyphens: auto 选择正确的断词词典
+  const lang = props.locale || 'en'
 
+  return (
+    <div lang={lang}>
+      <Markdown className="markdown-body"
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight, rehypeSlug, [rehypeAutolinkHeadings, autolinkHeadingsOptions], rehypeRaw]}
+      >
+        {markdown}
+      </Markdown>
+    </div>
   )
 }
 
