@@ -11,7 +11,7 @@ async function getBooks() {
     try {
         const response = await fetch(`${API_URL}/book/list`, {
             method: 'GET',
-            cache: 'no-store', // Or a revalidation strategy
+            next: { revalidate: 3600 },
         });
         return await response.json();
     } catch (error) {
@@ -22,7 +22,9 @@ async function getBooks() {
 
 async function getDevicesAndApps() {
     try {
-        const response = await fetch(`${API_URL}/device-app/grouped`);
+        const response = await fetch(`${API_URL}/device-app/grouped`, {
+            next: { revalidate: 3600 },
+        });
         return await response.json();
     } catch (error) {
         console.error('Error fetching device apps:', error);

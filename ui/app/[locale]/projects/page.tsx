@@ -30,7 +30,7 @@ interface Project {
 async function getProjects(): Promise<Project[]> {
   try {
     const response = await fetch(`${API_URL}/project/list`, {
-      cache: 'no-store',
+      next: { revalidate: 300 },
     });
 
     if (!response.ok) {

@@ -42,7 +42,7 @@ export async function getArticles({
         pageIndex,
         languageCode: locale,
       }),
-      cache: 'no-store',
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {
@@ -62,7 +62,7 @@ export async function getArticles({
 
 async function fetchArticleByParams(params: URLSearchParams): Promise<Article | null> {
   const response = await fetch(`${API_URL}/article?${params.toString()}`, {
-    next: { revalidate: 300 },
+    next: { revalidate: 3600 },
   });
 
   if (!response.ok) {

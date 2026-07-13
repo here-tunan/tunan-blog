@@ -27,7 +27,7 @@ interface Project {
 async function getFeaturedProjects(): Promise<Project[]> {
   try {
     const response = await fetch(`${API_URL}/project/featured`, {
-      cache: 'no-store',
+      next: { revalidate: 300 },
     });
 
     if (!response.ok) {
