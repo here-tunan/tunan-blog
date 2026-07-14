@@ -89,7 +89,9 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
 
   // 更新 Remark42 的主题并重新初始化
   const updateTheme = (themeState: number) => {
-    if (window && window.REMARK42) {
+    if (typeof window !== 'undefined'
+        && window.REMARK42
+        && typeof window.REMARK42.changeTheme === 'function') {
       let theme = themes[(themeState) % themes.length].theme; // 更新主题配置
       window.REMARK42.changeTheme(theme)
     }
