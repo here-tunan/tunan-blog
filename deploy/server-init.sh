@@ -81,6 +81,12 @@ if ! command -v caddy >/dev/null; then
 fi
 systemctl enable caddy 2>/dev/null || true
 
+echo "==> Node.js 22 LTS(Next.js standalone 的运行时,只跑不编译)"
+if ! command -v node >/dev/null; then
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  apt-get install -y nodejs
+fi
+
 echo "==> rclone"
 command -v rclone >/dev/null || curl -fsSL https://rclone.org/install.sh | bash
 
