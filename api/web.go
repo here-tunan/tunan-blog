@@ -123,7 +123,8 @@ func Start() {
 	admin.Put("/friend-links/:id", UpdateFriendLinkAdmin)
 	admin.Delete("/friend-links/:id", DeleteFriendLinkAdmin)
 
-	log.Fatal(app.Listen(":3002"))
+	// 只绑回环:外网流量一律经 Caddy 反代进来,不直接暴露端口
+	log.Fatal(app.Listen("127.0.0.1:3002"))
 }
 
 func BookMount() *fiber.App {

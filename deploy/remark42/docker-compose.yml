@@ -27,8 +27,8 @@ services:
       # TODO: 换成随机长字符串(openssl rand -hex 32)
       - SECRET=CHANGE_ME_TO_A_LONG_RANDOM_STRING
 
-      # 存储:bolt64 是新版默认,没有 bolt 的 1GB 大小限制
-      - STORE_TYPE=bolt64
+      # 存储:v1.18 起 bolt 已是 64 位实现(旧的 bolt64 名称已移除)
+      - STORE_TYPE=bolt
       - STORE_BOLT_PATH=/srv/var/db
       - BACKUP_PATH=/srv/var/backup
 
