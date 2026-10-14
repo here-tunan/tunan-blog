@@ -10,6 +10,7 @@ WorkingDirectory=/opt/tunan-admin
 Environment=PORT=3001
 Environment=HOSTNAME=127.0.0.1
 Environment=NODE_ENV=production
+Environment=API_URL_INTERNAL=http://127.0.0.1:3002/api
 EnvironmentFile=-/opt/tunan-admin/.env.local
 ExecStart=/usr/bin/node server.js
 Restart=always

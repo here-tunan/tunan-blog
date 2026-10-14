@@ -15,9 +15,11 @@ tunan.fun {
 		reverse_proxy 127.0.0.1:3001
 	}
 
-	# 其余全给主站
+	# 其余全给主站;X-Forwarded-Host 供 Next 中间件还原真实域名(重定向用)
 	handle {
-		reverse_proxy 127.0.0.1:3000
+		reverse_proxy 127.0.0.1:3000 {
+			header_up X-Forwarded-Host {host}
+		}
 	}
 }
 

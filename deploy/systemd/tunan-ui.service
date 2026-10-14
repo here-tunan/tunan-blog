@@ -10,6 +10,7 @@ WorkingDirectory=/opt/tunan-ui
 Environment=PORT=3000
 Environment=HOSTNAME=127.0.0.1
 Environment=NODE_ENV=production
+Environment=API_URL_INTERNAL=http://127.0.0.1:3002/api
 # standalone 产物不打包 .env*,GITHUB_USERNAME/GITHUB_TOKEN 从这里读
 EnvironmentFile=-/opt/tunan-ui/.env.local
 ExecStart=/usr/bin/node server.js

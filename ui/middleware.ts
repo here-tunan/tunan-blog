@@ -25,10 +25,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const url = request.nextUrl.clone();
-  url.pathname = pathname === '/' ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`;
-  url.search = search;
-  return NextResponse.redirect(url);
+  // standalone 模式下 Next 用 HOSTNAME/PORT 环境变量构造 URL,忽略真实 Host 头,
+  // 生产环境经 Caddy 反代时必须用 x-forwarded-* 还原真实域名(见 deploy/Caddyfile)
+  const forwardedHost = request.headers.get('x-forwarded-host') ?? request.nextUrl.host;
+  const forwardedProto = request.headers.get('x-forwarded-proto') ?? request.nextUrl.protocol;
+
+  const redirectPath = pathname === '/' ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`;
+  return NextResponse.redirect(new URL(`${forwardedProto}://${forwardedHost}${redirectPath}${search}`));
 }
 
 export const config = {

@@ -1,20 +1,30 @@
 #!/bin/bash
 # 服务器初始化 - 在新的 RackNerd VPS (Ubuntu 24.04 / Debian 12 均可) 上以 root 执行
 #
-# 用法(本地执行,把公钥传进去):
+# 用法(本地执行,把公钥传进去 需要自己提前创建好公私钥 deploy.sh中会用到):
 #   SSH_PUBKEY="$(cat ~/.ssh/tunan_vps.pub)" bash deploy/server-init.sh root@<VPS_IP>
 set -euo pipefail
 
-REMOTE="${1:?用法: SSH_PUBKEY=\$(cat key.pub) bash deploy/server-init.sh root@<VPS_IP>}"
-PUBKEY="${SSH_PUBKEY:?请先 export SSH_PUBKEY}"
+REMOTE="${1:?用法: bash deploy/server-init.sh root@<VPS_IP>}"
+# 公钥优先读默认路径,也可以用环境变量 SSH_PUBKEY 覆盖
+PUBKEY="${SSH_PUBKEY:-$(cat "$HOME/.ssh/tunan_vps.pub" 2>/dev/null || true)}"
+if [ -z "$PUBKEY" ]; then
+  echo "❌ 找不到 ~/.ssh/tunan_vps.pub,请先生成密钥对或 export SSH_PUBKEY"
+  exit 1
+fi
 
 echo "==> 上传初始化脚本并在服务器执行"
 ssh -o StrictHostKeyChecking=accept-new "$REMOTE" "PUBKEY='${PUBKEY}' bash -s" <<'EOF'
 set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
 
 echo "==> 系统更新"
 apt-get update -y
-apt-get upgrade -y
+# 新镜像升级偶发 console-setup 等非致命报错(VPS 没有实体控制台),不让它中断初始化
+if ! apt-get upgrade -y; then
+  echo "⚠️  apt upgrade 报错,尝试修复后继续(console-setup 类报错对无头 VPS 无实际影响)"
+  dpkg --configure -a || true
+fi
 
 echo "==> 基础软件包"
 apt-get install -y curl git ufw fail2ban unattended-upgrades ca-certificates \
