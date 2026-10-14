@@ -1,0 +1,20 @@
+# 拷贝到服务器 /etc/systemd/system/tunan-admin.service
+[Unit]
+Description=tunan-blog Admin (Next.js standalone)
+After=network-online.target tunan-blog.service
+Wants=network-online.target
+
+[Service]
+User=deploy
+WorkingDirectory=/opt/tunan-admin
+Environment=PORT=3001
+Environment=HOSTNAME=127.0.0.1
+Environment=NODE_ENV=production
+EnvironmentFile=-/opt/tunan-admin/.env.local
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+MemoryMax=300M
+
+[Install]
+WantedBy=multi-user.target

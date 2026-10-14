@@ -23,6 +23,7 @@ type Properties struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
 		Database string `json:"database"`
+		TLS      bool   `json:"tls"`
 	} `json:"mysql"`
 
 	Website struct {

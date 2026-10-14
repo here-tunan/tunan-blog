@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 独立产物模式:构建出可直接 node server.js 运行的自包含目录,适配小内存 VPS
+  output: 'standalone',
+
   async headers() {
     return [
       // Article detail pages: edge cache 1h, allow stale for 1 day

@@ -1,0 +1,32 @@
+# Caddy 反向代理 - 拷贝到服务器 /etc/caddy/Caddyfile
+# TLS 用 Cloudflare Origin CA 证书(15 年有效),配合 CF SSL 模式 Full (strict)
+# 证书放 /etc/caddy/ssl/origin.pem 和 origin.key,权限 0600 root
+
+tunan.fun {
+	tls /etc/caddy/ssl/origin.pem /etc/caddy/ssl/origin.key
+
+	# API → Go 后端
+	handle /api/* {
+		reverse_proxy 127.0.0.1:3002
+	}
+
+	# 管理后台(ui-admin 已带 basePath /admin,无需去前缀)
+	handle /admin* {
+		reverse_proxy 127.0.0.1:3001
+	}
+
+	# 其余全给主站
+	handle {
+		reverse_proxy 127.0.0.1:3000
+	}
+}
+
+www.tunan.fun {
+	tls /etc/caddy/ssl/origin.pem /etc/caddy/ssl/origin.key
+	redir https://tunan.fun{uri} permanent
+}
+
+remark42.tunan.fun {
+	tls /etc/caddy/ssl/origin.pem /etc/caddy/ssl/origin.key
+	reverse_proxy 127.0.0.1:8080
+}

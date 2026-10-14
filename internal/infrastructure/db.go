@@ -58,6 +58,11 @@ func initDatabase() {
 		dataSourName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4",
 			env.Prop.Mysql.Username, env.Prop.Mysql.Password, env.Prop.Mysql.Host, env.Prop.Mysql.Port, env.Prop.Mysql.Database)
 
+		// TiDB Cloud Serverless 等托管数据库强制 TLS,配置里显式开启
+		if env.Prop.Mysql.TLS {
+			dataSourName += "&tls=true"
+		}
+
 		DB, err = xorm.NewEngine("mysql", dataSourName)
 		if err != nil {
 			log.Fatalf("Failed to connect to MySQL: %v", err)
@@ -65,6 +70,11 @@ func initDatabase() {
 
 		// 设置驼峰转换
 		DB.SetMapper(names.GonicMapper{})
+
+		// 托管数据库按请求计费,连接池保持小
+		DB.SetMaxOpenConns(10)
+		DB.SetMaxIdleConns(5)
+		DB.SetConnMaxLifetime(5 * time.Minute)
 
 		// 时区
 		DB.TZLocation, _ = time.LoadLocation("Asia/Shanghai")

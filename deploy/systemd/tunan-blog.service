@@ -1,0 +1,17 @@
+# 拷贝到服务器 /etc/systemd/system/tunan-blog.service
+[Unit]
+Description=tunan-blog Go API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=deploy
+WorkingDirectory=/opt/tunan-blog
+Environment=GO_TUNAN_BLOG_ENV=prod
+ExecStart=/opt/tunan-blog/tunan-blog
+Restart=always
+RestartSec=5
+MemoryMax=200M
+
+[Install]
+WantedBy=multi-user.target

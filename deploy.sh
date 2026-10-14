@@ -1,154 +1,59 @@
 #!/bin/bash
+# 部署脚本 - 本地构建 + rsync,服务器上不再跑任何 npm/go build(1G 内存扛不住)
+#
+# 前置:
+#   1. 在项目根目录创建 .env.deploy(已被 .gitignore 忽略,严禁提交),内容:
+#        SSH_HOST=deploy@<你的VPS_IP>
+#        SSH_KEY=$HOME/.ssh/tunan_vps
+#   2. 服务器上已放好 /opt/tunan-blog/env/prod.yaml(参考 env/prod.yaml.example)
+#   3. 本机 ssh 免密可达
+# 用法: ./deploy.sh
+set -euo pipefail
 
-# 部署脚本 - Tunan Blog
-# 使用方法: ./deploy.sh
-
-set -e  # 遇到错误立即退出
+if [ -f .env.deploy ]; then
+  source .env.deploy
+fi
+SSH_HOST="${SSH_HOST:-}"
+SSH_KEY="${SSH_KEY:-$HOME/.ssh/tunan_vps}"
+if [ -z "$SSH_HOST" ]; then
+  echo "❌ 未配置 SSH_HOST:请创建 .env.deploy(参考 deploy.sh 头部注释),不要把 IP 写进本脚本"
+  exit 1
+fi
 
 echo "================================="
-echo "🚀 开始部署 Tunan Blog"
-echo "💡 请在本地本地提前执行以下命令👇："
-echo "CGO_ENABLED=1 GOOS=linux  GOARCH=amd64  CC=x86_64-linux-musl-gcc  CXX=x86_64-linux-musl-g++ go build -o tunan-blog cmd/tunan-blog/main.go"
-echo "（服务端🈚go语言环境，只进行执行，请自行编译成二进制文件）"
+echo "🚀 Tunan Blog 部署(本地构建 → rsync)"
 echo "================================="
 
-# 获取当前目录
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+cd "$(dirname "$0")"
 
-echo "📂 当前目录: $(pwd)"
+echo "==> 构建后端(CGO_ENABLED=0 静态编译,prod 只用 MySQL)"
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /tmp/tunan-blog-linux ./cmd/tunan-blog
 
-# 1. 拉取最新代码
-echo "📥 拉取最新代码..."
-git pull
+echo "==> 构建 UI(standalone)"
+(cd ui && npm ci --no-audit --no-fund && npm run build)
 
-# 2. 设置生产环境变量
-echo "🔧 设置生产环境..."
-export GO_TUNAN_BLOG_ENV=prod
+echo "==> 构建 Admin(standalone)"
+(cd ui-admin && npm ci --no-audit --no-fund && npm run build)
 
-# 3. 停止并重启后端服务
-echo "🔄 重启后端服务..."
-echo "   查找现有后端进程..."
-BACKEND_PID=$(ps -ef | grep tunan-blog | grep -v grep | awk '{print $2}' || true)
-if [ ! -z "$BACKEND_PID" ]; then
-    echo "   杀死现有后端进程: $BACKEND_PID"
-    kill $BACKEND_PID
-    sleep 2
-else
-    echo "   未找到现有后端进程"
-fi
+echo "==> 上传后端二进制"
+rsync -az -e "ssh -i $SSH_KEY" /tmp/tunan-blog-linux "$SSH_HOST:/opt/tunan-blog/tunan-blog"
 
-echo "   启动新的后端进程..."
-nohup ./tunan-blog > backend.log 2>&1 &
-BACKEND_NEW_PID=$!
-echo "   后端进程已启动，PID: $BACKEND_NEW_PID"
+echo "==> 上传 UI(standalone 产物,不带 --delete 以保留服务器上的 .env.local)"
+rsync -az -e "ssh -i $SSH_KEY" ui/.next/standalone/ "$SSH_HOST:/opt/tunan-ui/"
+rsync -az --delete -e "ssh -i $SSH_KEY" ui/.next/static/ "$SSH_HOST:/opt/tunan-ui/.next/static/"
+rsync -az --delete -e "ssh -i $SSH_KEY" ui/public/ "$SSH_HOST:/opt/tunan-ui/public/"
 
-# 4. 构建和部署前端 UI
-echo "🎨 构建前端 UI..."
-cd ui
+echo "==> 上传 Admin"
+rsync -az -e "ssh -i $SSH_KEY" ui-admin/.next/standalone/ "$SSH_HOST:/opt/tunan-admin/"
+rsync -az --delete -e "ssh -i $SSH_KEY" ui-admin/.next/static/ "$SSH_HOST:/opt/tunan-admin/.next/static/"
+rsync -az --delete -e "ssh -i $SSH_KEY" ui-admin/public/ "$SSH_HOST:/opt/tunan-admin/public/"
 
-echo "   安装依赖..."
-npm install
+echo "==> 重启服务"
+ssh -i "$SSH_KEY" "$SSH_HOST" "sudo systemctl restart tunan-blog tunan-ui tunan-admin"
 
-echo "   构建项目..."
-npm run build
-
-echo "   停止现有UI服务..."
-UI_PID=$(lsof -ti:3000 || true)
-if [ ! -z "$UI_PID" ]; then
-    echo "   杀死现有UI进程: $UI_PID"
-    kill $UI_PID
-    sleep 2
-else
-    echo "   未找到现有UI进程"
-fi
-
-echo "   启动新的UI服务..."
-nohup npm run start > ../ui.log 2>&1 &
-UI_NEW_PID=$!
-echo "   UI服务已启动，PID: $UI_NEW_PID"
-
-# 5. 构建和部署管理后台
-echo "⚙️  构建管理后台..."
-cd ../ui-admin
-
-echo "   安装依赖..."
-npm install
-
-echo "   构建项目..."
-npm run build
-
-echo "   停止现有管理后台服务..."
-ADMIN_PID=$(ss -tulpn | grep :3001 | grep -oP 'pid=\K\d+' || true)
-if [ ! -z "$ADMIN_PID" ]; then
-    echo "   杀死现有管理后台进程: $ADMIN_PID"
-    kill $ADMIN_PID
-    sleep 2
-else
-    echo "   未找到现有管理后台进程"
-fi
-
-echo "   启动新的管理后台服务..."
-nohup npm run start > ../admin.log 2>&1 &
-ADMIN_NEW_PID=$!
-echo "   管理后台已启动，PID: $ADMIN_NEW_PID"
-
-# 回到项目根目录
-cd "$SCRIPT_DIR"
-
-# 6. 等待服务启动并检查状态
-echo "⏳ 等待服务启动..."
-sleep 5
-
-echo "🔍 检查服务状态..."
-
-# 检查后端服务
-if ps -p $BACKEND_NEW_PID > /dev/null; then
-    echo "   ✅ 后端服务运行正常 (PID: $BACKEND_NEW_PID)"
-else
-    echo "   ❌ 后端服务启动失败"
-fi
-
-# 检查UI服务
-if ps -p $UI_NEW_PID > /dev/null; then
-    echo "   ✅ UI服务运行正常 (PID: $UI_NEW_PID)"
-else
-    echo "   ❌ UI服务启动失败"
-fi
-
-# 检查管理后台服务
-if ps -p $ADMIN_NEW_PID > /dev/null; then
-    echo "   ✅ 管理后台运行正常 (PID: $ADMIN_NEW_PID)"
-else
-    echo "   ❌ 管理后台启动失败"
-fi
-
-# 7. 显示端口占用情况
-echo "🌐 端口占用情况:"
-echo "   后端 API (应该是3002端口):"
-ss -tulpn | grep :3002 || echo "   未找到3002端口监听"
-echo "   前端 UI (端口3000):"
-ss -tulpn | grep :3000 || echo "   未找到3000端口监听"
-echo "   管理后台 (端口3001):"
-ss -tulpn | grep :3001 || echo "   未找到3001端口监听"
+sleep 3
+echo "==> 服务状态"
+ssh -i "$SSH_KEY" "$SSH_HOST" "systemctl is-active tunan-blog tunan-ui tunan-admin && free -m | head -2"
 
 echo ""
-echo "================================="
-echo "✨ 部署完成！"
-echo "================================="
-echo "📋 服务信息:"
-echo "   前端页面: http://your-domain:3000"
-echo "   管理后台: http://your-domain:3001"
-echo "   后端API:  http://your-domain:3002"
-echo ""
-echo "📝 日志文件:"
-echo "   后端日志: $(pwd)/backend.log"
-echo "   UI日志:   $(pwd)/ui.log"  
-echo "   管理后台: $(pwd)/admin.log"
-echo ""
-echo "🔧 常用命令:"
-echo "   查看后端日志: tail -f backend.log"
-echo "   查看UI日志:   tail -f ui.log"
-echo "   查看管理日志: tail -f admin.log"
-echo "   查看所有进程: ps -ef | grep -E '(tunan-blog|node.*3000|node.*3001)'"
-echo "================================="
+echo "✨ 部署完成。查看日志: ssh $SSH_HOST -- sudo journalctl -u tunan-ui -n 50 --no-pager"

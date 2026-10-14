@@ -1,0 +1,21 @@
+# 拷贝到服务器 /etc/systemd/system/tunan-ui.service
+[Unit]
+Description=tunan-blog UI (Next.js standalone)
+After=network-online.target tunan-blog.service
+Wants=network-online.target
+
+[Service]
+User=deploy
+WorkingDirectory=/opt/tunan-ui
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+Environment=NODE_ENV=production
+# standalone 产物不打包 .env*,GITHUB_USERNAME/GITHUB_TOKEN 从这里读
+EnvironmentFile=-/opt/tunan-ui/.env.local
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+MemoryMax=300M
+
+[Install]
+WantedBy=multi-user.target

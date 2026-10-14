@@ -31,3 +31,12 @@ go.work
 /ui-admin/package-lock.json
 /ui-admin/.next/
 /.claude/settings.local.json
+
+# Remark42 数据目录(bolt 数据库文件与备份,不入库)
+deploy/remark42/var/
+
+# 生产配置(含密钥,严禁入库)
+env/prod.yaml
+
+# 部署目标(含 IP,严禁入库)
+.env.deploy

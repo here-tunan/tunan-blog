@@ -1,0 +1,54 @@
+# Remark42 评论系统 - 全新部署(旧数据已丢失,无迁移负担)
+# 使用: 在服务器上 docker compose up -d
+# 数据全部落在 ./var 目录,务必配置每日备份(见 README.md)
+
+services:
+  remark42:
+    image: umputun/remark42:v1.18.0   # 固定版本,升级时手动改这里,不要用 latest
+    container_name: "remark42"
+    hostname: "remark42"
+    restart: always
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    # 只监听本机,由宿主机 nginx/caddy 反代到公网(remark42.tunan.fun)
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    environment:
+      # 站点标识,必须与前端 comment.tsx 里的 host / site_id 一致
+      - REMARK_URL=https://remark42.tunan.fun
+      - SITE=tunan-remark
+
+      # TODO: 换成随机长字符串(openssl rand -hex 32)
+      - SECRET=CHANGE_ME_TO_A_LONG_RANDOM_STRING
+
+      # 存储:bolt64 是新版默认,没有 bolt 的 1GB 大小限制
+      - STORE_TYPE=bolt64
+      - STORE_BOLT_PATH=/srv/var/db
+      - BACKUP_PATH=/srv/var/backup
+
+      # 允许匿名评论(保留 Remark42 的核心原因)
+      - AUTH_ANON=true
+
+      # 管理员:格式为 provider_id,如 github_12345678 或 anonymous_xxxxxxxx
+      # TODO: 填你自己的账号 id
+      - ADMIN_SHARED_ID=CHANGE_ME
+      - ADMIN_SHARED_EMAIL=admin@tunan.fun
+
+      # 邮箱通知/邮箱登录(可选,需要 SMTP,不用就删掉这三行)
+      # - AUTH_EMAIL_ENABLE=true
+      # - AUTH_EMAIL_FROM=notify@tunan.fun
+      # - SMTP_HOST=smtp.example.com:465
+      # - SMTP_USERNAME=notify@tunan.fun
+      # - SMTP_PASSWORD=CHANGE_ME
+
+      - TIME_ZONE=Asia/Shanghai
+      - DEBUG=false
+
+    volumes:
+      - ./var:/srv/var

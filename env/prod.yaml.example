@@ -1,0 +1,33 @@
+# 生产配置模板
+# 用法: 拷贝到服务器 /opt/tunan-blog/env/prod.yaml 并填入真实值 (chmod 600)
+# 所有 CHANGE_ME 用 openssl rand -hex 32 生成 (admin_password 除外)
+
+database_type: mysql
+
+sqlite3:
+  file: ./data/sqlite.db
+
+mysql:
+  host: gateway01.xx.prod.aws.tidbcloud.com   # TiDB Connect 对话框里的 host
+  port: 4000
+  username: "<prefix>.root"
+  password: "CHANGE_ME"
+  database: tunan
+  tls: true                                   # TiDB Cloud 强制 TLS,必须 true
+
+apikey: "CHANGE_ME"                           # RSS 接口的 ?apikey=
+
+website:
+  url: https://tunan.fun
+  title: CHANGE_ME
+  description: CHANGE_ME
+  follow_feed_id: CHANGE_ME                   # Follow 订阅验证用,没有就留空字符串
+  follow_user_id: CHANGE_ME
+
+auth:
+  # 管理后台密码: 首次可以填明文,启动日志会打印 bcrypt 哈希,把哈希回填到这里再重启
+  admin_password: "CHANGE_ME"
+  jwt_secret: "CHANGE_ME"
+
+github:
+  token: ""                                   # GitHub API token(ui 端 GitHubActivity 用,可留空)
