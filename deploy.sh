@@ -55,5 +55,17 @@ sleep 3
 echo "==> 服务状态"
 ssh -i "$SSH_KEY" "$SSH_HOST" "systemctl is-active tunan-blog tunan-ui tunan-admin && free -m | head -2"
 
+echo "==> 静态资源一致性校验(HTML 引用的 chunk 必须全部可访问)"
+BROKEN=$(ssh -i "$SSH_KEY" "$SSH_HOST" 'curl -s http://127.0.0.1:3000/zh-CN | grep -o "/_next/static/[^\"]*" | sort -u | while read -r u; do
+  code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000$u")
+  [ "$code" = "200" ] || echo "404 $u"
+done')
+if [ -n "$BROKEN" ]; then
+  echo "❌ 以下静态资源 404,构建产物与静态目录不一致,部署失败:"
+  echo "$BROKEN"
+  exit 1
+fi
+echo "✅ 全部可访问"
+
 echo ""
 echo "✨ 部署完成。查看日志: ssh $SSH_HOST -- sudo journalctl -u tunan-ui -n 50 --no-pager"
