@@ -42,7 +42,7 @@ chmod 600 /home/deploy/.ssh/authorized_keys
 
 # deploy 只能重启/查看 tunan-* 服务和看日志,不能任意 root
 cat > /etc/sudoers.d/deploy <<'SUDO'
-deploy ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart tunan-blog tunan-ui tunan-admin, /usr/bin/systemctl status tunan-blog tunan-ui tunan-admin, /usr/bin/systemctl start tunan-blog, /usr/bin/systemctl stop tunan-blog, /usr/bin/journalctl -u tunan-blog -n 100 --no-pager, /usr/bin/journalctl -u tunan-ui -n 100 --no-pager, /usr/bin/journalctl -u tunan-admin -n 100 --no-pager
+deploy ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart tunan-blog tunan-ui tunan-admin, /usr/bin/systemctl restart tunan-blog, /usr/bin/systemctl restart tunan-ui, /usr/bin/systemctl restart tunan-admin, /usr/bin/systemctl status tunan-blog tunan-ui tunan-admin, /usr/bin/systemctl status tunan-blog, /usr/bin/systemctl status tunan-ui, /usr/bin/systemctl status tunan-admin, /usr/bin/systemctl start tunan-blog, /usr/bin/systemctl stop tunan-blog, /usr/bin/journalctl -u tunan-blog -n 100 --no-pager, /usr/bin/journalctl -u tunan-ui -n 100 --no-pager, /usr/bin/journalctl -u tunan-admin -n 100 --no-pager
 SUDO
 chmod 440 /etc/sudoers.d/deploy
 visudo -c

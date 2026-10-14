@@ -17,6 +17,13 @@ echo "==> deploy 用户加入 docker 组(管理 remark42 容器)"
 usermod -aG docker deploy 2>/dev/null || true
 id deploy | tr ',' '\n' | grep docker || echo "   (已是组成员)"
 
+echo "==> 更新 sudo 白名单(与 server-init.sh 保持一致,支持单服务重启)"
+cat > /etc/sudoers.d/deploy <<'SUDO'
+deploy ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart tunan-blog tunan-ui tunan-admin, /usr/bin/systemctl restart tunan-blog, /usr/bin/systemctl restart tunan-ui, /usr/bin/systemctl restart tunan-admin, /usr/bin/systemctl status tunan-blog tunan-ui tunan-admin, /usr/bin/systemctl status tunan-blog, /usr/bin/systemctl status tunan-ui, /usr/bin/systemctl status tunan-admin, /usr/bin/systemctl start tunan-blog, /usr/bin/systemctl stop tunan-blog, /usr/bin/journalctl -u tunan-blog -n 100 --no-pager, /usr/bin/journalctl -u tunan-ui -n 100 --no-pager, /usr/bin/journalctl -u tunan-admin -n 100 --no-pager
+SUDO
+chmod 440 /etc/sudoers.d/deploy
+visudo -c >/dev/null && echo "   sudoers 校验通过"
+
 echo "==> 安装 systemd 服务单元"
 install -m 644 /tmp/tunan-blog.service /tmp/tunan-ui.service /tmp/tunan-admin.service /etc/systemd/system/
 systemctl daemon-reload

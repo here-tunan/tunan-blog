@@ -46,9 +46,18 @@ bash deploy/deploy.sh
 ## 服务器常用命令
 
 ```bash
+bash deploy/restart.sh                    # 重启全部(不重新构建)
+bash deploy/restart.sh restart ui         # 只重启前端(blog/ui/admin 可选)
+bash deploy/restart.sh status             # 看三个服务状态
+bash deploy/restart.sh logs blog          # 看后端最近 100 行日志
+```
+
+或直接上服务器:
+
+```bash
 ssh -i ~/.ssh/tunan_vps deploy@<IP>
 systemctl is-active tunan-blog tunan-ui tunan-admin   # 状态
-sudo systemctl restart tunan-blog tunan-ui tunan-admin # 重启(deploy 账号唯一免密 sudo)
+sudo systemctl restart tunan-blog tunan-ui tunan-admin # 重启(deploy 账号只能执行白名单内的 systemctl 命令)
 sudo journalctl -u tunan-ui -n 100 --no-pager          # 看日志
 docker compose -f /opt/deploy/remark42/docker-compose.yml ps  # 评论系统状态
 ```
