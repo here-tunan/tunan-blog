@@ -5,6 +5,15 @@
 tunan.fun {
 	tls /etc/caddy/ssl/origin.pem /etc/caddy/ssl/origin.key
 
+	# Next standalone 14.1.4 服务不了路径带 [动态段] 的静态 chunk(%5B 解码后被路由拦截,404),
+	# 由 Caddy 直接读盘:URL /_next/static/... 映射到磁盘 /opt/tunan-ui/.next/static/...
+	handle /_next/static/* {
+		uri strip_prefix /_next
+		root * /opt/tunan-ui/.next
+		file_server
+		header Cache-Control "public, max-age=31536000, immutable"
+	}
+
 	# API → Go 后端
 	handle /api/* {
 		reverse_proxy 127.0.0.1:3002
