@@ -2,29 +2,27 @@
 # 部署脚本 - 本地构建 + rsync,服务器上不再跑任何 npm/go build(1G 内存扛不住)
 #
 # 前置:
-#   1. 在项目根目录创建 .env.deploy(已被 .gitignore 忽略,严禁提交),内容:
+#   1. 在 deploy/ 目录创建 .env.deploy(已被 .gitignore 忽略,严禁提交),内容:
 #        SSH_HOST=deploy@<你的VPS_IP>
 #        SSH_KEY=$HOME/.ssh/tunan_vps
 #   2. 服务器上已放好 /opt/tunan-blog/env/prod.yaml(参考 env/prod.yaml.example)
 #   3. 本机 ssh 免密可达
-# 用法: ./deploy.sh
+# 用法: 在项目根目录执行  bash deploy/deploy.sh
 set -euo pipefail
 
-if [ -f .env.deploy ]; then
-  source .env.deploy
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+cd "$ROOT_DIR"
+
+if [ -f "$SCRIPT_DIR/.env.deploy" ]; then
+  source "$SCRIPT_DIR/.env.deploy"
 fi
 SSH_HOST="${SSH_HOST:-}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/tunan_vps}"
 if [ -z "$SSH_HOST" ]; then
-  echo "❌ 未配置 SSH_HOST:请创建 .env.deploy(参考 deploy.sh 头部注释),不要把 IP 写进本脚本"
+  echo "❌ 未配置 SSH_HOST:请创建 deploy/.env.deploy(参考本脚本头部注释),不要把 IP 写进本脚本"
   exit 1
 fi
-
-echo "================================="
-echo "🚀 Tunan Blog 部署(本地构建 → rsync)"
-echo "================================="
-
-cd "$(dirname "$0")"
 
 echo "==> 构建后端(CGO_ENABLED=0 静态编译,prod 只用 MySQL)"
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /tmp/tunan-blog-linux ./cmd/tunan-blog

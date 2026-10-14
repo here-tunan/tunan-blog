@@ -29,6 +29,8 @@ if [ -f /tmp/Caddyfile ]; then
   if [ -f /tmp/origin.pem ] && [ -f /tmp/origin.key ]; then
     install -m 600 /tmp/origin.pem /etc/caddy/ssl/origin.pem
     install -m 600 /tmp/origin.key /etc/caddy/ssl/origin.key
+    # caddy 服务以 caddy 用户运行,证书必须可读(否则 reload 报 permission denied)
+    chown caddy:caddy /etc/caddy/ssl/origin.pem /etc/caddy/ssl/origin.key
     echo "   证书已安装"
   else
     echo "   ⚠️ 缺 /tmp/origin.pem 或 /tmp/origin.key,证书跳过"
