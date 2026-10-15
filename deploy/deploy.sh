@@ -76,7 +76,8 @@ echo "==> 服务状态"
 SSH "systemctl is-active $RESTART && free -m | head -2"
 
 echo "==> 静态资源一致性校验(HTML 引用的 chunk 必须全部可访问)"
-BROKEN=$(SSH 'curl -s http://127.0.0.1:3000/zh-CN | grep -o "/_next/static/[^\"]*" | sort -u | while read -r u; do
+# sed 剥掉 RSC 转义引号前的反斜杠,避免 URL 尾部带 \ 造成误报
+BROKEN=$(SSH 'curl -s http://127.0.0.1:3000/zh-CN | grep -o "/_next/static/[^\"]*" | sed "s/\\\\*$//" | sort -u | while read -r u; do
   code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000$u")
   [ "$code" = "200" ] || echo "404 $u"
 done')
