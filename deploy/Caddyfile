@@ -45,6 +45,5 @@ www.tunan.fun {
 }
 
 remark42.tunan.fun {
-	tls /etc/caddy/ssl/origin.pem /etc/caddy/ssl/origin.key
 	reverse_proxy 127.0.0.1:8080
 }

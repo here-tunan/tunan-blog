@@ -29,6 +29,13 @@ export default function RootLayout({
         />
       </head>
       <body className="relative bg-skin-base">
+        {/* Cloudflare Web Analytics(手动安装模式;token 是公开埋点值,非密钥) */}
+        <script
+          type="module"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "8cb37c8b616f4677a7b5c3bfd4ce2c5a"}'
+          async
+        />
         {children}
       </body>
     </html>
