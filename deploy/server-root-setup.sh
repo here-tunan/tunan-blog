@@ -24,6 +24,15 @@ SUDO
 chmod 440 /etc/sudoers.d/deploy
 visudo -c >/dev/null && echo "   sudoers 校验通过"
 
+echo "==> 注入 RSS apikey 到 caddy 环境(供 /rss.xml 转译 /api/rss 用)"
+APIKEY=$(awk '/^apikey:/ {print $2; exit}' /opt/tunan-blog/env/prod.yaml | tr -d '"')
+mkdir -p /etc/systemd/system/caddy.service.d
+cat > /etc/systemd/system/caddy.service.d/rss-apikey.conf <<EOF
+[Service]
+Environment=RSS_APIKEY=${APIKEY}
+EOF
+chmod 600 /etc/systemd/system/caddy.service.d/rss-apikey.conf
+
 echo "==> 安装 systemd 服务单元"
 install -m 644 /tmp/tunan-blog.service /tmp/tunan-ui.service /tmp/tunan-admin.service /etc/systemd/system/
 systemctl daemon-reload
@@ -43,7 +52,8 @@ if [ -f /tmp/Caddyfile ]; then
     echo "   ⚠️ 缺 /tmp/origin.pem 或 /tmp/origin.key,证书跳过"
   fi
   install -m 644 /tmp/Caddyfile /etc/caddy/Caddyfile
-  if caddy validate --config /etc/caddy/Caddyfile >/dev/null 2>&1 && systemctl reload caddy; then
+  # 环境变量(RSS apikey)变了,必须 restart 才生效,reload 不读新环境
+  if caddy validate --config /etc/caddy/Caddyfile >/dev/null 2>&1 && systemctl restart caddy; then
     echo "   Caddyfile 已生效"
   else
     echo "   ⚠️ Caddy 配置未生效(通常因缺证书),证书就位后重跑本脚本即可"

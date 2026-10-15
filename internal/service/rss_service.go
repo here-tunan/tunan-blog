@@ -3,10 +3,6 @@ package service
 import (
 	"encoding/xml"
 	"fmt"
-	"log"
-	_ "log"
-	"os"
-	"os/exec"
 	"regexp"
 	"strings"
 	"time"
@@ -16,25 +12,21 @@ import (
 
 // Item RSS 项结构体
 type Item struct {
-	Title          string `xml:"title"`
-	Link           string `xml:"link"`
-	Description    string `xml:"description"`
-	ContentEncoded string `xml:"content:encoded"`
-	PubDate        string `xml:"pubDate"`
+	Title       string `xml:"title"`
+	Link        string `xml:"link"`
+	Description string `xml:"description"`
+	PubDate     string `xml:"pubDate"`
 }
 
 // RSS 结构体
 type RSS struct {
-	XMLName      xml.Name `xml:"rss"`
-	Version      string   `xml:"version,attr"`
-	Channel      Channel  `xml:"channel"`
-	XmlnsDc      string   `xml:"xmlns:dc,attr"`
-	XmlnsContent string   `xml:"xmlns:content,attr"`
-	XmlnsAtom    string   `xml:"xmlns:atom,attr"`
-	XmlnsItunes  string   `xml:"xmlns:itunes,attr"`
+	XMLName   xml.Name `xml:"rss"`
+	Version   string   `xml:"version,attr"`
+	XmlnsAtom string   `xml:"xmlns:atom,attr"`
+	Channel   Channel  `xml:"channel"`
 }
 
-// Channel RSS 项结构体
+// Channel RSS 频道
 type Channel struct {
 	Title       string       `xml:"title"`
 	Link        string       `xml:"link"`
@@ -43,7 +35,7 @@ type Channel struct {
 	Items       []Item       `xml:"item"`
 }
 
-// FollowChange 用于follow feed 的claim
+// FollowChange 用于 follow feed 的 claim
 type FollowChange struct {
 	FeedId string `xml:"feedId"`
 	UserId string `xml:"userId"`
@@ -73,7 +65,10 @@ func generateSummary(content string, maxLength int) string {
 	return cleaned
 }
 
-func RssXmlCreat() error {
+// RssXmlBytes 实时生成 RSS XML。
+// 旧实现写 rss.xml 文件到进程目录并调用外部 pandoc,新架构下由
+// /api/rss 直接返回字节流,Caddy 把 /rss.xml 转译到这个接口。
+func RssXmlBytes() ([]byte, error) {
 	param := repository.ArticleQueryParam{
 		PageSize:  20,
 		PageIndex: 1,
@@ -85,46 +80,27 @@ func RssXmlCreat() error {
 	articleList, _, _ := QueryArticle(param)
 
 	if len(articleList) == 0 {
-		return fmt.Errorf("no articles found")
+		return nil, fmt.Errorf("no articles found")
 	}
 
 	var items []Item
-	// 遍历列表
 	for _, article := range articleList {
-		// 生成文章摘要（约200字符）
-		summary := generateSummary(article.Content, 200)
-
-		// 使用 Pandoc 转换 Markdown 为 HTML
-		cmd := exec.Command("pandoc", "-f", "markdown", "-t", "html")
-		cmd.Stdin = strings.NewReader(article.Content)
-		htmlOutput, err := cmd.Output()
-		if err != nil {
-			log.Printf("Pandoc error for ID %d: %v", article.Id, err)
-			continue
-		}
-
-		// 创建 RSS 项
 		item := Item{
-			Title:          article.Title,
-			Link:           fmt.Sprintf("%s/blog/%s", env.Prop.Website.Url, article.Slug),
-			Description:    summary,            // 使用摘要而不是标题
-			ContentEncoded: string(htmlOutput), // 使用完整内容
-			PubDate:        article.GmtCreate.Format(time.RFC822),
+			Title:       article.Title,
+			Link:        fmt.Sprintf("%s/%s/blog/%s", env.Prop.Website.Url, repository.DefaultLanguageCode, article.Slug),
+			Description: generateSummary(article.Content, 200),
+			PubDate:     article.GmtCreate.Format(time.RFC822),
 		}
 		items = append(items, item)
 	}
 
-	// 创建 RSS 结构体
 	rss := RSS{
-		Version:      "2.0",
-		XmlnsDc:      "http://purl.org/dc/elements/1.1/",
-		XmlnsContent: "http://purl.org/rss/1.0/modules/content/",
-		XmlnsAtom:    "http://www.w3.org/2005/Atom",
-		XmlnsItunes:  "http://www.itunes.com/dtds/podcast-1.0.dtd",
+		Version:   "2.0",
+		XmlnsAtom: "http://www.w3.org/2005/Atom",
 		Channel: Channel{
-			Title:       env.Prop.Website.Title,       // 替换成你的 RSS 标题
-			Link:        env.Prop.Website.Url,         // 替换成你的 RSS 链接
-			Description: env.Prop.Website.Description, // 替换成你的 RSS 描述
+			Title:       env.Prop.Website.Title,
+			Link:        env.Prop.Website.Url,
+			Description: env.Prop.Website.Description,
 			Follow: FollowChange{
 				FeedId: env.Prop.Website.FollowFeedId,
 				UserId: env.Prop.Website.FollowUserId,
@@ -133,18 +109,10 @@ func RssXmlCreat() error {
 		},
 	}
 
-	// 将 RSS 数据编码为 XML
 	xmlData, err := xml.MarshalIndent(rss, "", "  ")
 	if err != nil {
-		return fmt.Errorf("failed to marshal RSS XML: %v", err)
+		return nil, fmt.Errorf("failed to marshal RSS XML: %v", err)
 	}
 
-	// 输出 XML 文件
-	err = os.WriteFile("rss.xml", xmlData, 0644)
-	if err != nil {
-		return fmt.Errorf("failed to write RSS file: %v", err)
-	}
-
-	fmt.Println("RSS feed generated successfully!")
-	return nil
+	return []byte(xml.Header + string(xmlData)), nil
 }
