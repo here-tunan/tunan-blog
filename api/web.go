@@ -107,7 +107,6 @@ func Start() {
 	admin.Get("/analytics/path-views", GetPathViewAnalytics)
 
 	// RSS generation route
-	admin.Post("/rss/generate", GenerateRSSAdmin)
 
 	// Device App management routes
 	admin.Get("/device-apps", GetAllDeviceAppsAdmin)

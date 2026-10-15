@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { Table, Typography, message, Spin, Button, Card, Space } from 'antd';
-import { CloudDownloadOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
 import { apiRequestJson } from '@/lib/api';
 
@@ -32,7 +31,6 @@ const columns: TableProps<PathViewData>['columns'] = [
 const DashboardPage = () => {
   const [data, setData] = useState<PathViewData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [rssLoading, setRssLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,45 +48,16 @@ const DashboardPage = () => {
     fetchData();
   }, []);
 
-  const handleGenerateRSS = async () => {
-    setRssLoading(true);
-
-    try {
-      const result = await apiRequestJson('/admin/rss/generate', {
-        method: 'POST',
-      });
-      message.success(result.message || 'RSS feed generated successfully!');
-    } catch (error) {
-      console.error(error);
-      message.error('Failed to generate RSS feed.');
-    } finally {
-      setRssLoading(false);
-    }
-  };
-
   return (
     <div>
       <Title level={2}>Analytics Dashboard</Title>
-      
+
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <Card title="RSS Management" size="small">
-          <Space>
-            <Button 
-              type="primary" 
-              icon={<CloudDownloadOutlined />}
-              loading={rssLoading}
-              onClick={handleGenerateRSS}
-            >
-              Generate RSS Feed
-            </Button>
-            <Button 
-              type="link" 
-              href="/rss.xml" 
-              target="_blank"
-            >
-              View Current RSS
-            </Button>
-          </Space>
+        <Card title="RSS" size="small">
+          {/* RSS 是 /rss.xml 实时生成的,不再需要手动触发 */}
+          <Button type="link" href="/rss.xml" target="_blank">
+            View Current RSS
+          </Button>
         </Card>
 
         <Card title="Page Views Analytics" size="small">

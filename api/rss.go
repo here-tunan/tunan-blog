@@ -23,16 +23,3 @@ func RssMount() *fiber.App {
 
 	return app
 }
-
-// GenerateRSSAdmin 管理后台的"生成RSS"按钮(兼容保留)
-func GenerateRSSAdmin(c *fiber.Ctx) error {
-	if _, err := service.RssXmlBytes(); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":   "Failed to generate RSS",
-			"message": err.Error(),
-		})
-	}
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "RSS 由 https://tunan.fun/rss.xml 实时提供,无需手动生成",
-	})
-}
