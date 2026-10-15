@@ -60,10 +60,8 @@ if [ -z "${BK:-}" ]; then
   FAILED=1
 else
   echo "    拉取到备份: $(basename "$BK")"
-  # remark42 的 restore 不认任意文件名:它按模板 userbackup-<SITE>-<YYYYMMDD>.gz
-  # 找"UTC 当天"的文件(可传日期参数指定)。演练把最新备份复制成它要的名字。
-  UTC_TODAY=$(date -u +%Y%m%d)
-  cp "$BK" "$DRILL/var/backup/userbackup-tunan-remark-$UTC_TODAY.gz"
+  # remark42 的 restore 按模板 userbackup-<SITE>-<YYYYMMDD>.gz 找"它自己时区"的今天的文件
+  # (镜像硬编码 America/Chicago,和宿主机差一天)。容器起来后直接问它今天是几号。
   docker run --rm -d --name remark42-drill -p 127.0.0.1:18080:8080 \
     -v "$DRILL/var:/srv/var" \
     -e REMARK_URL=http://127.0.0.1:18080 -e SITE=tunan-remark \
@@ -72,11 +70,18 @@ else
     -e BACKUP_PATH=/srv/var/backup -e STORE_BOLT_PATH=/srv/var/db \
     umputun/remark42:v1.18.0 >/dev/null
   sleep 6
+  CDATE=$(docker exec remark42-drill date +%Y%m%d)
+  cp "$BK" "$DRILL/var/backup/userbackup-tunan-remark-$CDATE.gz"
+  cp "$BK" "$DRILL/var/backup/userbackup-tunan-remark-$(date -u +%Y%m%d).gz" 2>/dev/null || true
+  echo "    [调试] 容器内 /srv/var/backup/:"
+  docker exec remark42-drill ls -la /srv/var/backup/ || true
   if docker exec remark42-drill restore; then
     echo "    ✓ restore 成功(容器退出码 0)"
   else
-    echo "    ❌ restore 失败"
+    echo "    ❌ restore 失败(现场已保留在 $DRILL,不清理)"
+    docker rm -f remark42-drill >/dev/null
     FAILED=1
+    exit 1
   fi
   docker rm -f remark42-drill >/dev/null
 fi
