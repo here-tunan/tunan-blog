@@ -17,7 +17,8 @@
 - **后端**: Go (Golang)，使用 [Fiber](https://gofiber.io/) Web 框架。
 - **前台 (公开)**: [Next.js](https://nextjs.org/) (React), TypeScript, Tailwind CSS。
 - **前台 (管理)**: [Next.js](https://nextjs.org/) (React), TypeScript, [Ant Design](https://ant.design/)。
-- **数据库**: 设计上兼容 MySQL 和 SQLite。
+- **数据库**: 兼容 MySQL、SQLite，以及 TiDB Cloud 等 MySQL 协议的托管服务。
+- **生产环境**: Caddy 反向代理、Cloudflare CDN、Remark42 评论系统(Docker)、每日备份至 Cloudflare R2。
 
 ### 为什么同时支持 MySQL 和 SQLite？
 
@@ -123,7 +124,7 @@
 
 ### 低配置服务器性能说明
 
-如果你的服务器性能很差（比如和我的一样是1核1G的），那么你在服务器上运行 `npm install` 和 `npm run build` 可能会有问题，但这里有相应的简单的解决方案，请见我的博客文章：[npm install ends with "Killed"](https://www.tunan.fun/blog/personal-cloud-server-tools#%E9%85%8D%E7%BD%AE%E5%A4%AA%E4%BD%8E%E5%AF%BC%E8%87%B4%E7%9A%84-npm-install-ends-with-killed-%E7%9A%84%E5%A4%84%E7%90%86)。
+生产环境流程**完全不在服务器上构建**——所有产物在本地编译后通过 `deploy/deploy.sh` 推送，1 核 1G 的 VPS 绰绰有余（详见 [deploy/README.md](deploy/README.md)）。想了解旧版在服务器上跑 `npm install`/`npm run build` 的血泪史，可以看这篇博客文章：[npm install ends with "Killed"](https://www.tunan.fun/blog/personal-cloud-server-tools#%E9%85%8D%E7%BD%AE%E5%A4%AA%E4%BD%8E%E5%AF%BC%E8%87%B4%E7%9A%84-npm-install-ends-with-killed-%E7%9A%84%E5%A4%84%E7%90%86)。
 
 ## 配置说明
 
@@ -142,17 +143,18 @@ sqlite3:
   file: /path/to/your/database.db
 ```
 
-#### 使用 MySQL
+#### 使用 MySQL（或 TiDB Cloud）
 ```yaml
 # 数据库类型: sqlite3 或 mysql
 database_type: mysql
 
 mysql:
-  host: 127.0.0.1
-  port: 3306
+  host: 127.0.0.1          # 也可以是 TiDB Cloud 等托管服务
+  port: 3306               # TiDB Cloud 使用 4000
   username: 你的用户名
   password: 你的密码
   database: 你的数据库名
+  tls: true                # TiDB Cloud 及大多数托管 MySQL 服务必需
 ```
 
 **重要说明：**
@@ -160,6 +162,7 @@ mysql:
 - 确保在运行应用前先创建 MySQL 数据库
 - 根据你选择的数据库使用相应的架构文件：
   - MySQL: `schema.sql`
+  - TiDB Cloud: `schema_tidb.sql`
   - SQLite: `schema_sqlite.sql`
 
 ### 多语言文章
@@ -216,7 +219,13 @@ website:
 
 ### 生产环境部署
 
-如果你要在自己的服务器上部署你的博客，那我推荐你使用Nginx来做反向代理，这里也有一篇相应的介绍文章：[Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1)。
+生产环境的技术栈：Caddy 反向代理 + Go API + 两个 Next.js 应用（前台/管理）+ Remark42 评论系统（Docker），数据存放在 TiDB Cloud（MySQL 协议），每日自动备份到 Cloudflare R2。
+
+- **部署体系**（服务器初始化、本地构建部署脚本、反向代理、systemd）：[deploy/README.md](deploy/README.md)
+- **备份与灾难恢复手册**：[deploy/backup/README.md](deploy/backup/README.md)
+- 2025 年迁移的**架构决策记录**：[MIGRATION.md](MIGRATION.md)
+
+如果你更喜欢经典的 Nginx 方案，这篇博客文章依然适用：[Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1)。
 
 ## 项目结构
 

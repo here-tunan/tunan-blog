@@ -21,7 +21,8 @@ A full-stack blog application built with Go and Next.js, featuring a modern, fea
 - **Backend**: Go (Golang) with the [Fiber](https://gofiber.io/) web framework.
 - **Frontend (Public)**: [Next.js](https://nextjs.org/) (React), TypeScript, Tailwind CSS.
 - **Frontend (Admin)**: [Next.js](https://nextjs.org/) (React), TypeScript, [Ant Design](https://ant.design/).
-- **Database**: Designed to be compatible with MySQL and SQLite.
+- **Database**: Compatible with MySQL, SQLite and MySQL-protocol managed services such as TiDB Cloud.
+- **Production**: Caddy reverse proxy, Cloudflare CDN, Remark42 (comments, Docker), daily backups to Cloudflare R2.
 
 ### Why Support Both MySQL and SQLite?
 
@@ -129,7 +130,7 @@ To get a local copy up and running, follow these simple steps.
 
 ### Performance Notes for Low-Spec Servers
 
-If you're running on a low-spec server (like 1-core, 1GB RAM), you might encounter issues with `npm install` and `npm run build`. For solutions to common problems like "npm install ends with 'Killed'", please see this blog post: [npm install ends with "Killed"](https://www.tunan.fun/blog/personal-cloud-server-tools#%E9%85%8D%E7%BD%AE%E5%A4%AA%E4%BD%8E%E5%AF%BC%E8%87%B4%E7%9A%84-npm-install-ends-with-killed-%E7%9A%84%E5%A4%84%E7%90%86).
+The production flow never builds on the server — everything is compiled locally and pushed with `deploy/deploy.sh`, so even a 1-core/1GB VPS is more than enough (see [deploy/README.md](deploy/README.md)). Curious about the old on-server `npm install`/`npm run build` struggles? See this blog post: [npm install ends with "Killed"](https://www.tunan.fun/blog/personal-cloud-server-tools#%E9%85%8D%E7%BD%AE%E5%A4%AA%E4%BD%8E%E5%AF%BC%E8%87%B4%E7%9A%84-npm-install-ends-with-killed-%E7%9A%84%E5%A4%84%E7%90%86).
 
 ## Configuration
 
@@ -148,17 +149,18 @@ sqlite3:
   file: /path/to/your/database.db
 ```
 
-#### Using MySQL
+#### Using MySQL (or TiDB Cloud)
 ```yaml
 # Database type: sqlite3 or mysql
 database_type: mysql
 
 mysql:
-  host: 127.0.0.1
-  port: 3306
+  host: 127.0.0.1        # or a managed service such as TiDB Cloud
+  port: 3306             # TiDB Cloud uses 4000
   username: your_username
   password: your_password
   database: your_database_name
+  tls: true              # required by TiDB Cloud and most managed MySQL services
 ```
 
 **Important Notes:**
@@ -166,6 +168,7 @@ mysql:
 - Make sure to create your MySQL database before running the application
 - Use the appropriate schema file for your chosen database:
   - For MySQL: `schema.sql`
+  - For TiDB Cloud: `schema_tidb.sql`
   - For SQLite: `schema_sqlite.sql`
 
 ### Multilingual Articles
@@ -222,12 +225,12 @@ website:
 
 ### RSS Feed Configuration
 
-The RSS feed is automatically generated with optimized article summaries for better performance:
+The RSS feed is generated on-the-fly by the backend and served at `https://<your-domain>/rss.xml`:
 
-- **Location**: Generated at `/rss.xml` in the project root
-- **Content**: Article summaries (approximately 200 characters) instead of full content
-- **Auto-Discovery**: Meta tags are automatically included in the HTML head for RSS reader detection
-- **Management**: Use the admin panel dashboard to generate/update the RSS feed with one click
+- **Content**: latest 20 articles with ~200-character summaries
+- **Auto-Discovery**: meta tags are automatically included in the HTML head for RSS reader detection
+- **No manual steps**: the feed is rendered live on every request — there is nothing to build or generate
+- Folo/Follow claim IDs are configured via `follow_feed_id` / `follow_user_id` (see above)
 
 ### Social Links Configuration
 
@@ -239,23 +242,29 @@ Update the social media links in the navigation component (`ui/app/components/Na
 
 ### IP Address Tracking
 
-For accurate visitor IP tracking behind reverse proxies (nginx):
+The backend trusts `X-Forwarded-For` only from loopback proxies (`TrustedProxies: 127.0.0.1`), so any local reverse proxy works:
 
-1. **Fiber Configuration**: The app is configured to trust proxy headers
-2. **Nginx Setup**: Ensure your nginx configuration passes the real client IP:
-   ```nginx
-   location /api/ {
-       proxy_pass http://localhost:3002;
-       proxy_set_header X-Real-IP $remote_addr;
-       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-       proxy_set_header X-Forwarded-Proto $scheme;
-       proxy_set_header Host $host;
-   }
-   ```
+- **Caddy (production)**: sets `X-Forwarded-For` automatically — nothing to configure
+- **Nginx (if you self-host with nginx instead)**: pass the real client IP:
+  ```nginx
+  location /api/ {
+      proxy_pass http://localhost:3002;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $host;
+  }
+  ```
 
-### Production Deployment with Nginx
+### Production Deployment
 
-If you want to deploy your blog on your own server, we recommend using Nginx as a reverse proxy. For detailed guidance on Nginx multi-domain configuration and HTTPS certificates, see: [Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1).
+The production stack runs a Go API, two Next.js apps (public site + admin) and Remark42 (comments, Docker) behind a Caddy reverse proxy, with data in MySQL-compatible TiDB Cloud and daily encrypted backups to Cloudflare R2.
+
+- **Deployment system** (server init, local-build deploy script, reverse proxy, systemd): [deploy/README.md](deploy/README.md)
+- **Backup & disaster-recovery manual**: [deploy/backup/README.md](deploy/backup/README.md)
+- **Architecture decisions** from the 2025 migration: [MIGRATION.md](MIGRATION.md)
+
+If you prefer a classic nginx setup, this blog post still applies: [Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1).
 
 ## Project Structure
 
