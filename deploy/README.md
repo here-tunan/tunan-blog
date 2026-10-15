@@ -43,6 +43,49 @@ bash deploy/deploy.sh
 | Remark42 SECRET | 服务器 `/opt/deploy/remark42/docker-compose.yml` | `openssl rand -hex 32` |
 | R2 备份密钥 | 服务器 `/opt/tunan-blog/db-backup.env`(600) | rclone 远端名叫 `r2` |
 
+## 备份与恢复
+
+### 备份了什么(每天 3:15,root cron,脚本 `backup.sh`)
+
+| 内容 | R2 路径 | 来源 |
+|---|---|---|
+| TiDB 全库 dump(gzip) | `r2:blog-backup/mysql/` | mariadb-dump over TLS |
+| 服务器配置包(prod.yaml、db-backup.env、.env.local、remark42 compose) | `r2:blog-backup/config/` | tar 打包,**桶是私有的,密钥入桶是设计决定** |
+| Remark42 全部评论 | `r2:blog-backup/remark42/` | 容器内置 backup 命令 |
+
+本地 `/var/backups/tunan/` 与 R2 同步保留 30 天滚动窗口。
+
+### rclone(云存储同步工具,备份的唯一出口)
+
+- 角色:把服务器上的备份文件推到 Cloudflare R2(S3 协议),相当于"面向对象存储的 rsync"
+- 配置位置:**仅 root** 的 `/root/.config/rclone/rclone.conf`(600),远端名叫 `r2`
+  —— 故意不给 deploy 账号:能删备份的权限越小,勒索/误删的风险越小
+- 常用操作(在服务器 root 会话):
+
+```bash
+rclone lsd r2:                      # 列出所有桶
+rclone ls r2:blog-backup/mysql/     # 列出所有数据库备份
+rclone copy r2:blog-backup/mysql/ /tmp/restore/   # 拉一份备份下来
+```
+
+### 灾难恢复流程
+
+**只丢数据库**(误删文章等):
+
+```bash
+# 服务器 root 会话
+rclone copy r2:blog-backup/mysql/ /tmp/restore/
+gunzip < /tmp/restore/mysql-<日期>.sql.gz | \
+  mariadb -h "$TIDB_HOST" -P "$TIDB_PORT" -u "$TIDB_USER" -p"$TIDB_PASS" \
+  --ssl tunan   # source /opt/tunan-blog/db-backup.env 后可用这些变量
+```
+
+**评论丢失**:拉回 `r2:blog-backup/remark42/` 里的文件放到
+`/opt/deploy/remark42/var/backup/`,然后 `docker exec remark42 restore <文件名>`。
+
+**整台服务器没了**(忘续费/被删):新 VPS 上按"首次部署"流程走一遍,
+在第 4 步前先从 R2 拉 `config/` 包解开恢复各配置文件,最后一步部署完即满血复活。
+
 ## 服务器常用命令
 
 ```bash
