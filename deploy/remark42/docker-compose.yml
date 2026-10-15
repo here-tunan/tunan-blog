@@ -35,6 +35,10 @@ services:
       # 允许匿名评论(保留 Remark42 的核心原因)
       - AUTH_ANON=true
 
+      # CLI 备份/恢复(docker exec remark42 backup)必需:走管理 API 鉴权。
+      # 真实值在服务器上的本文件里(openssl rand -hex 16 生成),切勿提交
+      # - ADMIN_PASSWD=CHANGE_ME_ON_SERVER
+
       # 管理员:格式为 provider_id,如 github_12345678 或 anonymous_xxxxxxxx
       # TODO: 填你自己的账号 id
       - ADMIN_SHARED_ID=CHANGE_ME
