@@ -59,7 +59,11 @@ if [ -z "${BK:-}" ]; then
   echo "    ❌ R2 里没有 remark42 备份文件"
   FAILED=1
 else
-  echo "    使用备份: $(basename "$BK")"
+  echo "    拉取到备份: $(basename "$BK")"
+  # remark42 的 restore 不认任意文件名:它按模板 userbackup-<SITE>-<YYYYMMDD>.gz
+  # 找"UTC 当天"的文件(可传日期参数指定)。演练把最新备份复制成它要的名字。
+  UTC_TODAY=$(date -u +%Y%m%d)
+  cp "$BK" "$DRILL/var/backup/userbackup-tunan-remark-$UTC_TODAY.gz"
   docker run --rm -d --name remark42-drill -p 127.0.0.1:18080:8080 \
     -v "$DRILL/var:/srv/var" \
     -e REMARK_URL=http://127.0.0.1:18080 -e SITE=tunan-remark \
@@ -68,7 +72,7 @@ else
     -e BACKUP_PATH=/srv/var/backup -e STORE_BOLT_PATH=/srv/var/db \
     umputun/remark42:v1.18.0 >/dev/null
   sleep 6
-  if docker exec remark42-drill restore "$(basename "$BK")"; then
+  if docker exec remark42-drill restore; then
     echo "    ✓ restore 成功(容器退出码 0)"
   else
     echo "    ❌ restore 失败"
