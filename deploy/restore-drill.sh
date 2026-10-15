@@ -64,12 +64,12 @@ else
   # (镜像硬编码 America/Chicago,和宿主机差一天)。容器起来后直接问它今天是几号。
   docker run --rm -d --name remark42-drill -p 127.0.0.1:18080:8080 \
     -v "$DRILL/var:/srv/var" \
-    -e REMARK_URL=http://127.0.0.1:18080 -e SITE=tunan-remark \
+    -e REMARK_URL=http://127.0.0.1:8080 -e SITE=tunan-remark \
     -e SECRET=drill-secret -e STORE_TYPE=bolt -e AUTH_ANON=true \
     -e ADMIN_PASSWD=drill-admin \
     -e BACKUP_PATH=/srv/var/backup -e STORE_BOLT_PATH=/srv/var/db \
     umputun/remark42:v1.18.0 >/dev/null
-  sleep 6
+  sleep 8
   CDATE=$(docker exec remark42-drill date +%Y%m%d)
   cp "$BK" "$DRILL/var/backup/userbackup-tunan-remark-$CDATE.gz"
   cp "$BK" "$DRILL/var/backup/userbackup-tunan-remark-$(date -u +%Y%m%d).gz" 2>/dev/null || true
