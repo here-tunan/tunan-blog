@@ -25,13 +25,16 @@ chmod 440 /etc/sudoers.d/deploy
 visudo -c >/dev/null && echo "   sudoers 校验通过"
 
 echo "==> 注入 RSS apikey 到 caddy 环境(供 /rss.xml 转译 /api/rss 用)"
-APIKEY=$(awk '/^apikey:/ {print $2; exit}' /opt/tunan-blog/env/prod.yaml | tr -d '"')
-mkdir -p /etc/systemd/system/caddy.service.d
-cat > /etc/systemd/system/caddy.service.d/rss-apikey.conf <<EOF
-[Service]
-Environment=RSS_APIKEY=${APIKEY}
-EOF
-chmod 600 /etc/systemd/system/caddy.service.d/rss-apikey.conf
+APIKEY=$(awk '/^apikey:/ {print $2; exit}' /opt/tunan-blog/env/prod.yaml 2>/dev/null | tr -d '"')
+if [ -n "$APIKEY" ]; then
+  # 不用 heredoc:外层脚本本身经 <<'EOF' 传入,内层再嵌 heredoc 会提前截断外层
+  mkdir -p /etc/systemd/system/caddy.service.d
+  printf '[Service]\nEnvironment=RSS_APIKEY=%s\n' "$APIKEY" > /etc/systemd/system/caddy.service.d/rss-apikey.conf
+  chmod 600 /etc/systemd/system/caddy.service.d/rss-apikey.conf
+  echo "   已写入 caddy 环境变量"
+else
+  echo "   (跳过:/opt/tunan-blog/env/prod.yaml 尚未创建,首次部署完成后再跑一次本脚本)"
+fi
 
 echo "==> 安装 systemd 服务单元"
 install -m 644 /tmp/tunan-blog.service /tmp/tunan-ui.service /tmp/tunan-admin.service /etc/systemd/system/
