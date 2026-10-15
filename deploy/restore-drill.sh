@@ -65,6 +65,7 @@ else
     -e REMARK_URL=http://127.0.0.1:18080 -e SITE=tunan-remark \
     -e SECRET=drill-secret -e STORE_TYPE=bolt -e AUTH_ANON=true \
     -e ADMIN_PASSWD=drill-admin \
+    -e BACKUP_PATH=/srv/var/backup -e STORE_BOLT_PATH=/srv/var/db \
     umputun/remark42:v1.18.0 >/dev/null
   sleep 6
   if docker exec remark42-drill restore "$(basename "$BK")"; then
