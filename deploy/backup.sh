@@ -28,9 +28,11 @@ TS=$(date +%F)
 mkdir -p "$WORK"
 
 echo "[$(date '+%F %T')] mysqldump ${TIDB_DB} ..."
-# pipefail + set -e:dump 失败会直接中止,绝不会上传空/半截压缩包
+# 注意:不要加 --single-transaction —— 它依赖 SAVEPOINT,TiDB 会报
+# "SAVEPOINT sp does not exist (1305)"。代价是无全局一致性快照(各表读取
+# 时刻略有先后),博客凌晨 3 点几乎无写入,可接受。--skip-lock-tables 避免锁表。
 mariadb-dump -h "$TIDB_HOST" -P "$TIDB_PORT" -u "$TIDB_USER" -p"$TIDB_PASS" \
-  --ssl --ssl-verify-server-cert --single-transaction --quick \
+  --ssl --ssl-verify-server-cert --quick --skip-lock-tables \
   "$TIDB_DB" | gzip > "$WORK/mysql-$TS.sql.gz"
 ls -lh "$WORK/mysql-$TS.sql.gz"
 
