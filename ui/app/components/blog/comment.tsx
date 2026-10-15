@@ -33,7 +33,7 @@ const insertScript = (id: string, parentElement: HTMLElement, remarkLocale: stri
     theme: "${theme}",
     page_title: 'Moving to Remark42',
     locale: '${remarkLocale}',
-    show_email_subscription: false,
+    show_email_subscription: true,
   };
   !function(e,n){for(var o=0;o<e.length;o++){var r=n.createElement("script"),c=".js",d=n.head||n.body;"noModule"in r?(r.type="module",c=".mjs"):r.async=!0,r.defer=!0,r.src=remark_config.host+"/web/"+e[o]+c,d.appendChild(r)}}(remark_config.components||["embed"],document);`;
   parentElement.appendChild(script);
