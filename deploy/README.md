@@ -12,7 +12,9 @@
 | `server-root-setup.sh` | root 侧配置(幂等):systemd 单元、Caddyfile+证书、备份 cron、docker 组 | 本地发起,SSH 到 root 执行 |
 | `Caddyfile` | 反向代理配置:静态 chunk 直读磁盘、/api→3002、/admin→3001、remark42 子域 | `/etc/caddy/Caddyfile` |
 | `systemd/*.service` | 三个服务的单元定义(自动重启、内存上限、环境变量) | `/etc/systemd/system/` |
-| `backup.sh` | 每日备份:TiDB dump + Remark42 内置备份 → rclone → Cloudflare R2 | `/opt/deploy/backup.sh` |
+| `backup/backup.sh` | 每日备份:TiDB dump + Remark42 内置备份 + 配置包 → rclone → Cloudflare R2 | `/opt/deploy/backup.sh` |
+| `backup/restore-drill.sh` | 恢复演练:验证三类备份都可真实恢复(每月手动跑一次) | `/opt/deploy/restore-drill.sh` |
+| `backup/README.md` | **备份与恢复手册:各灾难场景的具体恢复命令,出事先看它** | — |
 | `remark42/` | 评论系统 Docker Compose(v1.18.0,数据落 `./var`) | `/opt/deploy/remark42/` |
 
 ## 日常部署
