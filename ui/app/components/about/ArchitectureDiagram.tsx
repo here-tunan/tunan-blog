@@ -17,7 +17,7 @@ type BoxDef = {
 
 const BOXES: BoxDef[] = [
     {
-        id: "cf", x: 300, y: 104, w: 310, h: 96, emoji: "☁️", accent: "fill-amber-400",
+        id: "cf", x: 180, y: 104, w: 310, h: 96, emoji: "☁️", accent: "fill-amber-400",
         title: { zh: "Cloudflare CDN", en: "Cloudflare CDN" },
         subs: {
             zh: ["缓存 · 隐藏主站源站 · SSL Full(strict)", "手动统计 beacon(仅博客页)"],
@@ -25,32 +25,32 @@ const BOXES: BoxDef[] = [
         },
     },
     {
-        id: "vps", x: 280, y: 272, w: 810, h: 402, emoji: "🖥️", accent: "fill-slate-400",
+        id: "vps", x: 160, y: 272, w: 810, h: 402, emoji: "🖥️", accent: "fill-slate-400",
         title: { zh: "VPS · RackNerd 洛杉矶 · Ubuntu 24.04 · 1C2G", en: "VPS · RackNerd Los Angeles · Ubuntu 24.04 · 1C2G" },
         subs: { zh: [], en: [] },
     },
     {
-        id: "caddy", x: 480, y: 322, w: 230, h: 64, emoji: "🚦", accent: "fill-blue-400",
+        id: "caddy", x: 450, y: 322, w: 230, h: 64, emoji: "🚦", accent: "fill-blue-400",
         title: { zh: "Caddy 反向代理", en: "Caddy reverse proxy" },
         subs: { zh: [":80/:443 · 自动 HTTPS"], en: [":80/:443 · auto HTTPS"] },
     },
     {
-        id: "ui", x: 310, y: 442, w: 215, h: 74, emoji: "🌐", accent: "fill-sky-400",
+        id: "ui", x: 215, y: 442, w: 215, h: 74, emoji: "🌐", accent: "fill-sky-400",
         title: { zh: "tunan-ui · Next.js", en: "tunan-ui · Next.js" },
         subs: { zh: [":3000 · 博客前台"], en: [":3000 · public site"] },
     },
     {
-        id: "blog", x: 548, y: 442, w: 215, h: 74, emoji: "⚙️", accent: "fill-indigo-400",
+        id: "blog", x: 453, y: 442, w: 215, h: 74, emoji: "⚙️", accent: "fill-indigo-400",
         title: { zh: "tunan-blog · Go Fiber", en: "tunan-blog · Go Fiber" },
         subs: { zh: [":3002 · API"], en: [":3002 · API"] },
     },
     {
-        id: "admin", x: 786, y: 442, w: 215, h: 74, emoji: "🔐", accent: "fill-violet-400",
+        id: "admin", x: 691, y: 442, w: 215, h: 74, emoji: "🔐", accent: "fill-violet-400",
         title: { zh: "tunan-admin · Next.js", en: "tunan-admin · Next.js" },
         subs: { zh: [":3001 · 管理后台"], en: [":3001 · admin panel"] },
     },
     {
-        id: "remark", x: 310, y: 562, w: 310, h: 84, emoji: "💬", accent: "fill-yellow-400",
+        id: "remark", x: 215, y: 562, w: 310, h: 84, emoji: "💬", accent: "fill-yellow-400",
         title: { zh: "Remark42 v1.18 · Docker", en: "Remark42 v1.18 · Docker" },
         subs: {
             zh: [":8080 · 评论系统", "登录: 匿名/邮箱/GitHub/TG/Google"],
@@ -58,7 +58,7 @@ const BOXES: BoxDef[] = [
         },
     },
     {
-        id: "backup", x: 660, y: 562, w: 320, h: 84, emoji: "💾", accent: "fill-amber-400",
+        id: "backup", x: 553, y: 562, w: 320, h: 84, emoji: "💾", accent: "fill-amber-400",
         title: { zh: "backup.sh · cron 3:15", en: "backup.sh · cron 3:15" },
         subs: {
             zh: ["mysqldump + 评论导出 + 配置打包"],
@@ -66,7 +66,7 @@ const BOXES: BoxDef[] = [
         },
     },
     {
-        id: "tidb", x: 1170, y: 296, w: 300, h: 96, emoji: "🗄️", accent: "fill-green-400",
+        id: "tidb", x: 1010, y: 296, w: 300, h: 96, emoji: "🗄️", accent: "fill-green-400",
         title: { zh: "TiDB Cloud Serverless", en: "TiDB Cloud Serverless" },
         subs: {
             zh: ["免费 · us-west-2 · 库 tunan", "MySQL 协议 · 强制 TLS :4000"],
@@ -74,7 +74,7 @@ const BOXES: BoxDef[] = [
         },
     },
     {
-        id: "r2", x: 1170, y: 556, w: 300, h: 112, emoji: "🪣", accent: "fill-purple-400",
+        id: "r2", x: 1010, y: 556, w: 300, h: 112, emoji: "🪣", accent: "fill-purple-400",
         title: { zh: "Cloudflare R2 · 免费 10GB", en: "Cloudflare R2 · free 10GB" },
         subs: {
             zh: ["桶 blog-backup/", "mysql/ · config/ · remark42/", "30 天滚动保留"],
@@ -82,27 +82,27 @@ const BOXES: BoxDef[] = [
         },
     },
     {
-        id: "gmail", x: 1170, y: 738, w: 300, h: 64, emoji: "📧", accent: "fill-red-400",
+        id: "gmail", x: 215, y: 720, w: 310, h: 64, emoji: "📧", accent: "fill-red-400",
         title: { zh: "Gmail SMTP", en: "Gmail SMTP" },
         subs: { zh: ["评论邮件通知"], en: ["comment email notifications"] },
     },
     {
-        id: "tg", x: 1170, y: 846, w: 300, h: 64, emoji: "✈️", accent: "fill-cyan-400",
+        id: "tg", x: 553, y: 720, w: 320, h: 64, emoji: "✈️", accent: "fill-cyan-400",
         title: { zh: "Telegram 频道", en: "Telegram channel" },
         subs: { zh: ["Blog's notify · 新评论推送"], en: ["Blog's notify · new comment push"] },
     },
     {
-        id: "b1", x: 540, y: 962, w: 250, h: 62, emoji: "🏗️", accent: "fill-blue-400",
+        id: "b1", x: 420, y: 962, w: 250, h: 62, emoji: "🏗️", accent: "fill-blue-400",
         title: { zh: "① 本地构建", en: "① Local build" },
         subs: { zh: ["Go 交叉编译 + 2×Next build"], en: ["Go cross-compile + 2×Next build"] },
     },
     {
-        id: "b2", x: 840, y: 962, w: 250, h: 62, emoji: "📦", accent: "fill-violet-400",
+        id: "b2", x: 720, y: 962, w: 250, h: 62, emoji: "📦", accent: "fill-violet-400",
         title: { zh: "② rsync 产物", en: "② rsync artifacts" },
         subs: { zh: ["→ /opt/tunan-*"], en: ["→ /opt/tunan-*"] },
     },
     {
-        id: "b3", x: 1140, y: 962, w: 260, h: 62, emoji: "♻️", accent: "fill-green-400",
+        id: "b3", x: 980, y: 962, w: 260, h: 62, emoji: "♻️", accent: "fill-green-400",
         title: { zh: "③ 重启 + 校验", en: "③ Restart + verify" },
         subs: { zh: ["systemctl + 静态资源检查"], en: ["systemctl + asset consistency"] },
     },
@@ -116,32 +116,31 @@ type EdgeDef = {
 };
 
 const EDGES: EdgeDef[] = [
-    { x1: 190, y1: 152, x2: 300, y2: 152, flow: true },
-    { x1: 440, y1: 200, x2: 575, y2: 322, flow: true },
-    { x1: 555, y1: 386, x2: 420, y2: 442 },
-    { x1: 610, y1: 386, x2: 650, y2: 442 },
-    { x1: 665, y1: 386, x2: 880, y2: 442 },
+    { x1: 70, y1: 152, x2: 180, y2: 152, flow: true },
+    { x1: 335, y1: 200, x2: 565, y2: 322, flow: true },
+    { x1: 480, y1: 386, x2: 322, y2: 442 },
+    { x1: 565, y1: 386, x2: 560, y2: 442 },
+    { x1: 650, y1: 386, x2: 798, y2: 442 },
     {
-        x1: 763, y1: 479, x2: 1170, y2: 356, flow: true, lx: 905, ly: 400,
+        x1: 668, y1: 479, x2: 1050, y2: 344, flow: true, lx: 830, ly: 395,
         zh: "SQL over TLS :4000", en: "SQL over TLS :4000",
     },
     {
-        x1: 980, y1: 585, x2: 1170, y2: 600, flow: true, lx: 985, ly: 545,
+        x1: 873, y1: 604, x2: 1050, y2: 600, flow: true, lx: 930, ly: 585,
         zh: "rclone 每日上传 · 30 天滚动", en: "rclone daily · 30-day rolling",
     },
     {
-        x1: 620, y1: 604, x2: 1170, y2: 770, flow: true, lx: 845, ly: 706,
+        x1: 300, y1: 646, x2: 345, y2: 720, flow: true, lx: 215, ly: 692,
         zh: "SMTP 通知", en: "SMTP notify",
     },
     {
-        x1: 620, y1: 625, x2: 1170, y2: 878, flow: true, lx: 875, ly: 800,
+        x1: 440, y1: 646, x2: 700, y2: 720, flow: true, lx: 540, ly: 690,
         zh: "bot 推送", en: "bot push",
     },
-    { x1: 470, y1: 992, x2: 540, y2: 992, flow: true },
-    { x1: 790, y1: 992, x2: 840, y2: 992, flow: true },
-    { x1: 1090, y1: 992, x2: 1140, y2: 992, flow: true },
+    { x1: 670, y1: 993, x2: 720, y2: 993, flow: true },
+    { x1: 970, y1: 993, x2: 1020, y2: 993, flow: true },
     {
-        x1: 1270, y1: 962, x2: 940, y2: 674, dashed: true, lx: 1150, ly: 820,
+        x1: 1150, y1: 962, x2: 940, y2: 674, dashed: true, lx: 1120, ly: 820,
         zh: "SSH 部署", en: "SSH deploy",
     },
 ];
@@ -179,8 +178,8 @@ export default function ArchitectureDiagram({ locale }: { locale: string }) {
     const macText = isZh ? "开发机 Mac" : "Dev machine";
     const live = isZh ? "全系统运行中" : "All systems operational";
     const footer = isZh
-        ? "恢复手册: deploy/backup/README.md · 每月演练: bash /opt/deploy/restore-drill.sh · 架构决策: MIGRATION.md"
-        : "Recovery manual: deploy/backup/README.md · Monthly drill: bash /opt/deploy/restore-drill.sh · Decisions: MIGRATION.md";
+        ? "恢复手册: deploy/backup/README.md · 每月演练: bash /opt/deploy/restore-drill.sh"
+        : "Recovery manual: deploy/backup/README.md · Monthly drill: bash /opt/deploy/restore-drill.sh";
 
     const css = `
     .arch-panel { fill: url(#arch-panel-light); }
@@ -226,8 +225,8 @@ export default function ArchitectureDiagram({ locale }: { locale: string }) {
             </p>
             <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800 bg-gradient-to-br from-blue-50/40 via-white/40 to-purple-50/40 dark:from-gray-950/50 dark:via-gray-900/30 dark:to-indigo-950/30">
                 <svg
-                    viewBox="0 0 1500 1130"
-                    className="min-w-[1000px] w-full h-auto font-sans"
+                    viewBox="0 0 1340 1130"
+                    className="min-w-[880px] w-full h-auto font-sans"
                     role="img"
                     aria-label={titleText}
                 >
@@ -257,10 +256,14 @@ export default function ArchitectureDiagram({ locale }: { locale: string }) {
                         </pattern>
                     </defs>
 
-                    <rect x="0" y="0" width="1500" height="1130" fill="url(#arch-dots)" opacity={0.35} />
+                    <rect x="0" y="0" width="1340" height="1130" fill="url(#arch-dots)" opacity={0.35} />
 
-                    <text x={750} y={46} textAnchor="middle" fontSize={26} className="arch-heading" fontWeight={700}>
+                    <text x={670} y={46} textAnchor="middle" fontSize={26} className="arch-heading" fontWeight={700}>
                         {titleText}
+                    </text>
+
+                    <text x={125} y={132} textAnchor="middle" fontSize={13} className="arch-sub">
+                        {visitorText}
                     </text>
 
                     {BOXES.map((b) => {
@@ -269,7 +272,7 @@ export default function ArchitectureDiagram({ locale }: { locale: string }) {
                         const fs = b.fs ?? 15;
                         return (
                             <g key={b.id}>
-                                {isPanel && <rect x="0" y="0" width="1500" height="1130" fill="url(#arch-dots)" opacity={0} />}
+                                {isPanel && <rect x="0" y="0" width="1340" height="1130" fill="url(#arch-dots)" opacity={0} />}
                                 <rect
                                     x={b.x} y={b.y} width={b.w} height={b.h} rx={14} ry={14}
                                     className={`${isPanel ? "arch-panel" : "arch-card"} ${isPanel ? "arch-panel-stroke" : "arch-card-stroke"}`}
@@ -334,14 +337,18 @@ export default function ArchitectureDiagram({ locale }: { locale: string }) {
                     ))}
 
                     <g>
-                        <rect x={1155} y={20} width={215} height={34} rx={17} className="arch-card arch-card-stroke" strokeWidth={1} />
-                        <circle cx={1175} cy={37} r={4.5} className="arch-pulse fill-emerald-500" />
-                        <text x={1188} y={41.5} fontSize={13.5} className="arch-title">
+                        <rect x={1035} y={20} width={215} height={34} rx={17} className="arch-card arch-card-stroke" strokeWidth={1} />
+                        <circle cx={1055} cy={37} r={4.5} className="arch-pulse fill-emerald-500" />
+                        <text x={1068} y={41.5} fontSize={13.5} className="arch-title">
                             {live}
                         </text>
                     </g>
 
-                    <text x={300} y={1104} fontSize={13} className="arch-sub">
+                    <text x={830} y={946} textAnchor="middle" fontSize={13} className="arch-sub">
+                        {macText}
+                    </text>
+
+                    <text x={160} y={1104} fontSize={13} className="arch-sub">
                         {footer}
                     </text>
                 </svg>
