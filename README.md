@@ -262,7 +262,6 @@ The production stack runs a Go API, two Next.js apps (public site + admin) and R
 
 - **Deployment system** (server init, local-build deploy script, reverse proxy, systemd): [deploy/README.md](deploy/README.md)
 - **Backup & disaster-recovery manual**: [deploy/backup/README.md](deploy/backup/README.md)
-- **Architecture decisions** from the 2025 migration: [MIGRATION.md](MIGRATION.md)
 
 If you prefer a classic nginx setup, this blog post still applies: [Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1).
 

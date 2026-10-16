@@ -9,35 +9,35 @@ const nextConfig = {
       {
         source: '/:locale/blog/:slug',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
+          { key: 'Cache-Control', value: 'public, s-maxage=30, stale-while-revalidate=60' },
         ],
       },
       // Homepage: cache briefly (article list changes when new posts land)
       {
         source: '/:locale(zh-CN|en)',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=60, stale-while-revalidate=3600' },
+          { key: 'Cache-Control', value: 'public, s-maxage=30, stale-while-revalidate=60' },
         ],
       },
       // Blog list page
       {
         source: '/:locale/blog',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=60, stale-while-revalidate=3600' },
+          { key: 'Cache-Control', value: 'public, s-maxage=30, stale-while-revalidate=60' },
         ],
       },
       // Projects page
       {
         source: '/:locale/projects',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=300, stale-while-revalidate=86400' },
+          { key: 'Cache-Control', value: 'public, s-maxage=30, stale-while-revalidate=60' },
         ],
       },
       // About page (rarely changes)
       {
         source: '/:locale/about',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
+          { key: 'Cache-Control', value: 'public, s-maxage=30, stale-while-revalidate=60' },
         ],
       },
       // Never cache API responses served through Next

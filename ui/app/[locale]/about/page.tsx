@@ -3,6 +3,7 @@ import Skills from "@/app/components/Skills";
 import {Comments} from "@/app/components/blog/comment";
 import DevicesAndApps from "@/app/components/DevicesAndApps";
 import Books from "@/app/components/Books";
+import ArchitectureDiagram from "@/app/components/about/ArchitectureDiagram";
 import {API_URL} from "@/lib/config";
 import { getSafeLocale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/get-dictionary";
@@ -107,6 +108,8 @@ export default async function About({ params }: { params: { locale: string } }) 
                     <DevicesAndApps devicesAndApps={deviceApps}/>
 
                     <Books books={books}/>
+
+                    <ArchitectureDiagram locale={locale}/>
 
                     <Comments/>
                 </div>

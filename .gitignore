@@ -40,3 +40,6 @@ env/prod.yaml
 
 # 部署目标(含 IP,严禁入库)
 .env.deploy
+
+# TS 增量构建产物
+ui/tsconfig.tsbuildinfo

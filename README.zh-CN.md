@@ -223,7 +223,6 @@ website:
 
 - **部署体系**（服务器初始化、本地构建部署脚本、反向代理、systemd）：[deploy/README.md](deploy/README.md)
 - **备份与灾难恢复手册**：[deploy/backup/README.md](deploy/backup/README.md)
-- 2025 年迁移的**架构决策记录**：[MIGRATION.md](MIGRATION.md)
 
 如果你更喜欢经典的 Nginx 方案，这篇博客文章依然适用：[Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1)。
 
