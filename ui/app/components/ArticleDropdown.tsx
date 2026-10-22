@@ -40,20 +40,13 @@ export default function ArticleDropdown({ items, label }: ArticleDropdownProps) 
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:shadow-md hover:scale-105 ${
+        className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors sm:px-4 sm:text-[15px] ${
           isActive
-            ? 'bg-accent text-accent-foreground shadow-sm border border-accent/30'
-            : 'hover:bg-accent/30'
-        } ${isOpen ? 'shadow-lg ring-2 ring-accent/50' : ''}`}
+            ? 'bg-accent text-accent-foreground'
+            : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
+        }`}
       >
-        <img
-          src="/assets/icons/blog.png"
-          alt={label}
-          width="20"
-          height="20"
-          className="opacity-80"
-        />
-        <span>{label}</span>
+        <span className="sr-only sm:not-sr-only">{label}</span>
         <svg
           className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
@@ -65,17 +58,17 @@ export default function ArticleDropdown({ items, label }: ArticleDropdownProps) 
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-72 max-w-[90vw] bg-background/80 backdrop-blur-lg border border-border/50 rounded-lg shadow-xl z-50 animate-in fade-in-0 zoom-in-95 duration-200 overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-72 max-w-[90vw] bg-background border border-border rounded-xl shadow-xl z-50 animate-in fade-in-0 zoom-in-95 duration-200 overflow-hidden">
           <div className="p-2 space-y-1">
             {items.map((item, index) => (
               <Link
                 key={index}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className={`block px-4 py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] ${
+                className={`block px-4 py-3 rounded-lg transition-colors ${
                   pathname.startsWith(item.href)
-                    ? 'bg-accent/60 text-accent-foreground shadow-sm border border-accent/30'
-                    : 'hover:bg-accent/30 hover:shadow-md'
+                    ? 'bg-accent text-accent-foreground'
+                    : 'hover:bg-muted'
                 }`}
               >
                 <div className="font-semibold text-sm">{item.name}</div>
@@ -83,7 +76,7 @@ export default function ArticleDropdown({ items, label }: ArticleDropdownProps) 
               </Link>
             ))}
           </div>
-          <div className="absolute -top-2 left-4 w-4 h-4 bg-background/80 backdrop-blur-lg border-l border-t border-border/50 rotate-45 rounded-tl-sm"></div>
+          <div className="absolute -top-2 left-4 w-4 h-4 bg-background border-l border-t border-border rotate-45 rounded-tl-sm"></div>
         </div>
       )}
     </div>

@@ -10,6 +10,29 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        /* 纸墨编辑部语义色 (token 见 globals.css, 契约见 DESIGN.md) */
+        background: 'oklch(var(--paper) / <alpha-value>)',
+        foreground: 'oklch(var(--ink) / <alpha-value>)',
+        border: 'oklch(var(--line) / <alpha-value>)',
+        ring: 'oklch(var(--tone-indigo) / <alpha-value>)',
+        card: 'oklch(var(--paper-raised) / <alpha-value>)',
+        popover: 'oklch(var(--paper-raised) / <alpha-value>)',
+        primary: {
+          DEFAULT: 'oklch(var(--tone-indigo) / <alpha-value>)',
+          foreground: 'oklch(0.99 0.004 95 / <alpha-value>)',
+        },
+        muted: {
+          DEFAULT: 'oklch(var(--paper-raised) / <alpha-value>)',
+          foreground: 'oklch(var(--ink-3) / <alpha-value>)',
+        },
+        'muted-foreground': 'oklch(var(--ink-3) / <alpha-value>)',
+        accent: {
+          DEFAULT: 'oklch(var(--tone-indigo-wash) / <alpha-value>)',
+          foreground: 'oklch(var(--tone-indigo-deep) / <alpha-value>)',
+        },
+        'accent-foreground': 'oklch(var(--tone-indigo-deep) / <alpha-value>)',
+      },
       backgroundColor: {
         skin: {
           base: 'var(--color-background-base)',

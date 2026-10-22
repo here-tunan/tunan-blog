@@ -20,10 +20,12 @@ export default async function Page({params}: { params: { locale: string, slug: s
   return (
     <div className="container">
       {/*
-        阅读列：标题、正文、评论共享一条 720px 居中轴。
+        阅读列：标题、正文、评论共享一条 720px 轴。
+        不居中(mx-auto),左缘与全站容器/导航对齐——右侧空隙交给 TOC,
+        非对称但刻意的编辑部排版;行宽 720px 不变,中文阅读节奏不受影响。
         relative 让 TOC 桌面版能相对阅读列绝对定位在右侧。
       */}
-      <div className="max-w-[720px] mx-auto relative">
+      <div className="max-w-[720px] relative">
         <Header title={article.title} date={article.gmtCreate} tags={article.tagNames} path={withLocale(locale, `/blog/${params.slug}`)} locale={locale}/>
 
         {/* mt-12 (48px) 拉开 Header 装饰短线到正文的呼吸空间 */}

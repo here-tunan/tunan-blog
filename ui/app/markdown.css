@@ -1,11 +1,11 @@
 /** markdown style **/
-/** 引入本地霞鹜文楷字体 **/
-@import url('@/public/fonts/lxgw-wenkai-local.css');
+/** 霞鹜文楷改为 layout.tsx 引入的切片 webfont (lxgw-wenkai-webfont),此处不再 @import 全量 TTF **/
 
 /** 中英文混排字体优化 **/
 .markdown-body {
-    /* 英文/数字/连字符用 Inter，中文自动回退到 LXGW WenKai */
-    font-family: var(--font-inter),
+    /* 英文/数字用 Source Serif(衬线,与文楷同气质),中文自动回退到 LXGW WenKai */
+    font-family: var(--font-source-serif),
+                 var(--font-inter),
                  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                  "Helvetica Neue", Arial,
                  "LXGW WenKai", "PingFang SC", "Hiragino Sans GB",
@@ -45,11 +45,10 @@
     scroll-margin: 5rem;
     margin-top: 28px;
     margin-bottom: 16px;
-    font-weight: 600;
+    font-weight: 400;
     line-height: 1.25;
-    font-family: var(--font-inter),
-                 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                 "LXGW WenKai", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    font-family: var(--font-display),
+                 -apple-system, "PingFang SC", "Hiragino Sans GB", sans-serif;
 }
 
 .markdown-body h1 {
@@ -321,164 +320,6 @@
     color: var(--markdown-blockquote-text, #24292e);
 }
 
-/* 代码块顶部装饰条 */
-.markdown-body pre:before {
-    content: '';
-    display: block;
-    height: 3px;
-    background: var(--markdown-code-border, #e1e4e8);
-    width: 100%;
-}
-
-/* 不同语言的代码块主题 */
-/* JavaScript/TypeScript - 黄色主题 */
-.markdown-body pre:has(.language-javascript):before,
-.markdown-body pre:has(.language-js):before,
-.markdown-body pre:has(.language-typescript):before,
-.markdown-body pre:has(.language-ts):before {
-    background: linear-gradient(90deg, #f7df1e 0%, #ffd600 100%);
-}
-
-.markdown-body pre:has(.language-javascript),
-.markdown-body pre:has(.language-js),
-.markdown-body pre:has(.language-typescript),
-.markdown-body pre:has(.language-ts) {
-    border-left: 4px solid #f7df1e;
-}
-
-/* Python - 蓝绿色主题 */
-.markdown-body pre:has(.language-python):before,
-.markdown-body pre:has(.language-py):before {
-    background: linear-gradient(90deg, #3776ab 0%, #4b8bbe 100%);
-}
-
-.markdown-body pre:has(.language-python),
-.markdown-body pre:has(.language-py) {
-    border-left: 4px solid #3776ab;
-}
-
-/* Java - 红橙色主题 */
-.markdown-body pre:has(.language-java):before {
-    background: linear-gradient(90deg, #ed8b00 0%, #f89820 100%);
-}
-
-.markdown-body pre:has(.language-java) {
-    border-left: 4px solid #ed8b00;
-}
-
-/* C/C++ - 蓝色主题 */
-.markdown-body pre:has(.language-c):before,
-.markdown-body pre:has(.language-cpp):before,
-.markdown-body pre:has(.language-cc):before {
-    background: linear-gradient(90deg, #00599c 0%, #004482 100%);
-}
-
-.markdown-body pre:has(.language-c),
-.markdown-body pre:has(.language-cpp),
-.markdown-body pre:has(.language-cc) {
-    border-left: 4px solid #00599c;
-}
-
-/* Rust - 橙色主题 */
-.markdown-body pre:has(.language-rust):before,
-.markdown-body pre:has(.language-rs):before {
-    background: linear-gradient(90deg, #ce422b 0%, #b33819 100%);
-}
-
-.markdown-body pre:has(.language-rust),
-.markdown-body pre:has(.language-rs) {
-    border-left: 4px solid #ce422b;
-}
-
-/* Go - 青蓝色主题 */
-.markdown-body pre:has(.language-go):before,
-.markdown-body pre:has(.language-golang):before {
-    background: linear-gradient(90deg, #00add8 0%, #007d9c 100%);
-}
-
-.markdown-body pre:has(.language-go),
-.markdown-body pre:has(.language-golang) {
-    border-left: 4px solid #00add8;
-}
-
-/* HTML - 橙红色主题 */
-.markdown-body pre:has(.language-html):before,
-.markdown-body pre:has(.language-xml):before {
-    background: linear-gradient(90deg, #e34c26 0%, #f06529 100%);
-}
-
-.markdown-body pre:has(.language-html),
-.markdown-body pre:has(.language-xml) {
-    border-left: 4px solid #e34c26;
-}
-
-/* CSS - 蓝色主题 */
-.markdown-body pre:has(.language-css):before,
-.markdown-body pre:has(.language-scss):before,
-.markdown-body pre:has(.language-sass):before {
-    background: linear-gradient(90deg, #1572b6 0%, #33a9dc 100%);
-}
-
-.markdown-body pre:has(.language-css),
-.markdown-body pre:has(.language-scss),
-.markdown-body pre:has(.language-sass) {
-    border-left: 4px solid #1572b6;
-}
-
-/* React/JSX - 青色主题 */
-.markdown-body pre:has(.language-jsx):before,
-.markdown-body pre:has(.language-tsx):before,
-.markdown-body pre:has(.language-react):before {
-    background: linear-gradient(90deg, #61dafb 0%, #21d4fd 100%);
-}
-
-.markdown-body pre:has(.language-jsx),
-.markdown-body pre:has(.language-tsx),
-.markdown-body pre:has(.language-react) {
-    border-left: 4px solid #61dafb;
-}
-
-/* Vue - 绿色主题 */
-.markdown-body pre:has(.language-vue):before {
-    background: linear-gradient(90deg, #4fc08d 0%, #42b883 100%);
-}
-
-.markdown-body pre:has(.language-vue) {
-    border-left: 4px solid #4fc08d;
-}
-
-/* Shell/Bash - 绿色主题 */
-.markdown-body pre:has(.language-bash):before,
-.markdown-body pre:has(.language-shell):before,
-.markdown-body pre:has(.language-sh):before {
-    background: linear-gradient(90deg, #4eaa25 0%, #89e051 100%);
-}
-
-.markdown-body pre:has(.language-bash),
-.markdown-body pre:has(.language-shell),
-.markdown-body pre:has(.language-sh) {
-    border-left: 4px solid #4eaa25;
-}
-
-/* SQL - 紫色主题 */
-.markdown-body pre:has(.language-sql):before {
-    background: linear-gradient(90deg, #336791 0%, #4f8cc9 100%);
-}
-
-.markdown-body pre:has(.language-sql) {
-    border-left: 4px solid #336791;
-}
-
-/* JSON - 灰色主题 */
-.markdown-body pre:has(.language-json):before {
-    background: linear-gradient(90deg, #292929 0%, #525252 100%);
-}
-
-.markdown-body pre:has(.language-json) {
-    border-left: 4px solid #292929;
-}
-
-
 /* 滚动条美化 */
 .markdown-body pre code::-webkit-scrollbar {
     height: 6px;
@@ -532,7 +373,7 @@
     text-decoration: none;
     font-weight: 500;
     position: relative;
-    transition: all 0.2s ease;
+    transition: color 0.2s ease, background-color 0.2s ease;
     border-radius: 0.25rem;
     padding: 0.125rem 0.25rem;
     margin: -0.125rem -0.25rem;
@@ -541,7 +382,6 @@
 .markdown-body a:hover {
     color: var(--markdown-link-hover-color, #2563eb);
     background-color: var(--markdown-link-hover-bg, rgba(59, 130, 246, 0.1));
-    transform: translateY(-1px);
 }
 
 .markdown-body a:after {
@@ -554,7 +394,7 @@
     background: currentColor;
     opacity: 0;
     transform: scaleX(0);
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease;
     transform-origin: left center;
 }
 
@@ -578,7 +418,7 @@
     font-size: 0.8em;
     opacity: 0.6;
     margin-left: 0.25rem;
-    transition: all 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .markdown-body a[href^="http"]:hover:before,
@@ -603,6 +443,24 @@
     margin: 0;
 }
 
+/* .image-text 组合下不显示图注(旁边的文字就是说明) */
+.markdown-body .image-text figcaption {
+    display: none;
+}
+
+/* 并排对比图(rehype-raw):<div class="img-row"><img src="…"><img src="…"></div> */
+.markdown-body .img-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.markdown-body .img-row figure,
+.markdown-body .img-row img {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
 @media (max-width: 600px) {
     .markdown-body .image-text {
         flex-direction: column;
@@ -612,6 +470,10 @@
     .markdown-body .image-text img {
         margin-right: 0;
         margin-bottom: 10px;
+    }
+
+    .markdown-body .img-row {
+        flex-direction: column;
     }
 }
 

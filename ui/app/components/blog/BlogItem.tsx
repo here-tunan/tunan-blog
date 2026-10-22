@@ -15,19 +15,19 @@ export function BlogItem({link, name, gmtCreate, tagNames, locale}: BlogItemProp
   const date = formatDate(gmtCreate, locale, options)
 
   return (
-    <li className="border-b border-gray-100 dark:border-gray-800 last:border-0">
-      <Link className="group py-3 px-2 -mx-2 flex place-content-between rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200" href={link}>
-        <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 font-medium font-mono text-sm sm:text-base transition-colors duration-200">{name}</span>
+    <li>
+      <Link className="group flex place-content-between rounded-lg px-2 py-3 -mx-2 transition-colors hover:bg-foreground/[0.04]" href={link}>
+        <span className="font-medium text-sm sm:text-base text-foreground transition-colors group-hover:text-primary">{name}</span>
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex gap-1">
             {tagNames.map((tag) => (
               <span key={tag}
-                    className="blog-tag font-light text-xs py-1 px-2 rounded-full inline-flex items-center font-mono opacity-80 group-hover:opacity-100 transition-opacity">
+                    className="blog-tag rounded-full px-2 py-1 text-xs font-light font-mono inline-flex items-center opacity-80 group-hover:opacity-100 transition-opacity">
                 {tag}
               </span>
             ))}
           </div>
-          <p className="font-serif text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{date}</p>
+          <p className="font-mono text-sm text-muted-foreground whitespace-nowrap">{date}</p>
         </div>
       </Link>
     </li>

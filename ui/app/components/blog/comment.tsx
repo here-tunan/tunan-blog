@@ -80,7 +80,7 @@ const recreateRemark42Instance = () => {
 
 // The location prop is {props.location.pathname} from the parent component.
 // I.e. invoke the component like this in the parent: <Comments location={props.location.pathname} />
-export function Comments() {
+export function Comments({ showHeader = true }: { showHeader?: boolean }) {
   const { locale, dictionary } = useLocale();
   const [url, setUrl] = useState('');
   const remarkLocale = locale === 'zh-CN' ? 'zh' : 'en';
@@ -99,19 +99,21 @@ export function Comments() {
   return (
     <Fragment>
       {/*
-        评论区分界：大上间距 (mt-24 = 96px) + 细分割线 + uppercase 小写标题
-        标题用 tracking-widest 让排版感更强，和 TOC label 呼应
+        评论区分界：大上间距 (mt-24 = 96px) + 细分割线 + uppercase 小写标题。
+        仅在评论区没有外部标题壳时显示（文章页）；about 页有自己的 SectionHeader，传 showHeader={false}
       */}
-      <div className="mt-24 border-t border-slate-200 dark:border-slate-700 pt-6 mb-6">
-        <div className="flex items-baseline gap-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-            {dictionary.article.comments}
-          </span>
-          <span className="counter text-xs text-slate-400 dark:text-slate-500">
-            <span className="remark42__counter" data-url={url}></span>
-          </span>
+      {showHeader && (
+        <div className="mt-24 border-t border-border pt-6 mb-6">
+          <div className="flex items-baseline gap-2">
+            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              {dictionary.article.comments}
+            </span>
+            <span className="counter text-xs text-muted-foreground/70">
+              <span className="remark42__counter" data-url={url}></span>
+            </span>
+          </div>
         </div>
-      </div>
+      )}
       {/* This div is the target for actual comments insertion */}
       <div id="remark42"/>
     </Fragment>

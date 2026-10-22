@@ -16,7 +16,7 @@ interface BlogListProps {
 
 export default function BlogList({blogs, locale}: BlogListProps) {
   return (
-    <ul className="divide-y divide-double divide-emerald-700">
+    <ul className="divide-y divide-border">
       {blogs.map((item, i) => (
         <BlogItem link={withLocale(locale, `/blog/${item.slug}`)} name={item.title} gmtCreate={item.gmtCreate} tagNames={item.tagNames} locale={locale} key={i}></BlogItem>
       ))}

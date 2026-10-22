@@ -170,13 +170,15 @@ export default function ArchitectureDiagram({ locale }: { locale: string }) {
     const isZh = locale === "zh-CN";
     const t = (b: BoxDef) => (isZh ? b.title.zh : b.title.en);
     const subs = (b: BoxDef) => (isZh ? b.subs.zh : b.subs.en);
-    const heading = isZh ? "这个博客是怎么跑起来的" : "How this blog runs";
+    const live = isZh ? "全系统运行中" : "All systems operational";
+    const scrollHint = isZh
+        ? "左右滑动查看全图 · 蓝色流线 = 数据流向"
+        : "Swipe horizontally · blue streams = data flow";
     const titleText = isZh
         ? "Tunan Blog · 生产架构总览(2026-10)"
         : "Tunan Blog · Production Architecture (2026-10)";
     const visitorText = isZh ? "访客" : "Visitors";
     const macText = isZh ? "开发机 Mac" : "Dev machine";
-    const live = isZh ? "全系统运行中" : "All systems operational";
     const footer = isZh
         ? "恢复手册: deploy/backup/README.md · 每月演练: bash /opt/deploy/restore-drill.sh"
         : "Recovery manual: deploy/backup/README.md · Monthly drill: bash /opt/deploy/restore-drill.sh";
@@ -208,22 +210,13 @@ export default function ArchitectureDiagram({ locale }: { locale: string }) {
     }`;
 
     return (
-        <section className="rounded-[2rem] border border-gray-100/80 dark:border-gray-800 bg-white/70 dark:bg-gray-900/40 p-4 sm:p-6 shadow-sm backdrop-blur-sm">
-            <div className="flex items-center justify-between gap-4 flex-wrap mb-1">
-                <h2 className="text-2xl font-bold font-mono text-gray-800 dark:text-gray-100">
-                    {heading}
-                </h2>
-                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 dark:border-emerald-800 bg-emerald-50/70 dark:bg-emerald-950/30 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                    {live}
+        <section>
+            <div className="mb-5 flex justify-end">
+                <span className="text-[13px] text-muted-foreground">
+                    {scrollHint}
                 </span>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                {isZh
-                    ? "浏览器可横向滚动查看完整架构(手机端左右滑动) · 蓝色流线 = 数据流向"
-                    : "Scroll horizontally for the full architecture (swipe on mobile) · blue streams = data flow"}
-            </p>
-            <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800 bg-gradient-to-br from-blue-50/40 via-white/40 to-purple-50/40 dark:from-gray-950/50 dark:via-gray-900/30 dark:to-indigo-950/30">
+            <div className="overflow-x-auto rounded-xl border border-border bg-background">
                 <svg
                     viewBox="0 0 1340 1130"
                     className="min-w-[880px] w-full h-auto font-sans"

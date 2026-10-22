@@ -17,22 +17,16 @@ const Header = (props: HeaderProps) => {
 
   return (
     <header className="blog-header">
-      {/*
-        标题：现代无衬线（继承 Inter），字重降到 semibold，tracking 收紧一点，
-        大屏用 4xl，小屏 3xl 避免撑爆 720px 列宽
-      */}
-      <h1 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-slate-900 dark:text-slate-100">
+      {/* 标题:文楷 400,靠字号而非字重建立层级(globals h1 规则给 WenKai 与负字距) */}
+      <h1 className="text-3xl font-normal leading-snug text-foreground md:text-4xl">
         {props.title}
       </h1>
 
-      {/*
-        Meta 一行 Substack 风：日期 · 浏览量 · #tag
-        使用 · 中点分隔；tag 保留极简药丸（灰底灰字）+ hover 变主色
-      */}
-      <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
-        <time>{date}</time>
+      {/* Meta 一行:日期 · 浏览量 · #tag */}
+      <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm text-muted-foreground">
+        <time className="font-mono">{date}</time>
 
-        <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">·</span>
+        <span aria-hidden="true" className="text-border">·</span>
 
         <span className="inline-flex items-center gap-1">
           <ViewCounter path={props.path} className="font-medium tabular-nums" />
@@ -41,11 +35,11 @@ const Header = (props: HeaderProps) => {
 
         {tags && tags.length > 0 && (
           <>
-            <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">·</span>
+            <span aria-hidden="true" className="text-border">·</span>
             <ul className="flex flex-wrap items-center gap-1.5">
               {tags.map((tag) => (
                 <li key={tag}>
-                  <span className="inline-block rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-xs text-slate-600 dark:text-slate-300 transition-colors hover:text-indigo-600 dark:hover:text-indigo-400">
+                  <span className="inline-block rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary">
                     #{tag}
                   </span>
                 </li>
@@ -55,8 +49,8 @@ const Header = (props: HeaderProps) => {
         )}
       </div>
 
-      {/* 装饰短线，为正文创造清晰的呼吸空间；不用满屏 hr，避免和内容里的 hr 冲突 */}
-      <div className="mt-8 h-px w-12 bg-slate-200 dark:bg-slate-700" />
+      {/* 装饰短线,为正文创造呼吸空间;不用满屏 hr,避免和内容里的 hr 冲突 */}
+      <div className="mt-8 h-px w-12 bg-border" />
     </header>
   );
 }

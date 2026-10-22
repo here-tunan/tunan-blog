@@ -39,6 +39,18 @@
         --gray-9: #1f1f1f;
         --gray-10: #181818;
 
+        /* ===== 纸墨编辑部 tokens (契约见 ui/DESIGN.md) ===== */
+        --paper: 0.975 0.006 95;         /* 画布:暖白纸 */
+        --paper-raised: 0.993 0.004 95;  /* 浮起面 */
+        --ink: 0.25 0.012 95;            /* 主墨 */
+        --ink-2: 0.42 0.012 95;          /* 次墨 */
+        --ink-3: 0.55 0.01 95;           /* 弱墨 */
+        --line: 0.9 0.008 95;            /* 发丝线 */
+        --tone-indigo: 0.51 0.21 277;         /* 靛蓝强调 */
+        --tone-indigo-deep: 0.44 0.2 277;     /* 靛蓝 hover */
+        --tone-indigo-wash: 0.955 0.022 277;  /* 靛蓝淡染 */
+        --font-display: "LXGW WenKai", "Noto Serif SC", serif;
+
         --green: #7becbf;
         --orange: #f32f2f;
         --yellow: #fca62a;
@@ -55,18 +67,18 @@
 
 
         /* Colors */
-        --color-background-base: var(--gray-0);
-        --color-text-base: var(--gray-10);
-        --color-button-bg-base: var(--gray-2);
-        --color-button-border-base: var(--gray-5);
-        --color-blog-tag-bg-base: var(--gray-3);
-        --color-toc-text-base: #596869;
+        --color-background-base: oklch(var(--paper));
+        --color-text-base: oklch(var(--ink));
+        --color-button-bg-base: oklch(var(--paper-raised));
+        --color-button-border-base: oklch(var(--line));
+        --color-blog-tag-bg-base: oklch(var(--tone-indigo-wash));
+        --color-toc-text-base: oklch(var(--ink-3));
 
         /* Markdown 渲染的一些颜色 */
         --markdwon-code-backgroud: rgba(59, 130, 246, 0.04);
-        --markdwon-code-text: #ea4c9b;
+        --markdwon-code-text: #4f46e5;
         --markdwon-text-base: var(--gray-10);
-        --markdown-divide: #eb2344;
+        --markdown-divide: #4f46e5;
         --markdown-divide-sub: var(--gray-5);
         --markdown-codeblock-color1: #e73119;
         --markdown-codeblock-color2: #8bc34a;
@@ -75,7 +87,7 @@
         --markdown-codeblock-color5: #d41800;
         --markdown-codeblock-color6: #7e57c2;
         --markdown-codeblock-color7: #bfbfbf;
-        --markdown-blockquote-letf: #86d5a8;
+        --markdown-blockquote-letf: #4f46e5;
         --markdown-blockquote-text: var(--gray-5);
         --markdown-blockquote-background: var(--gray-3);
         
@@ -84,7 +96,7 @@
         --markdown-table-header-bg: #f8fafc;
         --markdown-table-header-bg-end: #f1f5f9;
         --markdown-table-header-text: #1f2937;
-        --markdown-table-header-border: #3b82f6;
+        --markdown-table-header-border: #4f46e5;
         --markdown-table-text: #374151;
         --markdown-table-caption: #374151;
         --markdown-table-stripe: rgba(249, 250, 251, 0.5);
@@ -106,7 +118,7 @@
         --markdown-h4-color: #6b7280;
         
         /* Horizontal rule colors for light mode */
-        --markdown-hr-gradient: #3b82f6;
+        --markdown-hr-gradient: #4f46e5;
 
 
 
@@ -120,19 +132,30 @@
     }
 
     .dark {
+        /* ===== 纸墨编辑部 tokens: 暖炭纸 ===== */
+        --paper: 0.185 0.006 85;
+        --paper-raised: 0.23 0.006 85;
+        --ink: 0.88 0.012 95;
+        --ink-2: 0.78 0.01 95;
+        --ink-3: 0.64 0.008 95;
+        --line: 0.28 0.006 85;
+        --tone-indigo: 0.62 0.17 277;
+        --tone-indigo-deep: 0.72 0.13 277;
+        --tone-indigo-wash: 0.28 0.06 277;
+
         /* Colors */
-        --color-background-base: var(--gray-8);
-        --color-text-base: var(--gray-4);
-        --color-button-bg-base: var(--gray-7);
-        --color-button-border-base: var(--gray-3);
-        --color-blog-tag-bg-base: var(--gray-6);
-        --color-toc-text-base: #b1babb;
+        --color-background-base: oklch(var(--paper));
+        --color-text-base: oklch(var(--ink-2));
+        --color-button-bg-base: oklch(var(--paper-raised));
+        --color-button-border-base: oklch(var(--line));
+        --color-blog-tag-bg-base: oklch(var(--tone-indigo-wash));
+        --color-toc-text-base: oklch(var(--ink-3));
 
         /* Markdown 渲染的一些颜色 */
         --markdwon-code-backgroud: #191c21;
-        --markdwon-code-text: #ee839c;
+        --markdwon-code-text: #a5b4fc;
         --markdwon-text-base: var(--gray-0);
-        --markdown-divide: #eb2344;
+        --markdown-divide: #4f46e5;
         --markdown-divide-sub: var(--gray-4);
         --markdown-codeblock-color1: #9257c2;
         --markdown-codeblock-color2: #8bc34a;
@@ -141,7 +164,7 @@
         --markdown-codeblock-color5: #d41800;
         --markdown-codeblock-color6: #4cb9e8;
         --markdown-codeblock-color7: #bfbfbf;
-        --markdown-blockquote-letf: #de5555;
+        --markdown-blockquote-letf: #818cf8;
         --markdown-blockquote-text: var(--gray-5);
         --markdown-blockquote-background: var(--gray-7);
         
@@ -150,7 +173,7 @@
         --markdown-table-header-bg: #1f2937;
         --markdown-table-header-bg-end: #111827;
         --markdown-table-header-text: #f3f4f6;
-        --markdown-table-header-border: #3b82f6;
+        --markdown-table-header-border: #818cf8;
         --markdown-table-text: #d1d5db;
         --markdown-table-caption: #f3f4f6;
         --markdown-table-stripe: rgba(55, 65, 81, 0.3);
@@ -158,9 +181,9 @@
         --markdown-table-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         
         /* Link colors for dark mode */
-        --markdown-link-color: #60a5fa;
-        --markdown-link-hover-color: #3b82f6;
-        --markdown-link-hover-bg: rgba(96, 165, 250, 0.15);
+        --markdown-link-color: #818cf8;
+        --markdown-link-hover-color: #a5b4fc;
+        --markdown-link-hover-bg: rgba(129, 140, 248, 0.15);
         --markdown-code-border: rgba(156, 163, 175, 0.3);
         
         /* Scrollbar colors for dark mode */
@@ -172,7 +195,7 @@
         --markdown-h4-color: #9ca3af;
         
         /* Horizontal rule colors for dark mode */
-        --markdown-hr-gradient: #60a5fa;
+        --markdown-hr-gradient: #818cf8;
 
 
 
@@ -216,6 +239,31 @@
 /* Texts */
 h1, h2, h3, h4, h5, p, li, ul, span {
   color: var(--color-text-base);
+}
+
+/* 纸墨编辑部:字体与排版基础 */
+body {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+h1 { letter-spacing: -0.022em; }
+h2 { letter-spacing: -0.012em; }
+
+p, li {
+  text-wrap: pretty;
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
 }
 
 

@@ -9,29 +9,26 @@ export default function Footer() {
   const { dictionary } = useLocale();
 
   return (
-    <footer className="footer py-10">
-        <div className="container flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-center">
+    <footer className="footer mt-16 py-12">
+      <div className="container">
+        <div className="border-t border-border pt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-center">
+          {/* Uptime */}
+          <div className="font-mono text-sm text-muted-foreground">
+            <SiteUptime/>
+          </div>
 
-            {/* Uptime */}
-            <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400 text-sm">
-                <span>🚀</span>
-                <span className="font-mono"><SiteUptime/></span>
-            </div>
+          {/* Total Views */}
+          <div className="font-mono text-sm text-muted-foreground">
+            <TotalViews/>
+            <span className="hidden sm:inline"> {dictionary.footer.totalViews}</span>
+          </div>
 
-            {/* Total Views */}
-            <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400 text-sm">
-                <span>🔥</span>
-                <span className="font-mono"><TotalViews/></span>
-                <span className="hidden sm:inline">{dictionary.footer.totalViews}</span>
-            </div>
-
-
-            {/* Playful Text */}
-            <p className="animated-gradient-text font-bold text-lg tracking-wider">
-                {dictionary.footer.slogan}
-            </p>
-
+          {/* Slogan */}
+          <p className="font-display text-lg text-foreground">
+            {dictionary.footer.slogan}
+          </p>
         </div>
+      </div>
     </footer>
   );
 }

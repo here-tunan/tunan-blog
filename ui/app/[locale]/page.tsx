@@ -15,22 +15,20 @@ export default function Home({ params }: { params: { locale: string } }) {
     <main className="min-h-screen">
       <div className="container px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
         {/* Welcome Section with improved styling */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 mb-8 border-b border-gray-100 dark:border-gray-800">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 mb-8 border-b border-border">
           <header className="flex-1 text-center sm:text-left">
-            <h1 className="text-2xl sm:text-3xl font-mono font-bold">
+            <h1 className="text-3xl sm:text-4xl font-display">
               <span className="text-4xl inline-block animate-wave">👋</span>{' '}
-              <span className="bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400 bg-clip-text text-transparent">
-                {dictionary.home.welcome}
-              </span>
+              {dictionary.home.welcome}
             </h1>
             <AnimatedSubtitle />
           </header>
           <div className="mt-4 sm:mt-0 flex-shrink-0">
             <img
-              src="/assets/beer.jpeg"
+              src="/assets/me-avatar.jpeg"
               width="100"
-              className="rounded-full shadow-lg ring-4 ring-white dark:ring-gray-800 transform hover:scale-110 hover:rotate-6 transition-all duration-300 ease-out sm:w-[120px]"
-              alt="cute"
+              className="rounded-full border border-border shadow-[0_1px_3px_rgba(0,0,0,0.10)] transition-transform duration-300 hover:scale-[1.03] sm:w-[120px]"
+              alt="Tunan"
             />
           </div>
         </div>

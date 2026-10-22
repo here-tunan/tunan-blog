@@ -18,13 +18,14 @@ export default async function History({ params }: { params: { locale: string } }
     <main>
       <div className="container">
         <div className="max-w-5xl mx-auto">
-          <header className="mb-8 text-center">
-            <h1 className="text-3xl font-bold font-mono mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+          <header className="mb-10">
+            <h1 className="font-display text-3xl text-foreground md:text-4xl">
               {dictionary.history.title}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="mt-3 text-sm text-muted-foreground">
               {dictionary.history.description}
             </p>
+            <div className="mt-5 h-px w-12 bg-border" />
           </header>
 
           <HistoryTimeline events={historyEvents} locale={locale} />

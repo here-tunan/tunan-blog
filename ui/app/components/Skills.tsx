@@ -6,67 +6,80 @@ import { useLocale } from "@/app/i18n/locale-context";
 const skills = [
     {
         name: "java",
+        label: "Java",
         href: "https://www.java.com",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg"
     },
     {
         name: "spring",
+        label: "Spring",
         href: "https://spring.io/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/spring/spring-original.svg"
     },
     {
         name: "linux",
+        label: "Linux",
         href: "https://www.linux.org/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg"
     },
     {
         name: "redis",
+        label: "Redis",
         href: "https://redis.io",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original-wordmark.svg"
     },
     {
         name: "mysql",
+        label: "MySQL",
         href: "https://www.mysql.com/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg"
     },
     {
         name: "mongodb",
+        label: "MongoDB",
         href: "https://www.mongodb.com/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg"
     },
-    {name: "git", href: "https://git-scm.com/", img: "https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg"},
+    {name: "git", label: "Git", href: "https://git-scm.com/", img: "https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg"},
     {
         name: "docker",
+        label: "Docker",
         href: "https://www.docker.com/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg"
     },
     {
         name: "kubernetes",
+        label: "Kubernetes",
         href: "https://kubernetes.io",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/kubernetes/kubernetes-plain.svg"
     },
     {
         name: "python",
+        label: "Python",
         href: "https://www.python.org",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"
     },
     {
         name: "go",
+        label: "Go",
         href: "https://golang.org/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original.svg"
     },
     {
         name: "vuejs",
+        label: "Vue",
         href: "https://vuejs.org/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/vuejs/vuejs-original.svg"
     },
     {
         name: "react",
+        label: "React",
         href: "https://reactjs.org/",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg"
     },
     {
         name: "javascript",
+        label: "JavaScript",
         href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
         img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"
     },
@@ -116,106 +129,104 @@ function SkillRadar({ locale }: { locale: string }) {
         .join(' ');
 
     return (
-        <div className="rounded-3xl border border-white/60 dark:border-gray-800 bg-white/60 dark:bg-gray-900/45 p-5 shadow-sm">
-            <svg viewBox="0 0 240 240" className="mx-auto h-72 w-full max-w-[320px] overflow-visible">
-                <defs>
-                    <linearGradient id="skillRadarFill" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.42" />
-                        <stop offset="100%" stopColor="#a855f7" stopOpacity="0.32" />
-                    </linearGradient>
-                    <linearGradient id="skillRadarStroke" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#2563eb" />
-                        <stop offset="100%" stopColor="#9333ea" />
-                    </linearGradient>
-                </defs>
+        <svg
+            viewBox="0 0 240 240"
+            className="mx-auto h-72 w-full max-w-[320px] overflow-visible text-muted-foreground"
+            role="img"
+            aria-label={locale === 'zh-CN' ? '技能雷达图' : 'Skills radar chart'}
+        >
+            <defs>
+                <linearGradient id="skillRadarFill" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#818cf8" stopOpacity="0.32" />
+                    <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.14" />
+                </linearGradient>
+            </defs>
 
-                {gridLevels.map((level) => {
-                    const points = data
-                        .map((_, index) => getAxisPoint(index, total, 86 * level))
-                        .map((point) => `${point.x},${point.y}`)
-                        .join(' ');
+            {gridLevels.map((level) => {
+                const points = data
+                    .map((_, index) => getAxisPoint(index, total, 86 * level))
+                    .map((point) => `${point.x},${point.y}`)
+                    .join(' ');
 
-                    return (
-                        <polygon
-                            key={level}
-                            points={points}
-                            fill="none"
-                            stroke="currentColor"
-                            strokeOpacity="0.12"
-                            strokeWidth="1"
-                        />
-                    );
-                })}
+                return (
+                    <polygon
+                        key={level}
+                        points={points}
+                        fill="none"
+                        stroke="currentColor"
+                        strokeOpacity="0.35"
+                        strokeWidth="1"
+                    />
+                );
+            })}
 
-                {data.map((_, index) => {
-                    const point = getAxisPoint(index, total);
-                    return (
-                        <line
-                            key={index}
-                            x1="120"
-                            y1="120"
-                            x2={point.x}
-                            y2={point.y}
-                            stroke="currentColor"
-                            strokeOpacity="0.10"
-                            strokeWidth="1"
-                        />
-                    );
-                })}
+            {data.map((_, index) => {
+                const point = getAxisPoint(index, total);
+                return (
+                    <line
+                        key={index}
+                        x1="120"
+                        y1="120"
+                        x2={point.x}
+                        y2={point.y}
+                        stroke="currentColor"
+                        strokeOpacity="0.25"
+                        strokeWidth="1"
+                    />
+                );
+            })}
 
-                <polygon
-                    points={polygonPoints}
-                    fill="url(#skillRadarFill)"
-                    stroke="url(#skillRadarStroke)"
-                    strokeWidth="2.5"
-                    strokeLinejoin="round"
-                />
+            <polygon
+                points={polygonPoints}
+                fill="url(#skillRadarFill)"
+                className="stroke-primary"
+                strokeWidth="2.5"
+                strokeLinejoin="round"
+            />
 
-                {data.map((item, index) => {
-                    const point = getPoint(item.value, index, total);
-                    const label = getAxisPoint(index, total, 108);
-                    return (
-                        <g key={item.label}>
-                            <circle cx={point.x} cy={point.y} r="4" fill="#2563eb" className="dark:fill-blue-300" />
-                            <text
-                                x={label.x}
-                                y={label.y}
-                                textAnchor="middle"
-                                dominantBaseline="middle"
-                                className="fill-gray-600 text-[10px] font-semibold dark:fill-gray-300"
-                            >
-                                {item.label}
-                            </text>
-                        </g>
-                    );
-                })}
-            </svg>
-        </div>
+            {data.map((item, index) => {
+                const point = getPoint(item.value, index, total);
+                const label = getAxisPoint(index, total, 108);
+                return (
+                    <g key={item.label}>
+                        <circle cx={point.x} cy={point.y} r="4" className="fill-primary" />
+                        <text
+                            x={label.x}
+                            y={label.y}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            className="fill-foreground text-[11px] font-medium"
+                        >
+                            {item.label}
+                        </text>
+                    </g>
+                );
+            })}
+        </svg>
     );
 }
 
 export default function Skills() {
-    const { locale, dictionary } = useLocale();
+    const { locale } = useLocale();
 
     return (
-        <section className="relative overflow-hidden rounded-[2rem] border border-gray-100/80 dark:border-gray-800 bg-gradient-to-br from-gray-50/70 via-white/70 to-gray-100/70 dark:from-gray-900/30 dark:via-gray-950/40 dark:to-gray-900/30 p-6 sm:p-8 shadow-sm backdrop-blur-sm">
-            <div className="absolute -left-12 -top-12 h-32 w-32 rounded-full bg-blue-200/20 blur-3xl" />
-            <div className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-purple-200/20 blur-3xl" />
-            <div className="relative">
-                <h3 className="font-mono font-bold text-2xl pb-6">{dictionary.about.skills}</h3>
-                <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-                    <SkillRadar locale={locale} />
+        <div className="grid gap-10 lg:grid-cols-[300px_1fr] lg:items-center">
+            <SkillRadar locale={locale} />
 
-                    <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                        {skills.map((item, index) => (
-                            <a href={item.href} key={index}
-                               className="group rounded-2xl border border-white/60 dark:border-gray-800 bg-white/70 dark:bg-gray-900/50 p-3 flex items-center justify-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-md hover:bg-white dark:hover:bg-gray-800">
-                                <img src={item.img} width={36} height={36} alt={item.name} className="transition-transform duration-300 group-hover:scale-110" />
-                            </a>
-                        ))}
-                    </div>
-                </div>
+            <div className="flex flex-wrap content-start gap-2.5">
+                {skills.map((item) => (
+                    <a
+                        href={item.href}
+                        key={item.name}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-[13px] text-muted-foreground transition-colors hover:border-foreground/25 hover:text-foreground"
+                    >
+                        <img src={item.img} width={18} height={18} alt="" loading="lazy" className="shrink-0" />
+                        <span>{item.label}</span>
+                    </a>
+                ))}
             </div>
-        </section>
+        </div>
     );
 }

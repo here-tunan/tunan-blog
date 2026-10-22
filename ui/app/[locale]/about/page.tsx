@@ -1,117 +1,117 @@
 import React from "react";
 import Skills from "@/app/components/Skills";
 import {Comments} from "@/app/components/blog/comment";
-import DevicesAndApps from "@/app/components/DevicesAndApps";
-import Books from "@/app/components/Books";
-import ArchitectureDiagram from "@/app/components/about/ArchitectureDiagram";
-import {API_URL} from "@/lib/config";
+import SectionHeader from "@/app/components/SectionHeader";
 import { getSafeLocale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/get-dictionary";
-
-async function getBooks() {
-    try {
-        const response = await fetch(`${API_URL}/book/list`, {
-            method: 'GET',
-            next: { revalidate: 3600 },
-        });
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching books:", error);
-        return [];
-    }
-}
-
-async function getDevicesAndApps() {
-    try {
-        const response = await fetch(`${API_URL}/device-app/grouped`, {
-            next: { revalidate: 3600 },
-        });
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching device apps:', error);
-        return [];
-    }
-}
 
 export default async function About({ params }: { params: { locale: string } }) {
     const locale = getSafeLocale(params.locale);
     const dictionary = getDictionary(locale);
-    const books = await getBooks();
-    const deviceApps = await getDevicesAndApps();
 
     const focusTags = [dictionary.about.focusBackend, dictionary.about.focusFullStack, dictionary.about.focusWriting];
 
     return (
         <main>
             <div className="container">
-                <div className="space-y-12">
-                    <section className="relative overflow-hidden rounded-[2rem] border border-gray-100/80 dark:border-gray-800 bg-gradient-to-br from-blue-50/70 via-white/70 to-purple-50/70 dark:from-blue-950/20 dark:via-gray-900/40 dark:to-purple-950/20 p-6 sm:p-8 shadow-sm backdrop-blur-sm">
-                        <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-300/20 blur-3xl" />
-                        <div className="absolute -bottom-20 left-1/4 h-52 w-52 rounded-full bg-purple-300/20 blur-3xl" />
+                <div className="space-y-24 pb-10">
+                    {/* Hero: 无卡编辑部位 */}
+                    <section className="grid gap-12 pt-6 lg:grid-cols-[1fr_300px] lg:gap-20">
+                        <div>
+                            <p className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-primary" />
+                                {dictionary.about.eyebrow}
+                            </p>
 
-                        <div className="relative grid gap-8 lg:grid-cols-[1.4fr_0.8fr] lg:items-center">
-                            <div>
-                                <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 dark:border-blue-900 bg-white/60 dark:bg-gray-900/50 px-3 py-1 text-xs font-mono text-blue-600 dark:text-blue-300 shadow-sm">
-                                    <span>👋</span>
-                                    <span>{dictionary.about.eyebrow}</span>
-                                </div>
+                            <h1 className="mt-5 font-display text-4xl text-foreground sm:text-5xl">
+                                {dictionary.about.title}
+                            </h1>
 
-                                <h1 className="mt-5 text-4xl sm:text-5xl font-bold font-mono leading-tight bg-gradient-to-r from-gray-950 via-blue-700 to-purple-700 dark:from-gray-100 dark:via-blue-300 dark:to-purple-300 bg-clip-text text-transparent">
-                                    {dictionary.about.title}
-                                </h1>
+                            <p className="mt-5 max-w-xl font-display text-xl leading-relaxed text-foreground sm:text-2xl">
+                                {dictionary.about.subtitle}
+                            </p>
 
-                                <p className="mt-4 max-w-2xl text-lg sm:text-xl leading-8 text-gray-700 dark:text-gray-300">
-                                    {dictionary.about.subtitle}
-                                </p>
+                            <p className="mt-6 max-w-xl text-[15px] leading-8 text-muted-foreground">
+                                {dictionary.about.intro}
+                            </p>
 
-                                <p className="mt-5 max-w-2xl leading-8 text-gray-600 dark:text-gray-400">
-                                    {dictionary.about.intro}
-                                </p>
+                            <p className="mt-4 max-w-xl text-[15px] leading-8 text-muted-foreground">
+                                {dictionary.about.background}
+                            </p>
 
-                                <div className="mt-6 flex flex-wrap gap-2">
-                                    {focusTags.map((item) => (
-                                        <span key={item} className="rounded-full bg-gray-950 text-white dark:bg-white dark:text-gray-950 px-3 py-1 text-sm font-medium shadow-sm">
-                                            {item}
-                                        </span>
-                                    ))}
-                                </div>
+                            <p className="mt-4 max-w-xl text-[15px] leading-8 text-muted-foreground">
+                                <span className="mr-2 inline-flex -translate-y-px items-center rounded-full border border-primary/30 bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-foreground">
+                                    INFJ
+                                </span>
+                                {dictionary.about.personality}
+                            </p>
 
-                                <div className="mt-4 flex flex-wrap gap-2">
-                                    {dictionary.about.backgroundTags.map((item) => (
-                                        <span key={item} className="rounded-full bg-white/70 dark:bg-gray-900/60 px-3 py-1 text-sm shadow-sm border border-gray-100 dark:border-gray-800 text-gray-600 dark:text-gray-300">
-                                            {item}
-                                        </span>
-                                    ))}
-                                </div>
+                            <div className="mt-7 flex flex-wrap gap-2">
+                                {focusTags.map((item) => (
+                                    <span key={item} className="rounded-full bg-accent px-3 py-1 text-[13px] font-medium text-accent-foreground">
+                                        {item}
+                                    </span>
+                                ))}
+                                {dictionary.about.backgroundTags.map((item) => (
+                                    <span key={item} className="rounded-full border border-border px-3 py-1 text-[13px] text-muted-foreground">
+                                        {item}
+                                    </span>
+                                ))}
                             </div>
 
-                            <div className="relative mx-auto flex h-56 w-56 items-center justify-center lg:mx-0 lg:justify-self-end">
-                                <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-blue-500 to-purple-500 opacity-15 rotate-6" />
-                                <div className="absolute inset-4 rounded-[2rem] border border-white/70 dark:border-white/10 bg-white/60 dark:bg-gray-900/50 shadow-xl backdrop-blur-md" />
-                                <div className="relative text-center">
-                                    <div className="text-6xl">🌱</div>
-                                    <div className="mt-4 rounded-full bg-gray-950 text-white dark:bg-white dark:text-gray-950 px-4 py-2 text-sm font-semibold shadow-lg">
-                                        INFJ
-                                    </div>
-                                    <p className="mt-3 text-xs uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400">
-                                        {dictionary.about.personalityLabel}
-                                    </p>
-                                </div>
+                            <div className="mt-9 flex flex-wrap gap-x-8 gap-y-3 text-[15px]">
+                                <a href={`/${locale}/blog`} className="group inline-flex items-center gap-1.5 text-primary transition-colors hover:text-accent-foreground">
+                                    {dictionary.about.readBlog}
+                                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                                </a>
+                                <a href={`/${locale}/architecture`} className="group inline-flex items-center gap-1.5 text-primary transition-colors hover:text-accent-foreground">
+                                    {dictionary.about.seeHow}
+                                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                                </a>
+                                <a href={`/${locale}/books`} className="group inline-flex items-center gap-1.5 text-primary transition-colors hover:text-accent-foreground">
+                                    {dictionary.about.seeBooks}
+                                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                                </a>
+                                <a href={`/${locale}/uses`} className="group inline-flex items-center gap-1.5 text-primary transition-colors hover:text-accent-foreground">
+                                    {dictionary.about.seeUses}
+                                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                                </a>
+                                <a
+                                    href="https://www.placesbeen.net/placesbeen/share/v1/view/e69b25dd-546d-4c0c-80a9-584847347a1a/en/map-cuwfna"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group inline-flex items-center gap-1.5 text-primary transition-colors hover:text-accent-foreground"
+                                >
+                                    {dictionary.about.seePlaces}
+                                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">↗</span>
+                                </a>
                             </div>
                         </div>
+
+                        <figure className="mx-auto w-60 max-w-full sm:w-64 lg:mx-0 lg:w-full lg:max-w-[300px] lg:justify-self-end lg:pt-2">
+                            <div className="rounded-xl border border-border bg-background p-2 shadow-[0_1px_3px_rgba(0,0,0,0.10)]">
+                                <img
+                                    src="/assets/me-hero.jpeg"
+                                    alt={dictionary.about.title}
+                                    width={472}
+                                    height={590}
+                                    className="h-auto w-full rounded-lg"
+                                />
+                            </div>
+                        </figure>
                     </section>
 
-                    {/*<GitHubActivity/>*/}
+                    <section>
+                        <SectionHeader title={dictionary.about.skills} sub={dictionary.about.skillsSub} />
+                        <Skills/>
+                    </section>
 
-                    <Skills/>
-
-                    <DevicesAndApps devicesAndApps={deviceApps}/>
-
-                    <Books books={books}/>
-
-                    <ArchitectureDiagram locale={locale}/>
-
-                    <Comments/>
+                    <section>
+                        <SectionHeader title={dictionary.about.commentsTitle} sub={dictionary.about.commentsSub} />
+                        <div className="rounded-xl border border-border bg-background p-4 sm:p-6">
+                            <Comments showHeader={false}/>
+                        </div>
+                    </section>
                 </div>
             </div>
         </main>

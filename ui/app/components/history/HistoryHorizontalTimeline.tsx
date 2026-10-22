@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Locale } from '@/app/i18n/config';
 import { formatDate } from '@/app/i18n/format';
 import { withLocale } from '@/app/i18n/routes';
-import { formatHistoryTitle, getEventIcon } from './utils';
+import { formatHistoryTitle } from './utils';
 
 interface HistoryEvent {
   id: number;
@@ -29,43 +29,25 @@ export default function HistoryHorizontalTimeline({ events, locale }: HistoryHor
 
   return (
     <div className="relative">
-      <style>{`
-        @keyframes history-wave-flow {
-          0% { transform: translateX(-35%) scaleX(0.65); opacity: 0; }
-          15% { opacity: 0.95; }
-          70% { opacity: 0.95; }
-          100% { transform: translateX(135%) scaleX(0.95); opacity: 0; }
-        }
-        .history-wave-flow {
-          animation: history-wave-flow 2.6s cubic-bezier(0.45, 0, 0.2, 1) infinite;
-        }
-      `}</style>
-      <div className="relative">
-        <div className="absolute top-14 left-0 right-3 hidden h-0.5 overflow-hidden rounded-full bg-gradient-to-r from-orange-500 via-red-500 to-purple-500 sm:block">
-          <span className="history-wave-flow absolute -inset-y-2 left-0 w-1/2 rounded-full bg-gradient-to-r from-transparent via-white to-transparent blur-sm"></span>
-          <span className="history-wave-flow absolute -inset-y-1 left-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-yellow-200 to-transparent opacity-80" style={{ animationDelay: '0.18s' }}></span>
-        </div>
-        <div className="absolute top-[3.27rem] right-0 hidden h-2.5 w-2.5 rotate-45 border-r-2 border-t-2 border-purple-500 sm:block"></div>
+      <div aria-hidden="true" className="absolute left-0 right-0 top-8 hidden h-px bg-border sm:block" />
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {displayEvents.map((event) => (
-            <Link key={event.id} href={withLocale(locale, `/blog/${event.slug}`)} className="group flex flex-col items-center text-center">
-              <div className="text-xs font-medium text-orange-600 dark:text-orange-400 mb-4">
-                {formatDate(event.gmtCreate, locale, { month: 'short', year: 'numeric' })}
-              </div>
+      <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
+        {displayEvents.map((event) => (
+          <Link key={event.id} href={withLocale(locale, `/blog/${event.slug}`)} className="group flex flex-col items-center text-center">
+            <span className="mb-3 font-mono text-xs text-muted-foreground">
+              {formatDate(event.gmtCreate, locale, { month: 'short', year: 'numeric' })}
+            </span>
 
-              <div className="w-12 h-12 bg-gradient-to-br from-white to-orange-50 dark:from-gray-800 dark:to-gray-900 border-4 border-orange-400 hover:border-orange-500 rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl mb-4 hover:scale-110 transition-all duration-300 hover:rotate-12 z-10">
-                <span className="text-xl">{getEventIcon(event.title, event.id)}</span>
-              </div>
+            <span
+              aria-hidden="true"
+              className="mb-4 h-2 w-2 rounded-full bg-border transition-colors group-hover:bg-primary"
+            />
 
-              <div className="bg-gradient-to-br from-orange-50/80 to-red-50/80 dark:from-gray-800/90 dark:to-gray-750/90 backdrop-blur-sm border border-orange-200/60 dark:border-gray-600/40 rounded-xl p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] w-full">
-                <h4 className="font-semibold text-xs text-gray-900 dark:text-gray-100 line-clamp-2 text-center min-h-[2rem]">
-                  {formatHistoryTitle(event.title)}
-                </h4>
-              </div>
-            </Link>
-          ))}
-        </div>
+            <h4 className="line-clamp-2 min-h-[2.5rem] text-[13px] font-medium leading-5 text-foreground transition-colors group-hover:text-primary">
+              {formatHistoryTitle(event.title)}
+            </h4>
+          </Link>
+        ))}
       </div>
     </div>
   );

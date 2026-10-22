@@ -101,7 +101,7 @@ const TableOfContents = ({content}: ArticleProps) => {
         onClick={() => setOpen(true)}
         aria-label="Open table of contents"
         aria-expanded={open}
-        className="xl:hidden fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+        className="xl:hidden fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-background border border-border shadow-lg text-muted-foreground hover:text-primary transition-colors"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="8" y1="6" x2="21" y2="6"/>
@@ -126,14 +126,14 @@ const TableOfContents = ({content}: ArticleProps) => {
             role="dialog"
             aria-modal="true"
             aria-label="Table of contents"
-            className="absolute right-0 top-0 bottom-0 w-72 max-w-[85vw] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 shadow-2xl overflow-y-auto p-6 animate-in slide-in-from-right duration-200"
+            className="absolute right-0 top-0 bottom-0 w-72 max-w-[85vw] bg-background border-l border-border shadow-2xl overflow-y-auto p-6 animate-in slide-in-from-right duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted transition-colors"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"/>

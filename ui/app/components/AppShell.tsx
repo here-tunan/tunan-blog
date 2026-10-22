@@ -1,7 +1,6 @@
 'use client'
 
 import React, { Suspense, useEffect, useState } from 'react';
-import Image from 'next/image';
 import Navigation from '@/app/components/Navigation';
 import Footer from '@/app/components/Footer';
 import CommandPalette from '@/app/components/CommandPalette';
@@ -49,24 +48,6 @@ export default function AppShell({
           </div>
         </div>
       </ThemeProvider>
-
-      <Image
-        width={1512}
-        height={550}
-        className="absolute left-1/2 top-0 -z-10 -translate-x-1/2"
-        src="/assets/gradient-background-top.png"
-        alt=""
-        priority
-      />
-
-      <Image
-        width={1512}
-        height={447}
-        className="absolute -bottom-4 left-1/2 -z-10 -translate-x-1/2"
-        src="/assets/gradient-background-bottom.png"
-        alt=""
-        priority
-      />
     </LocaleProvider>
   );
 }

@@ -69,17 +69,15 @@ export default async function Projects({ params }: { params: { locale: string } 
   return (
     <main>
       <div className="container">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="mb-6">
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent mb-4">
-              {dictionary.projects.title}
-            </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
-          </div>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        {/* Hero */}
+        <div className="mb-14">
+          <h1 className="font-display text-4xl text-foreground md:text-5xl">
+            {dictionary.projects.title}
+          </h1>
+          <p className="mt-4 max-w-2xl text-[15px] leading-8 text-muted-foreground">
             {dictionary.projects.description}
           </p>
+          <div className="mt-6 h-px w-12 bg-border" />
         </div>
 
         <ProjectGrid projects={projects} />

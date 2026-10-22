@@ -6,6 +6,7 @@ import rehypeHighlight from 'rehype-highlight'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeRaw from 'rehype-raw'
+import ZoomableImage from '@/app/components/ZoomableImage'
 
 
 type ContentProps = {
@@ -33,6 +34,11 @@ const Content = async (props: ContentProps) => {
       <Markdown className="markdown-body"
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeHighlight, rehypeSlug, [rehypeAutolinkHeadings, autolinkHeadingsOptions], rehypeRaw]}
+                components={{
+                  img: ({ src, alt, title }) => (
+                    <ZoomableImage src={typeof src === 'string' ? src : undefined} alt={alt} title={title} />
+                  ),
+                }}
       >
         {markdown}
       </Markdown>
