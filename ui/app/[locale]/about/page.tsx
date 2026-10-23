@@ -77,7 +77,7 @@ export default async function About({ params }: { params: { locale: string } }) 
                                     <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                                 </a>
                                 <a
-                                    href="https://www.placesbeen.net/placesbeen/share/v1/view/e69b25dd-546d-4c0c-80a9-584847347a1a/en/map-cuwfna"
+                                    href="https://beeneverywhere.net/user/47551"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="group inline-flex items-center gap-1.5 text-primary transition-colors hover:text-accent-foreground"
