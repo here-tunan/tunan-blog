@@ -57,6 +57,8 @@ export const zhCN = {
   },
   article: {
     comments: '评论',
+    series: '系列',
+    related: '相关文章',
   },
   about: {
     eyebrow: '个人档案',

@@ -1,5 +1,6 @@
 import './globals.css';
 import React from 'react';
+import type { Metadata } from 'next';
 import { Inter, Source_Serif_4 } from 'next/font/google';
 // 霞鹜文楷切片 webfont:全量按 unicode-range 切成 woff2 分块,按需加载(整包 24MB TTF 已移除)
 import 'lxgw-wenkai-webfont/lxgwwenkai-regular.css';
@@ -17,6 +18,17 @@ const sourceSerif = Source_Serif_4({
   display: 'swap',
   variable: '--font-source-serif',
 });
+
+// 站点级分享元数据:og:image 默认品牌卡,页面级 generateMetadata 只需覆写标题/摘要
+export const metadata: Metadata = {
+  metadataBase: new URL('https://tunan.fun'),
+  openGraph: {
+    images: ['/assets/og-card.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+};
 
 export default function RootLayout({
   children,

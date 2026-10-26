@@ -57,6 +57,8 @@ export const en = {
   },
   article: {
     comments: 'Comments',
+    series: 'Series',
+    related: 'Related reading',
   },
   about: {
     eyebrow: 'Profile',
