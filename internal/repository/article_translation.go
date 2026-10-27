@@ -195,6 +195,15 @@ func articleTranslationWhere(param ArticleQueryParam) ([]string, []interface{}) 
 		args = append(args, param.Type)
 	}
 
+	// 裸 SQL 不展开 slice 占位符,手动生成 NOT IN (?,?,...)
+	if len(param.ExcludeTypes) > 0 {
+		placeholders := strings.TrimSuffix(strings.Repeat("?,", len(param.ExcludeTypes)), ",")
+		where = append(where, "article.type NOT IN ("+placeholders+")")
+		for _, t := range param.ExcludeTypes {
+			args = append(args, t)
+		}
+	}
+
 	if param.StartTime != "" {
 		transactionStartTime, _ := time.Parse("2006-01-02", param.StartTime)
 		where = append(where, "article.gmt_create >= ?")

@@ -39,6 +39,8 @@ description: tunan-blog 的部署、重启、备份与灾难恢复。当用户�
 
 ## 动手前检查的已知坑(改代码/配置前先过一遍)
 
+- **Cloudflare 会缓存 HTML 和 rss.xml,部署后不会自动更新**:Next 静态页默认发 `s-maxage=31536000`(一年),`.xml` 在 CF 默认缓存扩展名里。所以每次部署后,静态页(首页/about 等)和 RSS 可能长期返回旧内容;动态路由(文章页)不受影响。部署完必须在 CF 控制台 Purge(或给 HTML 配 Cache Rule Bypass),验证静态页时带 `?nocache=随机数` 参数可直接看源站新版本。
+
 - **Next standalone 不看请求 Host 头**,重定向用 `HOSTNAME/PORT` 环境变量拼。语言跳转中间件读 `x-forwarded-host`,别破坏它。
 - **Next 14.1.4 服务不了路径带 `[locale]` 的静态 chunk**(404)。`/_next/static/*` 由 Caddy 直接读盘解决,删了 Caddyfile 那个 handle 块会全挂。
 - **服务端渲染的 API 地址**走 `API_URL_INTERNAL`(指向 127.0.0.1:3002),浏览器端走公网域名。`lib/config.ts` 保持这个双轨。
