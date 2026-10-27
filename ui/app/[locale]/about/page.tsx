@@ -76,6 +76,10 @@ export default async function About({ params }: { params: { locale: string } }) 
                                     {dictionary.about.seeUses}
                                     <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                                 </a>
+                                <a href={`/${locale}/translations`} className="group inline-flex items-center gap-1.5 text-primary transition-colors hover:text-accent-foreground">
+                                    {dictionary.about.seeTranslations}
+                                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+                                </a>
                                 <a
                                     href="https://beeneverywhere.net/user/47551"
                                     target="_blank"

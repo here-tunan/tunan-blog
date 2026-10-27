@@ -65,6 +65,9 @@ func generateSummary(content string, maxLength int) string {
 	return cleaned
 }
 
+// articleTypeTranslation 文章类型:翻译(与前端 ARTICLE_TYPES 对齐)
+const articleTypeTranslation = 3
+
 // RssXmlBytes 实时生成 RSS XML。
 // 旧实现写 rss.xml 文件到进程目录并调用外部 pandoc,新架构下由
 // /api/rss 直接返回字节流,Caddy 把 /rss.xml 转译到这个接口。
@@ -75,6 +78,9 @@ func RssXmlBytes() ([]byte, error) {
 	}
 
 	param.LanguageCode = repository.DefaultLanguageCode
+
+	// RSS 只推博客/周报/历史,不含翻译(翻译存档仅站内保留,不对外分发)
+	param.ExcludeTypes = []int{articleTypeTranslation}
 
 	// 查询文章列表
 	articleList, _, _ := QueryArticle(param)

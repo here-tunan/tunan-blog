@@ -1,7 +1,6 @@
 import React from 'react';
 import BlogsSection from '@/app/components/home/BlogsSection';
 import WeeklySection from '@/app/components/home/WeeklySection';
-import TranslationsSection from '@/app/components/home/TranslationsSection';
 import HistorySection from '@/app/components/home/HistorySection';
 import AnimatedSubtitle from '@/app/components/AnimatedSubtitle';
 import { getSafeLocale } from '@/app/i18n/config';
@@ -37,7 +36,6 @@ export default function Home({ params }: { params: { locale: string } }) {
         <div className="space-y-12">
           <WeeklySection locale={locale} />
           <BlogsSection locale={locale} />
-          <TranslationsSection locale={locale} />
           <HistorySection locale={locale} />
         </div>
       </div>

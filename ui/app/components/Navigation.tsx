@@ -47,11 +47,6 @@ export default function Navigation({ setCommandPaletteOpen }: { setCommandPalett
       description: dictionary.nav.weeklyDescription,
     },
     {
-      name: dictionary.nav.translations,
-      href: withLocale(locale, '/translations'),
-      description: dictionary.nav.translationsDescription,
-    },
-    {
       name: dictionary.nav.history,
       href: withLocale(locale, '/history'),
       description: dictionary.nav.historyDescription,

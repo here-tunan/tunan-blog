@@ -28,6 +28,7 @@ type ArticleQueryParam struct {
 	PageSize      int    `json:"pageSize"`
 	PageIndex     int    `json:"pageIndex"`
 	Type          int    `json:"type"`
+	ExcludeTypes  []int  `json:"excludeTypes"`
 	IgnoreContent bool   `json:"ignoreContent"`
 	LanguageCode  string `json:"languageCode"`
 }
@@ -43,6 +44,9 @@ func QueryArticle(param ArticleQueryParam) ([]Article, int64, error) {
 	session := infrastructure.GetDB().Where("is_deleted = 0")
 	if param.Type != 0 {
 		session = session.And("type = ?", param.Type)
+	}
+	if len(param.ExcludeTypes) > 0 {
+		session = session.And("type NOT IN ?", param.ExcludeTypes)
 	}
 
 	// 格式是 2023-09-12
